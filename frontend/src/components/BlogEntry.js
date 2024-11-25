@@ -1,22 +1,5 @@
 import React from 'react';
 
-const BlockRenderer = ({ block }) => {
-  if (!block || !block.children) return null;
-  
-  switch (block.type) {
-    case 'paragraph':
-      return <p style={{ marginBottom: '1rem' }}>
-        {block.children.map((child, i) => child.text).join('')}
-      </p>;
-    case 'heading':
-      return <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '1rem 0'}}>
-        {block.children.map((child, i) => child.text).join('')}
-      </h2>;
-    default:
-      return null;
-  }
-};
-
 const BlogEntry = ({ data }) => {
   // Extract the array of blog posts from the nested structure
   const blogPosts = data

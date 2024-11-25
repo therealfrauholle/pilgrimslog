@@ -1,7 +1,6 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
 import Homepage from './pages/Homepage'
-import SiteHeader from './components/SiteHeader'
 import { createTheme } from '@mui/material/styles';
 import { orange,red } from '@mui/material/colors';
 import { ThemeProvider } from '@emotion/react';

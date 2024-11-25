@@ -46,16 +46,6 @@ const Homepage = () => {
     return `${differenceInDays} Tag`;
   };
 
-  const LocationDisplay = ({ location }) => {
-    if (!location || !location.locations || !location.locations.length) return null;
-    
-    return (
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem'}}>
-        {location.locations.map(loc => loc.name).join(', ') || 'Untitled'}
-      </h1>
-    );
-  };
-
 
   const goToHome = () => {
     setCurrentPage(0);
