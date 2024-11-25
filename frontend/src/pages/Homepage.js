@@ -43,7 +43,7 @@ const Homepage = () => {
     // Convert milliseconds to days (1 day = 86400000 ms)
     const differenceInDays = Math.round(differenceInMs / (1000 * 60 * 60 * 24));
   
-    return `${differenceInDays} Tage`;
+    return `${differenceInDays}. Tag`;
   };
 
 
@@ -70,7 +70,7 @@ const Homepage = () => {
     if (currentPage === 1) {
       return (
         <div className="p-6 md:p-8">
-          <h2 className="text-6xl font-extrabold mb-6 text-gray-800" style={{padding: '30px'}}>Einträge</h2>
+          <h2 className="text-6xl font-bold mb-6 text-gray-800" style={{padding: '30px'}}>Einträge</h2>
           <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-12rem)]">
             {blogEntries.map((entry, index) => (
               <button
