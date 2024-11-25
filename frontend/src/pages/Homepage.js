@@ -43,7 +43,7 @@ const Homepage = () => {
     // Convert milliseconds to days (1 day = 86400000 ms)
     const differenceInDays = Math.round(differenceInMs / (1000 * 60 * 60 * 24));
   
-    return `${differenceInDays} Tag`;
+    return `${differenceInDays} Tage`;
   };
 
 
