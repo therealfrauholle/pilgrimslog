@@ -17,16 +17,6 @@ const BlockRenderer = ({ block }) => {
   }
 };
 
-const LocationDisplay = ({ location }) => {
-  if (!location || !location.locations || !location.locations.length) return null;
-  
-  return (
-    <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem'}}>
-      {location.locations.map(loc => loc.name).join(', ') || 'Untitled'}
-    </h1>
-  );
-};
-
 const BlogEntry = ({ data }) => {
   // Extract the array of blog posts from the nested structure
   const blogPosts = data
@@ -48,16 +38,11 @@ const BlogEntry = ({ data }) => {
             borderRadius: '8px',
           }}
         >
-          {<LocationDisplay location={blogPosts.location} />}
+          <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem'}}>
+            {blogPosts.Location || 'Untilted'}
+          </h1>
           <div>
-            {blogPosts.body && Array.isArray(blogPosts.body) && blogPosts.body.map((block, index) => (
-              <BlockRenderer key={index} block={block} />
-            ))}
-          </div>
-          <div>
-            {blogPosts.media && Array.isArray(blogPosts.media) && blogPosts.media.map((block, index) => (
-              <img key={index} src={`http://localhost:1337${block.url}`} alt="" className="w-full md:w-4/5 lg:w-3/4 h-auto object-cover rounded-lg mx-auto"/>
-            ))}
+            {blogPosts.Content}
           </div>
         </div>
     </div>

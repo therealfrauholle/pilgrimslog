@@ -12,7 +12,7 @@ const Homepage = () => {
   useEffect(() => {
     const fetchEntries = async () => {
       try {
-        const response = await fetch('http://localhost:1337/api/blog-entries?populate=*&sort=date:asc');
+        const response = await fetch('http://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc');
         const data = await response.json();
         setBlogEntries(data.data || []);
       } catch (error) {
@@ -34,7 +34,7 @@ const Homepage = () => {
   };
 
   const formatDate = (dateString) => {
-    const startDate = new Date('2024-05-08'); // Start date: 8 May 2024
+    const startDate = new Date('2024-05-07'); // Start date: 8 May 2024
     const givenDate = new Date(dateString);  // Convert the given date string to a Date object
   
     // Calculate the difference in milliseconds
@@ -89,8 +89,12 @@ const Homepage = () => {
                 className='w-full group'
                 >
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center border-b border-gray-200 pb-2">
-                  <span className="text-base md:text-lg font-medium">{<LocationDisplay location={entry.location} /> || 'Untitled'}</span>
-                  <span className="text-sm md:text-base text-gray-600">{formatDate(entry.date)}</span>
+                  <span className="text-base md:text-lg font-medium">
+                    <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem'}}>
+                      {entry.Location|| 'Untitled'}
+                    </h1>
+                  </span>
+                  <span className="text-sm md:text-base text-gray-600">{formatDate(entry.When)}</span>
                   </div>
               </button>
             ))}
@@ -108,7 +112,7 @@ const Homepage = () => {
           <BlogEntry data={entry}/>
           {/* Footer with date */}
           <div className="absolute bottom-0 right-0 p-4 text-gray-600 text-lg">
-            {formatDate(entry.date)}
+            {formatDate(entry.When)}
           </div>
         </div>
       );
