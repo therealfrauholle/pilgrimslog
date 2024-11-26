@@ -12,7 +12,7 @@ const Homepage = () => {
   useEffect(() => {
     const fetchEntries = async () => {
       try {
-        const response = await fetch('http://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc');
+        const response = await fetch('https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc');
         const data = await response.json();
         setBlogEntries(data.data || []);
       } catch (error) {
