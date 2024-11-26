@@ -61,7 +61,11 @@ const Homepage = () => {
             <div className="text-3xl text-left pl-4">eines Pilgers</div>
           </div>
           <div style={{padding: '30px'}}>
-            <p className="text-lg md:text-xl text-gray-600">A collection of thoughts and experiences</p>
+            <p className="text-lg md:text-xl text-gray-600">
+              Wir sind alle Pilger im Leben: Einen Tag kommen wir, den anderen gehen wir. Nur auf der Durchreise.<br/>
+              Dieses Logbuch eines Pilgers sucht festzuhalten, was nicht greifbar scheint. Alles andere mag zwischen den Seiten verloren gehen.<br/>
+              Kannst du es begreifen?
+            </p>
           </div>
         </div>
       );
