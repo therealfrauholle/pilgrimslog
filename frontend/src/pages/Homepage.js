@@ -102,10 +102,11 @@ const Homepage = () => {
     
     if (entry) {
       return (
-        <div className="p-6 md:p-8 overflow-y-auto max-h-[calc(100vh-4rem)]">
-          <BlogEntry data={entry}/>
-          {/* Footer with date */}
-          <div className="absolute bottom-0 right-0 p-4 text-gray-600 text-lg">
+        <div className="flex flex-col h-screen">
+          <div className="flex-grow overflow-y-auto p-6 md:p-8">
+            <BlogEntry data={entry}/>
+          </div>
+          <div className="p-4 text-gray-600 text-lg text-right">
             {formatDate(entry.When)}
           </div>
         </div>
@@ -130,44 +131,54 @@ const Homepage = () => {
             className="p-2 text-blue-500 hover:text-blue-600 transition-colors"
             aria-label="Go to home page"
           >
-           <Bookmark fontSize="large"
-            sx={{ 
-              fontSize: 48,   // Custom pixel size   // Color customization
-              }} 
+           <Bookmark
+            sx={currentPage === 0 ?
+              {fontSize: 32}:{fontSize: 48} // Custom pixel size   // Color customization
+              }
             />
          </button>
           </div>
         </div>
       </div>
       {/* Book Container */}
-      <div className="relative top-4 mx-auto bg-white shadow-xl min-h-screen max-w-5xl  ">
+      <div className="flex-grow top-4 mx-auto bg-white shadow-xl min-h-screen max-w-5xl mx-4 ">
         {/* Page Content */}
-        <div className="relative min-h-screen">
+        <div className="h-full">
           {renderPage()}
-          {/* Full-height Navigation Buttons */}
-          <div className="fixed inset-y-0 left-0 right-0 pointer-events-none flex justify-between">
-            <div className="pointer-events-auto h-full">
-              {currentPage > 0 && (
-                <button
-                  onClick={handlePrevPage}
-                  className="h-full px-2 bg-gradient-to-l hover:bg-gradient-to-r from-transparent to-stone-400 transition-all flex items-center"
-                  aria-label="Previous page"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-              )}
-            </div>
-            <div className="pointer-events-auto h-full">
-              {currentPage < totalPages - 1 && (
-                <button
-                  onClick={handleNextPage}
-                  className="h-full px-2 bg-gradient-to-r hover:bg-gradient-to-l from-transparent to-stone-400 transition-all flex items-center"
-                  aria-label="Next page"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              )}
-            </div>
+        </div>
+        {/* Navigation Buttons */}
+        <div className="fixed inset-y-0 left-0 right-0 pointer-events-none flex items-center justify-between">
+          <div className="pointer-events-auto">
+            {currentPage > 0 && (
+              <button
+                onClick={handlePrevPage}
+                className="h-16 w-9 bg-gray-100/30 mx-1 hover:bg-gray-200/50 
+                          backdrop-blur-sm rounded-r-lg 
+                          flex items-center justify-center 
+                          transition-all duration-300 
+                          shadow-md hover:shadow-xl 
+                          border border-gray-200/20"
+                aria-label="Previous page"
+              >
+                <ChevronLeft className="w-8 h-8 text-gray-700 opacity-70 hover:opacity-100" />
+              </button>
+            )}
+          </div>
+          <div className="pointer-events-auto">
+            {currentPage < totalPages - 1 && (
+              <button
+                onClick={handleNextPage}
+                className="h-16 w-9 mx-1 bg-gray-100/30 hover:bg-gray-200/50 
+                          backdrop-blur-sm rounded-l-lg 
+                          flex items-center justify-center 
+                          transition-all duration-300 
+                          shadow-md hover:shadow-xl 
+                          border border-gray-200/20"
+                aria-label="Next page"
+              >
+                <ChevronRight className="w-8 h-8 text-gray-700 opacity-70 hover:opacity-100" />
+              </button>
+            )}
           </div>
         </div>
       </div>
