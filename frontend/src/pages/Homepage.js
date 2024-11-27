@@ -8,7 +8,7 @@ import BlogEntry from '../components/BlogEntry';
 const Homepage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [blogEntries, setBlogEntries] = useState([]);
-  
+
   useEffect(() => {
     const fetchEntries = async () => {
       try {
@@ -119,14 +119,16 @@ const Homepage = () => {
         {/* Container positioned just outside the page content */}
         <div className="fixed top-4 right-4 lg:right-[15%] xl:right-[25%] transition-all duration-300">
           <button
+            disabled = {currentPage === 0}
             onClick={goToHome}
+            style={currentPage === 0 ?
+              {color:'gray'} : {color:'orange'}}
             className="p-2 text-blue-500 hover:text-blue-600 transition-colors"
             aria-label="Go to home page"
           >
            <Bookmark fontSize="large"
             sx={{ 
-              fontSize: 48,   // Custom pixel size
-              color: 'orange'   // Color customization
+              fontSize: 48,   // Custom pixel size   // Color customization
               }} 
             />
          </button>
