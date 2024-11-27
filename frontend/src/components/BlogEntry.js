@@ -1,4 +1,6 @@
 import React from 'react';
+import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
+
 
 const BlogEntry = ({ data }) => {
   // Extract the array of blog posts from the nested structure
@@ -25,7 +27,7 @@ const BlogEntry = ({ data }) => {
             {blogPosts.Location || 'Untilted'}
           </h1>
           <div>
-            {blogPosts.Content}
+            <StrapiMarkdownRenderer data={blogPosts.Content}/>
           </div>
         </div>
     </div>
