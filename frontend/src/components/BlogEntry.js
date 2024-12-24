@@ -18,7 +18,7 @@ const BlogEntry = ({ data }) => {
           key={blogPosts.id}
           style={{ 
             maxWidth: '800px', 
-            margin: '20px auto', 
+            border: '20px', 
             padding: '20px',
             borderRadius: '8px',
           }}

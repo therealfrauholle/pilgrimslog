@@ -1,9 +1,9 @@
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
-import Homepage from './pages/Homepage'
+import RoutingService from './services/RoutingService';
 import { createTheme } from '@mui/material/styles';
-import { orange,red } from '@mui/material/colors';
+import { orange, red } from '@mui/material/colors';
 import { ThemeProvider } from '@emotion/react';
+import BookLayout from './components/BookLayout';
 
 
 const theme = createTheme({
@@ -17,17 +17,16 @@ const theme = createTheme({
   },
 });
 
+
+
+
+
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <div className="body">
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/:slug" element={<Homepage />} />
-          </Routes>
-        </div>
-      </Router>
+      <BookLayout>
+        <RoutingService />
+      </BookLayout>
     </ThemeProvider>
   );
 };
