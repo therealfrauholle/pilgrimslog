@@ -13,7 +13,7 @@ const BlogEntry = ({ data }) => {
   }
 
   return (
-    <div>
+    <div className="p-6 md:p-8">
         <div 
           key={blogPosts.id}
           style={{ 
