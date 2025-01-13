@@ -7,7 +7,7 @@ export default function StrapiMarkdownRenderer(content) {
   console.log(content)
   if(!content) return (<div className='markdown-error'>Kein Inhalt verfügbar.</div>);    
   return (
-    <div className='strapi-markdown-content'>
+    <div className='strapi-markdown-content prose'>
       <Markdown children={content.data} remarkPlugins={[remarkGfm]} />
     </div>
   )
