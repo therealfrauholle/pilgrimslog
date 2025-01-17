@@ -9,9 +9,7 @@ import NavigationButtons from '../components/NavigationButtons'
 export default function RoutingService() {
 
   const { blogEntries, isLoading, error } = useFetchAllEntries();
-    
-  // Add this console.log to debug
-  console.log('blogEntries:', blogEntries.data);
+  const entries = blogEntries.data;
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -22,7 +20,7 @@ export default function RoutingService() {
       const givenDate = new Date(dateString);
       const differenceInMs = givenDate - startDate;
       const differenceInDays = Math.round(differenceInMs / (1000 * 60 * 60 * 24));
-      return `${differenceInDays}`;
+      return differenceInDays;
   };
 
   // Use Array.map instead of forEach for better readability
@@ -34,7 +32,7 @@ export default function RoutingService() {
             <Routes>
               <Route path="/" element={<Homepage />} />
               <Route path="/Content" element={<Contentpage />} />
-              <Route path="/Tag/:day" element={<Entry />} />
+              <Route path="/Tag/:day" element={<Entry entries={entries} availableDays={availableDays}/>} />
               <Route path="/:slug" element={<Homepage />} />
             </Routes>
         </div>
