@@ -1,7 +1,7 @@
 import React from 'react';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
 
-const BlogEntry = ({ data }) => {
+const BlogEntry = ({ data, day }) => {
     // Extract the array of blog posts from the nested structure
     const blogPosts = data;
 
@@ -12,28 +12,27 @@ const BlogEntry = ({ data }) => {
     }
 
     return (
-        <div className="p-6 md:p-8">
-            <div
-                key={blogPosts.id}
+        <div
+            key={blogPosts.id}
+            style={{
+                padding: '60px',
+            }}
+            className="flex flex-col p-6 md:p-8 h-dvh"
+        >
+            <h1
                 style={{
-                    maxWidth: '800px',
-                    border: '20px',
-                    padding: '20px',
-                    borderRadius: '8px',
+                    fontSize: '2rem',
+                    fontWeight: 'bold',
+                    marginBottom: '2rem',
                 }}
             >
-                <h1
-                    style={{
-                        fontSize: '2rem',
-                        fontWeight: 'bold',
-                        marginBottom: '1rem',
-                    }}
-                >
-                    {blogPosts.Location || 'Untilted'}
-                </h1>
-                <div>
-                    <StrapiMarkdownRenderer data={blogPosts.Content} />
-                </div>
+                {blogPosts.Location || 'Untilted'}
+            </h1>
+            <div className="grow">
+                <StrapiMarkdownRenderer data={blogPosts.Content} />
+            </div>
+            <div className="sticky absolute bottom-0 backdrop-blur-sm p-4 text-gray-600 text-lg text-right">
+                {day}. Tag
             </div>
         </div>
     );

@@ -30,7 +30,7 @@ export default function RoutingService() {
 
     return (
         <Router>
-            <div className="body">
+            <div className="body h-dvh">
                 <Routes>
                     <Route path="/" element={<Homepage />} />
                     <Route path="/Content" element={<Contentpage />} />

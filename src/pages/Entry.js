@@ -19,10 +19,7 @@ export default function Entry(props) {
     return (
         <>
             <HeaderBookmark isHome={false} onClick={() => navigate('/')} />
-            <BlogEntry data={props.entries[index]} />
-            <div className="sticky absolute bottom-0 bg-white/80 backdrop-blur-sm p-4 text-gray-600 text-lg text-right">
-                {day}. Tag
-            </div>
+            <BlogEntry data={props.entries[index]} day={day} />
         </>
     );
 }
