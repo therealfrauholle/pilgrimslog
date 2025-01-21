@@ -13,7 +13,7 @@ export default function Entry(props) {
 
     const index = props.availableDays.findIndex((d) => d == day);
 
-    if (index == -1) return <div>Day not found</div>;
+    if (index === -1) return <div>Day not found</div>;
 
     //TODO fix: only get single type object not an array
     return (
