@@ -13,34 +13,34 @@ const NavigationButtons = ({ availableDays }) => {
         nextPath: '',
     });
 
-    // Helper function to get the current page type and day
-    const getCurrentPageInfo = () => {
-        const path = location.pathname;
-
-        if (path === '/') return { type: 'home', day: null };
-        if (path === '/Content') return { type: 'content', day: null };
-
-        const dayMatch = path.match(/\/Tag\/(\d+)/);
-        if (dayMatch) return { type: 'entry', day: parseInt(dayMatch[1]) };
-
-        return { type: 'unknown', day: null };
-    };
-
-    // Helper function to find the next available day
-    const findNextDay = (currentDay) => {
-        const nextAvailable = availableDays.find((day) => day > currentDay);
-        return nextAvailable || null;
-    };
-
-    // Helper function to find the previous available day
-    const findPrevDay = (currentDay) => {
-        const prevAvailable = [...availableDays]
-            .reverse()
-            .find((day) => day < currentDay);
-        return prevAvailable || null;
-    };
-
     useEffect(() => {
+        // Helper function to get the current page type and day
+        const getCurrentPageInfo = () => {
+            const path = location.pathname;
+
+            if (path === '/') return { type: 'home', day: null };
+            if (path === '/Content') return { type: 'content', day: null };
+
+            const dayMatch = path.match(/\/Tag\/(\d+)/);
+            if (dayMatch) return { type: 'entry', day: parseInt(dayMatch[1]) };
+
+            return { type: 'unknown', day: null };
+        };
+
+        // Helper function to find the next available day
+        const findNextDay = (currentDay) => {
+            const nextAvailable = availableDays.find((day) => day > currentDay);
+            return nextAvailable || null;
+        };
+
+        // Helper function to find the previous available day
+        const findPrevDay = (currentDay) => {
+            const prevAvailable = [...availableDays]
+                .reverse()
+                .find((day) => day < currentDay);
+            return prevAvailable || null;
+        };
+
         const { type, day } = getCurrentPageInfo();
         let newNavigation = {
             showPrev: false,
