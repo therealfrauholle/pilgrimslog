@@ -15,7 +15,7 @@ const BlogEntry = ({ data, day }) => {
         <div
             key={blogPosts.id}
             style={{
-                padding: '60px',
+                padding: '50px 50px 10px 50px',
             }}
             className="flex flex-col p-6 md:p-8 h-dvh"
         >
@@ -28,10 +28,10 @@ const BlogEntry = ({ data, day }) => {
             >
                 {blogPosts.Location || 'Untilted'}
             </h1>
-            <div className="grow">
+            <div className="grow overflow-y-auto">
                 <StrapiMarkdownRenderer data={blogPosts.Content} />
             </div>
-            <div className="sticky absolute bottom-0 backdrop-blur-sm p-4 text-gray-600 text-lg text-right">
+            <div className="p-4 text-gray-600 text-lg text-right">
                 {day}. Tag | ≈{blogPosts.km}km
             </div>
         </div>
