@@ -33,7 +33,10 @@ export default function RoutingService() {
             <div className="body h-dvh">
                 <Routes>
                     <Route path="/" element={<Homepage />} />
-                    <Route path="/Content" element={<Contentpage />} />
+                    <Route
+                        path="/Content"
+                        element={<Contentpage entries={entries} />}
+                    />
                     <Route
                         path="/Tag/:day"
                         element={
