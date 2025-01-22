@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import haversine from 'haversine-distance';
 
 export function useFetchAllEntries() {
     const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +23,24 @@ export function useFetchAllEntries() {
 
                 // Check the structure of the data
                 if (data) {
+                    const startgps = { lat: 52.5522859, lon: 13.3789186 };
+
+                    let total = 0.0;
+                    let lastgps = startgps;
+
+                    data.data.forEach(function (entry) {
+                        const thisgps = {
+                            lat: entry.Where.lat,
+                            lon: entry.Where.lng,
+                        };
+                        const newdistance = haversine(lastgps, thisgps);
+
+                        total += newdistance * 1.25;
+
+                        lastgps = thisgps;
+
+                        entry.km = Math.round(total / 1000);
+                    });
                     setBlogEntries(data);
                 } else {
                     console.warn('Unexpected data structure:', data);

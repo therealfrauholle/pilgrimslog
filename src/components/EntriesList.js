@@ -24,7 +24,7 @@ const EntriesList = ({ entries, formatDate, onEntrySelect }) => {
                                 {entry.Location || 'Untitled'}
                             </span>
                             <span className="text-base text-gray-600">
-                                {formatDate(entry.When)}. Tag
+                                {formatDate(entry.When)}. Tag | ≈{entry.km}km
                             </span>
                         </div>
                     </button>
