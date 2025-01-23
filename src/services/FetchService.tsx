@@ -1,6 +1,20 @@
 import haversine from 'haversine-distance';
 
-export async function fetchAll() {
+export interface FetchList {
+    data: FetchEntry[]
+}
+
+export interface FetchEntry {
+    When: string,
+    Where: {
+        lat: number,
+        long: number
+    },
+    Location: string,
+    Content: string,
+    km: number
+}
+export async function fetchAll(): Promise<FetchList> {
     const apiUrl =
         'https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc&pagination[pageSize]=10000';
 
@@ -9,6 +23,7 @@ export async function fetchAll() {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+            // TODO do sanity check of json
             return response.json();
         })
         .then((data) => {

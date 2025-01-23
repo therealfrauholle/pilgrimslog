@@ -1,19 +1,15 @@
-import React from 'react';
+import { FetchEntry } from '../services/FetchService';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
 
-const BlogEntry = ({ data, day }) => {
-    // Extract the array of blog posts from the nested structure
-    const blogPosts = data;
+export default function BlogEntry({ data, day }: { data: FetchEntry, day: string }) {
+    console.log('Rendering entry: ', data);
 
-    console.log('Blog posts:', blogPosts);
-
-    if (!blogPosts) {
+    if (!data) {
         return <div>No blog posts available</div>;
     }
 
     return (
         <div
-            key={blogPosts.id}
             style={{
                 padding: '50px 50px 10px 50px',
             }}
@@ -26,16 +22,15 @@ const BlogEntry = ({ data, day }) => {
                     marginBottom: '2rem',
                 }}
             >
-                {blogPosts.Location || 'Untilted'}
+                {data.Location || 'Untilted'}
             </h1>
             <div className="grow overflow-y-auto">
-                <StrapiMarkdownRenderer data={blogPosts.Content} />
+                <StrapiMarkdownRenderer data={data.Content} />
             </div>
             <div className="p-4 text-gray-600 text-lg text-right">
-                {day}. Tag | ≈{blogPosts.km}km
+                {day}. Tag | ≈{data.km}km
             </div>
         </div>
     );
 };
 
-export default BlogEntry;

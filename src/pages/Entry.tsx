@@ -3,15 +3,14 @@ import BlogEntry from '../components/BlogEntry';
 import { useParams } from 'react-router-dom';
 import HeaderBookmark from '../components/HeaderBookmark';
 import { useNavigate } from 'react-router-dom';
+import { FetchList } from '../services/FetchService';
 
-export default function Entry(props) {
+export default function Entry({ entries, availableDays }: { entries: FetchList, availableDays: number[] }) {
     const { day } = useParams();
+    const theDay = day as any as number;
     const navigate = useNavigate();
 
-    if (!props.entries || props.entries.length === 0)
-        return <div>No entries found</div>;
-
-    const index = props.availableDays.findIndex((d) => d == day);
+    const index = availableDays.findIndex((d) => d = theDay);
 
     if (index === -1) return <div>Day not found</div>;
 
@@ -19,7 +18,7 @@ export default function Entry(props) {
     return (
         <>
             <HeaderBookmark isHome={false} onClick={() => navigate('/')} />
-            <BlogEntry data={props.entries[index]} day={day} />
+            <BlogEntry data={entries.data[index]} day={day} />
         </>
     );
 }
