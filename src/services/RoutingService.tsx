@@ -1,13 +1,29 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Homepage from '../pages/Homepage';
 import Contentpage from '../pages/Contentpage';
 import Entry from '../pages/Entry';
-import { useFetchAllEntries } from '../services/FetchService';
+import { fetchAll } from '../services/FetchService';
 import NavigationButtons from '../components/NavigationButtons';
 
 export default function RoutingService() {
-    const { blogEntries, isLoading, error } = useFetchAllEntries();
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [blogEntries, setBlogEntries] = useState([]);
+
+    useEffect(() => {
+        setIsLoading(true);
+        fetchAll().then((data) => {
+            setIsLoading(false);
+            setBlogEntries(data);
+        }).catch((err) => {
+            console.error('Fetch Error:', err);
+            setError(err);
+            setIsLoading(false);
+        });
+    }, []);
+
     const entries = (blogEntries as any).data;
 
     if (isLoading) return <div>Loading...</div>;
