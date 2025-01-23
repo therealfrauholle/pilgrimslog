@@ -5,7 +5,7 @@ import CoverPage from './CoverPage';
 const Homepage = () => {
     return (
         <>
-            <HeaderBookmark isHome={true} />
+            <HeaderBookmark isHome={true} onClick={console.log('Already home!')} />
             <CoverPage />
         </>
     );

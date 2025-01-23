@@ -8,23 +8,20 @@ import NavigationButtons from '../components/NavigationButtons';
 
 export default function RoutingService() {
     const { blogEntries, isLoading, error } = useFetchAllEntries();
-    const entries = blogEntries.data;
+    const entries = (blogEntries as any).data;
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-    const formatDate = (dateString) => {
+    const formatDate = (dateString: string) => {
         const startDate = new Date('2024-05-07');
         const givenDate = new Date(dateString);
-        const differenceInMs = givenDate - startDate;
-        const differenceInDays = Math.round(
-            differenceInMs / (1000 * 60 * 60 * 24),
-        );
-        return differenceInDays;
+
+        return (givenDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
     };
 
     // Use Array.map instead of forEach for better readability
-    const availableDays = blogEntries.data.map((entry) =>
+    const availableDays = (blogEntries as any).data.map((entry) =>
         formatDate(entry.When),
     );
 

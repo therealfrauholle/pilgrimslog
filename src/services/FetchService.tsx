@@ -28,7 +28,7 @@ export function useFetchAllEntries() {
                     let total = 0.0;
                     let lastgps = startgps;
 
-                    data.data.forEach(function (entry) {
+                    data.data.forEach(function(entry) {
                         const thisgps = {
                             lat: entry.Where.lat,
                             lon: entry.Where.lng,
@@ -43,14 +43,7 @@ export function useFetchAllEntries() {
                         const startDate = new Date('2024-05-07'); // Start date: 8 May 2024
                         const givenDate = new Date(entry.When); // Convert the given date string to a Date object
 
-                        // Calculate the difference in milliseconds
-                        const differenceInMs = givenDate - startDate;
-
-                        // Convert milliseconds to days (1 day = 86400000 ms)
-                        const differenceInDays = Math.round(
-                            differenceInMs / (1000 * 60 * 60 * 24),
-                        );
-                        entry.day = differenceInDays;
+                        entry.day = (givenDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
                     });
                     setBlogEntries(data);
                 } else {
