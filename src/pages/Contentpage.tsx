@@ -5,22 +5,14 @@ import EntriesList from '../components/EntriesList';
 const Contentpage = ({ entries }) => {
     const navigate = useNavigate();
 
-    const formatDate = (dateString) => {
+    const formatDate = (dateString: string) => {
         const startDate = new Date('2024-05-07'); // Start date: 8 May 2024
         const givenDate = new Date(dateString); // Convert the given date string to a Date object
 
-        // Calculate the difference in milliseconds
-        const differenceInMs = givenDate - startDate;
-
-        // Convert milliseconds to days (1 day = 86400000 ms)
-        const differenceInDays = Math.round(
-            differenceInMs / (1000 * 60 * 60 * 24),
-        );
-
-        return `${differenceInDays}`;
+        return (givenDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
     };
 
-    const handleEntrySelect = (day) => {
+    const handleEntrySelect = (day: number) => {
         console.log(day);
         navigate(`/Tag/${day}`);
     };
@@ -28,7 +20,7 @@ const Contentpage = ({ entries }) => {
     return (
         <>
             <HeaderBookmark isHome={false} onClick={() => navigate('/')} />
-            <EntriesList
+            < EntriesList
                 entries={entries}
                 formatDate={formatDate}
                 onEntrySelect={handleEntrySelect}
