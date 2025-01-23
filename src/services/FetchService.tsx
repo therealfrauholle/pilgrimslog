@@ -1,33 +1,6 @@
-import { useEffect, useState } from 'react';
 import haversine from 'haversine-distance';
 
-export function useFetchAllEntries() {
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [blogEntries, setBlogEntries] = useState([]);
-
-    useEffect(() => {
-        setIsLoading(true);
-        innerfetch().then((data) => {
-            setIsLoading(false);
-            setBlogEntries(data);
-        }).catch((err) => {
-            console.error('Fetch Error:', err);
-            setError(err);
-            setIsLoading(false);
-        });
-    }, []);
-
-    // Return an object with more information
-    return {
-        blogEntries,
-        isLoading,
-        error,
-    };
-
-}
-
-async function innerfetch() {
+export async function fetchAll() {
     const apiUrl =
         'https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc&pagination[pageSize]=10000';
 
