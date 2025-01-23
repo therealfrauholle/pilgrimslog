@@ -1,6 +1,6 @@
-import React from 'react';
+import { FetchEntry, FetchList } from '../services/FetchService';
 
-const EntriesList = ({ entries, formatDate, onEntrySelect }) => {
+export default function EntriesList({ entries, formatDate, onEntrySelect }: { entries: FetchList; formatDate: (dateString: string) => number; onEntrySelect: (day: number) => void; }) {
     return (
         <div className="flex flex-col h-dvh p-6 md:p-8">
             <div
@@ -10,7 +10,7 @@ const EntriesList = ({ entries, formatDate, onEntrySelect }) => {
                 Einträge
             </div>
             <div className="overflow-y-auto grow">
-                {entries.map((entry, index) => (
+                {entries.data.map((entry: FetchEntry, index: number) => (
                     <button
                         key={index}
                         onClick={() => onEntrySelect(formatDate(entry.When))}
@@ -34,4 +34,3 @@ const EntriesList = ({ entries, formatDate, onEntrySelect }) => {
     );
 };
 
-export default EntriesList;

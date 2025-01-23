@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import HeaderBookmark from '../components/HeaderBookmark';
 import EntriesList from '../components/EntriesList';
+import { FetchList } from '../services/FetchService';
 
-const Contentpage = ({ entries }) => {
+export default function Contentpage({ entries }: { entries: FetchList }) {
     const navigate = useNavigate();
 
     const formatDate = (dateString: string) => {
@@ -29,4 +30,3 @@ const Contentpage = ({ entries }) => {
     );
 };
 
-export default Contentpage;

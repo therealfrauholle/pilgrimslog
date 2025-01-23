@@ -4,13 +4,13 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Homepage from '../pages/Homepage';
 import Contentpage from '../pages/Contentpage';
 import Entry from '../pages/Entry';
-import { fetchAll } from '../services/FetchService';
+import { fetchAll, FetchEntry, FetchList } from '../services/FetchService';
 import NavigationButtons from '../components/NavigationButtons';
 
 export default function RoutingService() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [blogEntries, setBlogEntries] = useState([]);
+    const [entries, setBlogEntries] = useState<FetchList>(null);
 
     useEffect(() => {
         setIsLoading(true);
@@ -24,7 +24,6 @@ export default function RoutingService() {
         });
     }, []);
 
-    const entries = (blogEntries as any).data;
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -37,7 +36,7 @@ export default function RoutingService() {
     };
 
     // Use Array.map instead of forEach for better readability
-    const availableDays = (blogEntries as any).data.map((entry) =>
+    const availableDays = entries.data.map((entry: FetchEntry) =>
         formatDate(entry.When),
     );
 
