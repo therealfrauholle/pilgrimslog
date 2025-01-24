@@ -1,19 +1,89 @@
 import haversine from 'haversine-distance';
 
 export interface FetchList {
-    data: FetchEntry[]
+    data: FetchEntry[];
+
+    readonly getEntryByDay: (day: number) => FetchEntry
 }
 
+class InnerList {
+    data: InnerEntry[] = null;
+
+    constructor(fetched: FetchList) {
+        this.data = fetched.data.map((entry) => new InnerEntry(entry))
+
+        let previous = null;
+        this.data.forEach((entry: InnerEntry) => {
+            entry.previous = previous;
+            previous = entry;
+        });
+
+        let next = null;
+        this.data.slice().reverse().forEach((entry: InnerEntry) => {
+            entry.next = next;
+            next = entry;
+        });
+
+    }
+
+    getEntryByDay(day: number): FetchEntry {
+        return this.data.find((entry) => entry.getDaysSinceStart() == day)
+    }
+}
 export interface FetchEntry {
     When: string,
     Where: {
         lat: number,
-        long: number
+        lng: number
     },
     Location: string,
     Content: string,
-    km: number
+    km: number,
+
+    readonly getDaysSinceStart: () => number,
+
+    readonly getPrevious: () => FetchEntry,
+    readonly getNext: () => FetchEntry,
 }
+
+class InnerEntry {
+    When: string = null;
+    Where: {
+        lat: number,
+        lng: number
+    } = null;
+    Location: string = null;
+    Content: string = null;
+    km: number = null;
+
+    next: FetchEntry = null;
+    previous: FetchEntry = null;
+
+    constructor(fetched: FetchEntry) {
+        this.When = fetched.When;
+        this.Where = fetched.Where;
+        this.Content = fetched.Content;
+        this.Location = fetched.Location;
+        this.km = fetched.km;
+    }
+
+    getDaysSinceStart(): number {
+        const startDate = new Date('2024-05-07'); // Start date: 8 May 2024
+        const givenDate = new Date(this.When); // Convert the given date string to a Date object
+
+        return (givenDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+    }
+
+    getPrevious(): FetchEntry {
+        return this.previous
+    }
+
+    getNext(): FetchEntry {
+        return this.next
+    }
+
+}
+
 export async function fetchAll(): Promise<FetchList> {
     const apiUrl =
         'https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc&pagination[pageSize]=10000';
@@ -26,17 +96,19 @@ export async function fetchAll(): Promise<FetchList> {
             // TODO do sanity check of json
             return response.json();
         })
-        .then((data) => {
-            console.log('Full API Response:', data); // Log the full response
+        .then((json) => {
+            console.log('Full API Response:', json); // Log the full response
 
             // Check the structure of the data
-            if (data) {
+            if (json) {
+                const data = new InnerList(json);
+
                 const startgps = { lat: 52.5522859, lon: 13.3789186 };
 
                 let total = 0.0;
                 let lastgps = startgps;
 
-                data.data.forEach(function(entry) {
+                data.data.forEach(function(entry: InnerEntry) {
                     const thisgps = {
                         lat: entry.Where.lat,
                         lon: entry.Where.lng,
@@ -48,14 +120,11 @@ export async function fetchAll(): Promise<FetchList> {
                     lastgps = thisgps;
 
                     entry.km = Math.round(total / 1000);
-                    const startDate = new Date('2024-05-07'); // Start date: 8 May 2024
-                    const givenDate = new Date(entry.When); // Convert the given date string to a Date object
-
-                    entry.day = (givenDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
                 });
+                return data
             } else {
-                console.warn('Unexpected data structure:', data);
+                console.warn('Unexpected data structure:', json);
+                return null;
             }
-            return data
         })
 }

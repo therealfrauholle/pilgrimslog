@@ -1,14 +1,16 @@
-import React from 'react';
 import HeaderBookmark from '../components/HeaderBookmark';
+import { LinkLocation } from '../components/NavigationButtons';
+import NavigationButtons from '../components/NavigationButtons';
 import CoverPage from './CoverPage';
 
-const Homepage = () => {
+export default function Homepage() {
     return (
         <>
-            <HeaderBookmark isHome={true} onClick={console.log('Already home!')} />
+            <HeaderBookmark isHome={true} onClick={console.log("Already home!")} />
             <CoverPage />
+
+            <NavigationButtons previous={null} next={LinkLocation.content()} />
         </>
     );
 };
 
-export default Homepage;

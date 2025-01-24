@@ -1,7 +1,7 @@
 import { FetchEntry } from '../services/FetchService';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
 
-export default function BlogEntry({ data, day }: { data: FetchEntry, day: string }) {
+export default function BlogEntry({ data }: { data: FetchEntry }) {
     console.log('Rendering entry: ', data);
 
     if (!data) {
@@ -28,7 +28,7 @@ export default function BlogEntry({ data, day }: { data: FetchEntry, day: string
                 <StrapiMarkdownRenderer data={data.Content} />
             </div>
             <div className="p-4 text-gray-600 text-lg text-right">
-                {day}. Tag | ≈{data.km}km
+                {data.getDaysSinceStart()}. Tag | ≈{data.km}km
             </div>
         </div>
     );
