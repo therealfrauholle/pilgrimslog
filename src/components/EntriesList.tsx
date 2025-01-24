@@ -1,6 +1,6 @@
 import { FetchEntry, FetchList } from '../services/FetchService';
 
-export default function EntriesList({ entries, formatDate, onEntrySelect }: { entries: FetchList; formatDate: (dateString: string) => number; onEntrySelect: (day: number) => void; }) {
+export default function EntriesList({ entries, onEntrySelect }: { entries: FetchList; onEntrySelect: (day: number) => void; }) {
     return (
         <div className="flex flex-col h-dvh p-6 md:p-8">
             <div
@@ -13,7 +13,7 @@ export default function EntriesList({ entries, formatDate, onEntrySelect }: { en
                 {entries.data.map((entry: FetchEntry, index: number) => (
                     <button
                         key={index}
-                        onClick={() => onEntrySelect(formatDate(entry.When))}
+                        onClick={() => onEntrySelect(entry.getDaysSinceStart())}
                         className="w-full group"
                     >
                         <div
@@ -24,7 +24,7 @@ export default function EntriesList({ entries, formatDate, onEntrySelect }: { en
                                 {entry.Location || 'Untitled'}
                             </span>
                             <span className="text-base text-gray-600">
-                                {formatDate(entry.When)}. Tag | ≈{entry.km}km
+                                {entry.getDaysSinceStart()}. Tag | ≈{entry.km}km
                             </span>
                         </div>
                     </button>

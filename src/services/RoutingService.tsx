@@ -1,44 +1,31 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Homepage from '../pages/Homepage';
 import Contentpage from '../pages/Contentpage';
 import Entry from '../pages/Entry';
-import { fetchAll, FetchEntry, FetchList } from '../services/FetchService';
-import NavigationButtons from '../components/NavigationButtons';
+import { fetchAll, FetchList } from '../services/FetchService';
 
 export default function RoutingService() {
-    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [entries, setBlogEntries] = useState<FetchList>(null);
 
     useEffect(() => {
-        setIsLoading(true);
         fetchAll().then((data) => {
-            setIsLoading(false);
             setBlogEntries(data);
         }).catch((err) => {
             console.error('Fetch Error:', err);
             setError(err);
-            setIsLoading(false);
         });
     }, []);
 
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    if (error == null && entries == null) {
+        return <></>
+    }
 
-    const formatDate = (dateString: string) => {
-        const startDate = new Date('2024-05-07');
-        const givenDate = new Date(dateString);
-
-        return (givenDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
-    };
-
-    // Use Array.map instead of forEach for better readability
-    const availableDays = entries.data.map((entry: FetchEntry) =>
-        formatDate(entry.When),
-    );
+    if (error != null) {
+        return <div>Error: {error.message}</div>
+    }
 
     return (
         <Router>
@@ -54,14 +41,12 @@ export default function RoutingService() {
                         element={
                             <Entry
                                 entries={entries}
-                                availableDays={availableDays}
                             />
                         }
                     />
                     <Route path="/:slug" element={<Homepage />} />
                 </Routes>
             </div>
-            <NavigationButtons availableDays={availableDays} />
         </Router>
     );
 }
