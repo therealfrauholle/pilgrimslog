@@ -30,7 +30,7 @@ class InnerList {
 
     getEntryByDay(day: number): FetchEntry {
         return this.data.find((entry) => {
-            return entry.getDaysSinceStart() == day;
+            return entry.getDaysSinceStart() === day;
         });
     }
 }
