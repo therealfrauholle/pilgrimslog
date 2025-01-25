@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import HeaderBookmark from '../components/HeaderBookmark';
 import EntriesList from '../components/EntriesList';
-import { FetchList } from '../services/FetchService';
+import { ILogEntries } from '../services/FetchService';
 import NavigationButtons, {
     LinkLocation,
 } from '../components/NavigationButtons';
 
-export default function Contentpage({ entries }: { entries: FetchList }) {
+export default function Contentpage({ entries }: { entries: ILogEntries }) {
     const navigate = useNavigate();
 
     const handleEntrySelect = (day: number) => {

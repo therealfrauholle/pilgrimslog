@@ -2,12 +2,12 @@ import BlogEntry from '../components/BlogEntry';
 import { useParams } from 'react-router-dom';
 import HeaderBookmark from '../components/HeaderBookmark';
 import { useNavigate } from 'react-router-dom';
-import { FetchList } from '../services/FetchService';
+import { ILogEntries } from '../services/FetchService';
 import NavigationButtons, {
     LinkLocation,
 } from '../components/NavigationButtons';
 
-export default function Entry({ entries }: { entries: FetchList }) {
+export default function Entry({ entries }: { entries: ILogEntries }) {
     const { day } = useParams();
 
     const navigate = useNavigate();

@@ -1,7 +1,7 @@
-import { FetchEntry } from '../services/FetchService';
+import { ILogEntry } from '../services/FetchService';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
 
-export default function BlogEntry({ data }: { data: FetchEntry }) {
+export default function BlogEntry({ data }: { data: ILogEntry }) {
     console.log('Rendering entry: ', data);
 
     if (!data) {

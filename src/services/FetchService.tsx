@@ -1,19 +1,19 @@
 import haversine from 'haversine-distance';
 
-export interface FetchList {
-    data: FetchEntry[];
+export interface ILogEntries {
+    data: ILogEntry[];
 
-    readonly getEntryByDay: (day: number) => FetchEntry;
+    readonly getEntryByDay: (day: number) => ILogEntry;
 }
 
-class InnerList {
-    data: InnerEntry[] = null;
+class LogEntries {
+    data: LogEntry[] = null;
 
-    constructor(fetched: FetchList) {
-        this.data = fetched.data.map((entry) => new InnerEntry(entry));
+    constructor(fetched: ILogEntries) {
+        this.data = fetched.data.map((entry) => new LogEntry(entry));
 
         let previous = null;
-        this.data.forEach((entry: InnerEntry) => {
+        this.data.forEach((entry: LogEntry) => {
             entry.previous = previous;
             previous = entry;
         });
@@ -22,19 +22,19 @@ class InnerList {
         this.data
             .slice()
             .reverse()
-            .forEach((entry: InnerEntry) => {
+            .forEach((entry: LogEntry) => {
                 entry.next = next;
                 next = entry;
             });
     }
 
-    getEntryByDay(day: number): FetchEntry {
+    getEntryByDay(day: number): ILogEntry {
         return this.data.find((entry) => {
             return entry.getDaysSinceStart() === day;
         });
     }
 }
-export interface FetchEntry {
+export interface ILogEntry {
     When: string;
     Where: {
         lat: number;
@@ -46,11 +46,11 @@ export interface FetchEntry {
 
     readonly getDaysSinceStart: () => number;
 
-    readonly getPrevious: () => FetchEntry;
-    readonly getNext: () => FetchEntry;
+    readonly getPrevious: () => ILogEntry;
+    readonly getNext: () => ILogEntry;
 }
 
-class InnerEntry {
+class LogEntry {
     When: string = null;
     Where: {
         lat: number;
@@ -60,10 +60,10 @@ class InnerEntry {
     Content: string = null;
     km: number = null;
 
-    next: FetchEntry = null;
-    previous: FetchEntry = null;
+    next: ILogEntry = null;
+    previous: ILogEntry = null;
 
-    constructor(fetched: FetchEntry) {
+    constructor(fetched: ILogEntry) {
         this.When = fetched.When;
         this.Where = fetched.Where;
         this.Content = fetched.Content;
@@ -80,16 +80,16 @@ class InnerEntry {
         );
     }
 
-    getPrevious(): FetchEntry {
+    getPrevious(): ILogEntry {
         return this.previous;
     }
 
-    getNext(): FetchEntry {
+    getNext(): ILogEntry {
         return this.next;
     }
 }
 
-export async function fetchAll(): Promise<FetchList> {
+export async function fetchAll(): Promise<ILogEntries> {
     const apiUrl =
         'https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc&pagination[pageSize]=10000';
 
@@ -106,14 +106,14 @@ export async function fetchAll(): Promise<FetchList> {
 
             // Check the structure of the data
             if (json) {
-                const data = new InnerList(json);
+                const data = new LogEntries(json);
 
                 const startgps = { lat: 52.5522859, lon: 13.3789186 };
 
                 let total = 0.0;
                 let lastgps = startgps;
 
-                data.data.forEach(function (entry: InnerEntry) {
+                data.data.forEach(function (entry: LogEntry) {
                     const thisgps = {
                         lat: entry.Where.lat,
                         lon: entry.Where.lng,

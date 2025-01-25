@@ -1,10 +1,10 @@
-import { FetchEntry, FetchList } from '../services/FetchService';
+import { ILogEntry, ILogEntries } from '../services/FetchService';
 
 export default function EntriesList({
     entries,
     onEntrySelect,
 }: {
-    entries: FetchList;
+    entries: ILogEntries;
     onEntrySelect: (day: number) => void;
 }) {
     return (
@@ -16,7 +16,7 @@ export default function EntriesList({
                 Einträge
             </div>
             <div className="overflow-y-auto grow">
-                {entries.data.map((entry: FetchEntry, index: number) => (
+                {entries.data.map((entry: ILogEntry, index: number) => (
                     <button
                         key={index}
                         onClick={() => onEntrySelect(entry.getDaysSinceStart())}

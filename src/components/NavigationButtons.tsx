@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { FetchEntry } from '../services/FetchService';
+import { ILogEntry } from '../services/FetchService';
 import { JSX } from 'react/jsx-runtime';
 
 enum Page {
@@ -12,9 +12,9 @@ enum Page {
 
 export class LinkLocation {
     page: Page;
-    day: FetchEntry;
+    day: ILogEntry;
 
-    static day(day: FetchEntry): LinkLocation {
+    static day(day: ILogEntry): LinkLocation {
         let newLocation = new LinkLocation();
         newLocation.page = Page.Day;
         newLocation.day = day;
