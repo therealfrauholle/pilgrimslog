@@ -2,7 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import HeaderBookmark from '../components/HeaderBookmark';
 import EntriesList from '../components/EntriesList';
 import { FetchList } from '../services/FetchService';
-import NavigationButtons, { LinkLocation } from '../components/NavigationButtons';
+import NavigationButtons, {
+    LinkLocation,
+} from '../components/NavigationButtons';
 
 export default function Contentpage({ entries }: { entries: FetchList }) {
     const navigate = useNavigate();
@@ -15,12 +17,11 @@ export default function Contentpage({ entries }: { entries: FetchList }) {
     return (
         <>
             <HeaderBookmark isHome={false} onClick={() => navigate('/')} />
-            < EntriesList
-                entries={entries}
-                onEntrySelect={handleEntrySelect}
+            <EntriesList entries={entries} onEntrySelect={handleEntrySelect} />
+            <NavigationButtons
+                previous={LinkLocation.homepage()}
+                next={LinkLocation.day(entries.data[0])}
             />
-            <NavigationButtons previous={LinkLocation.homepage()} next={LinkLocation.day(entries.data[0])} />
         </>
     );
-};
-
+}
