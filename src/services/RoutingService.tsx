@@ -10,21 +10,22 @@ export default function RoutingService() {
     const [entries, setBlogEntries] = useState<FetchList>(null);
 
     useEffect(() => {
-        fetchAll().then((data) => {
-            setBlogEntries(data);
-        }).catch((err) => {
-            console.error('Fetch Error:', err);
-            setError(err);
-        });
+        fetchAll()
+            .then((data) => {
+                setBlogEntries(data);
+            })
+            .catch((err) => {
+                console.error('Fetch Error:', err);
+                setError(err);
+            });
     }, []);
 
-
     if (error == null && entries == null) {
-        return <></>
+        return <></>;
     }
 
     if (error != null) {
-        return <div>Error: {error.message}</div>
+        return <div>Error: {error.message}</div>;
     }
 
     return (
@@ -38,11 +39,7 @@ export default function RoutingService() {
                     />
                     <Route
                         path="/Tag/:day"
-                        element={
-                            <Entry
-                                entries={entries}
-                            />
-                        }
+                        element={<Entry entries={entries} />}
                     />
                     <Route path="/:slug" element={<Homepage />} />
                 </Routes>

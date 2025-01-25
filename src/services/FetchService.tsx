@@ -3,14 +3,14 @@ import haversine from 'haversine-distance';
 export interface FetchList {
     data: FetchEntry[];
 
-    readonly getEntryByDay: (day: number) => FetchEntry
+    readonly getEntryByDay: (day: number) => FetchEntry;
 }
 
 class InnerList {
     data: InnerEntry[] = null;
 
     constructor(fetched: FetchList) {
-        this.data = fetched.data.map((entry) => new InnerEntry(entry))
+        this.data = fetched.data.map((entry) => new InnerEntry(entry));
 
         let previous = null;
         this.data.forEach((entry: InnerEntry) => {
@@ -19,38 +19,42 @@ class InnerList {
         });
 
         let next = null;
-        this.data.slice().reverse().forEach((entry: InnerEntry) => {
-            entry.next = next;
-            next = entry;
-        });
-
+        this.data
+            .slice()
+            .reverse()
+            .forEach((entry: InnerEntry) => {
+                entry.next = next;
+                next = entry;
+            });
     }
 
     getEntryByDay(day: number): FetchEntry {
-        return this.data.find((entry) => entry.getDaysSinceStart() == day)
+        return this.data.find((entry) => {
+            return entry.getDaysSinceStart() == day;
+        });
     }
 }
 export interface FetchEntry {
-    When: string,
+    When: string;
     Where: {
-        lat: number,
-        lng: number
-    },
-    Location: string,
-    Content: string,
-    km: number,
+        lat: number;
+        lng: number;
+    };
+    Location: string;
+    Content: string;
+    km: number;
 
-    readonly getDaysSinceStart: () => number,
+    readonly getDaysSinceStart: () => number;
 
-    readonly getPrevious: () => FetchEntry,
-    readonly getNext: () => FetchEntry,
+    readonly getPrevious: () => FetchEntry;
+    readonly getNext: () => FetchEntry;
 }
 
 class InnerEntry {
     When: string = null;
     Where: {
-        lat: number,
-        lng: number
+        lat: number;
+        lng: number;
     } = null;
     Location: string = null;
     Content: string = null;
@@ -71,17 +75,18 @@ class InnerEntry {
         const startDate = new Date('2024-05-07'); // Start date: 8 May 2024
         const givenDate = new Date(this.When); // Convert the given date string to a Date object
 
-        return (givenDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+        return (
+            (givenDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+        );
     }
 
     getPrevious(): FetchEntry {
-        return this.previous
+        return this.previous;
     }
 
     getNext(): FetchEntry {
-        return this.next
+        return this.next;
     }
-
 }
 
 export async function fetchAll(): Promise<FetchList> {
@@ -108,7 +113,7 @@ export async function fetchAll(): Promise<FetchList> {
                 let total = 0.0;
                 let lastgps = startgps;
 
-                data.data.forEach(function(entry: InnerEntry) {
+                data.data.forEach(function (entry: InnerEntry) {
                     const thisgps = {
                         lat: entry.Where.lat,
                         lon: entry.Where.lng,
@@ -121,10 +126,10 @@ export async function fetchAll(): Promise<FetchList> {
 
                     entry.km = Math.round(total / 1000);
                 });
-                return data
+                return data;
             } else {
                 console.warn('Unexpected data structure:', json);
                 return null;
             }
-        })
+        });
 }

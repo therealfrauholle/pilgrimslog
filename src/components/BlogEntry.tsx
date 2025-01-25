@@ -32,5 +32,4 @@ export default function BlogEntry({ data }: { data: FetchEntry }) {
             </div>
         </div>
     );
-};
-
+}

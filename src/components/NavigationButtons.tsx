@@ -1,9 +1,14 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { FetchEntry, FetchList } from '../services/FetchService';
+import { FetchEntry } from '../services/FetchService';
 import { JSX } from 'react/jsx-runtime';
 
+enum Page {
+    Homepage,
+    Content,
+    Day,
+}
 
 export class LinkLocation {
     page: Page;
@@ -27,33 +32,32 @@ export class LinkLocation {
         newLocation.page = Page.Content;
         return newLocation;
     }
-
-}
-enum Page {
-    Homepage,
-    Content,
-    Day
 }
 
-export default function NavigationButtons({ previous, next }: { previous: LinkLocation | undefined, next: LinkLocation | undefined }) {
+export default function NavigationButtons({
+    previous,
+    next,
+}: {
+    previous: LinkLocation | undefined;
+    next: LinkLocation | undefined;
+}) {
     const navigate = useNavigate();
-
     let previousButton: JSX.Element;
     let nextButton: JSX.Element;
 
     const handleNavigation = (location: LinkLocation) => {
         switch (location.page) {
             case Page.Homepage:
-                navigate("/")
+                navigate('/');
                 break;
             case Page.Content:
-                navigate("/Content")
+                navigate('/Content');
                 break;
             case Page.Day:
-                navigate("/Tag/" + location.day.getDaysSinceStart());
+                navigate('/Tag/' + location.day.getDaysSinceStart());
                 break;
         }
-    }
+    };
     if (previous != null) {
         previousButton = (
             <button
@@ -68,8 +72,7 @@ export default function NavigationButtons({ previous, next }: { previous: LinkLo
             >
                 <ChevronLeft className="w-8 h-8 text-gray-700 opacity-70 hover:opacity-100" />
             </button>
-        )
-
+        );
     }
 
     if (next != null) {
@@ -86,19 +89,13 @@ export default function NavigationButtons({ previous, next }: { previous: LinkLo
             >
                 <ChevronRight className="w-8 h-8 text-gray-700 opacity-70 hover:opacity-100" />
             </button>
-        )
-
+        );
     }
 
     return (
         <div className="fixed inset-y-0 left-0 right-0 pointer-events-none flex items-center justify-between">
-            <div className="pointer-events-auto">
-                {previousButton}
-            </div>
-            <div className="pointer-events-auto">
-                {nextButton}
-            </div>
+            <div className="pointer-events-auto">{previousButton}</div>
+            <div className="pointer-events-auto">{nextButton}</div>
         </div>
     );
 }
-

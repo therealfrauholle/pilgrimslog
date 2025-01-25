@@ -3,7 +3,9 @@ import { useParams } from 'react-router-dom';
 import HeaderBookmark from '../components/HeaderBookmark';
 import { useNavigate } from 'react-router-dom';
 import { FetchList } from '../services/FetchService';
-import NavigationButtons, { LinkLocation } from '../components/NavigationButtons';
+import NavigationButtons, {
+    LinkLocation,
+} from '../components/NavigationButtons';
 
 export default function Entry({ entries }: { entries: FetchList }) {
     const { day } = useParams();
