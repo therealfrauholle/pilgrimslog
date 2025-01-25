@@ -9,8 +9,14 @@ import NavigationButtons, {
 
 export default function Entry({ entries }: { entries: FetchList }) {
     const { day } = useParams();
-    const theDay = day as any as number;
+
     const navigate = useNavigate();
+
+    const theDay = parseInt(day);
+
+    if (isNaN(theDay)) {
+        return (<>Die URL ist fehlerhaft.</>);
+    }
 
     let theEntry = entries.getEntryByDay(theDay);
 
