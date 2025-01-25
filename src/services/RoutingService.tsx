@@ -4,6 +4,8 @@ import Homepage from '../pages/Homepage';
 import Contentpage from '../pages/Contentpage';
 import Entry from '../pages/Entry';
 import { fetchAll, FetchList } from '../services/FetchService';
+import { CircularProgress } from '@mui/material';
+
 
 export default function RoutingService() {
     const [error, setError] = useState(null);
@@ -21,7 +23,7 @@ export default function RoutingService() {
     }, []);
 
     if (error == null && entries == null) {
-        return <></>;
+        return <><CircularProgress /></>;
     }
 
     if (error != null) {
