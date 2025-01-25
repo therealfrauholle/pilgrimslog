@@ -4,12 +4,13 @@ export interface ILogEntries {
     data: ILogEntry[];
 
     readonly getEntryByDay: (day: number) => ILogEntry;
+    readonly getDayById: (id: string) => ILogEntry;
 }
 
 class LogEntries {
     data: LogEntry[] = null;
 
-    constructor(fetched: ILogEntries) {
+    constructor(fetched: any) {
         this.data = fetched.data.map((entry) => new LogEntry(entry));
 
         let previous = null;
@@ -20,7 +21,7 @@ class LogEntries {
 
         let next = null;
         this.data
-            .slice()
+            .slice() // copy because reverse mutates the array
             .reverse()
             .forEach((entry: LogEntry) => {
                 entry.next = next;
@@ -33,8 +34,15 @@ class LogEntries {
             return entry.getDaysSinceStart() === day;
         });
     }
+
+    getDayById(id: string): ILogEntry {
+        return this.data.find((entry) => {
+            return entry.Id === id;
+        });
+    }
 }
 export interface ILogEntry {
+    Id: string;
     When: string;
     Where: {
         lat: number;
@@ -51,6 +59,7 @@ export interface ILogEntry {
 }
 
 class LogEntry {
+    Id: string;
     When: string = null;
     Where: {
         lat: number;
@@ -63,7 +72,8 @@ class LogEntry {
     next: ILogEntry = null;
     previous: ILogEntry = null;
 
-    constructor(fetched: ILogEntry) {
+    constructor(fetched: any) {
+        this.Id = fetched.documentId;
         this.When = fetched.When;
         this.Where = fetched.Where;
         this.Content = fetched.Content;

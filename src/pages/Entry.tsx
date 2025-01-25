@@ -8,17 +8,11 @@ import NavigationButtons, {
 } from '../components/NavigationButtons';
 
 export default function Entry({ entries }: { entries: ILogEntries }) {
-    const { day } = useParams();
+    const { id } = useParams();
 
     const navigate = useNavigate();
 
-    const theDay = parseInt(day);
-
-    if (isNaN(theDay)) {
-        return (<>Die URL ist fehlerhaft.</>);
-    }
-
-    let theEntry = entries.getEntryByDay(theDay);
+    let theEntry = entries.getDayById(id);
 
     if (theEntry === null) return <div>Day not found</div>;
 
@@ -26,11 +20,11 @@ export default function Entry({ entries }: { entries: ILogEntries }) {
     let next = null;
 
     if (theEntry.getPrevious() != null) {
-        previous = LinkLocation.day(theEntry.getPrevious());
+        previous = LinkLocation.entry(theEntry.getPrevious());
     }
 
     if (theEntry.getNext() != null) {
-        next = LinkLocation.day(theEntry.getNext());
+        next = LinkLocation.entry(theEntry.getNext());
     }
 
     return (

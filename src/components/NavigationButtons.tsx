@@ -7,17 +7,17 @@ import { JSX } from 'react/jsx-runtime';
 enum Page {
     Homepage,
     Content,
-    Day,
+    Entry,
 }
 
 export class LinkLocation {
     page: Page;
-    day: ILogEntry;
+    entry: ILogEntry;
 
-    static day(day: ILogEntry): LinkLocation {
+    static entry(entry: ILogEntry): LinkLocation {
         let newLocation = new LinkLocation();
-        newLocation.page = Page.Day;
-        newLocation.day = day;
+        newLocation.page = Page.Entry;
+        newLocation.entry = entry;
         return newLocation;
     }
 
@@ -53,8 +53,8 @@ export default function NavigationButtons({
             case Page.Content:
                 navigate('/Content');
                 break;
-            case Page.Day:
-                navigate('/Tag/' + location.day.getDaysSinceStart());
+            case Page.Entry:
+                navigate('/Tag/' + location.entry.Id);
                 break;
         }
     };

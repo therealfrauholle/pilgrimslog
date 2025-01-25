@@ -9,9 +9,9 @@ import NavigationButtons, {
 export default function Contentpage({ entries }: { entries: ILogEntries }) {
     const navigate = useNavigate();
 
-    const handleEntrySelect = (day: number) => {
-        console.log(day);
-        navigate(`/Tag/${day}`);
+    const handleEntrySelect = (id: string) => {
+        console.log(id);
+        navigate(`/Tag/${id}`);
     };
 
     return (
@@ -20,7 +20,7 @@ export default function Contentpage({ entries }: { entries: ILogEntries }) {
             <EntriesList entries={entries} onEntrySelect={handleEntrySelect} />
             <NavigationButtons
                 previous={LinkLocation.homepage()}
-                next={LinkLocation.day(entries.data[0])}
+                next={LinkLocation.entry(entries.data[0])}
             />
         </>
     );

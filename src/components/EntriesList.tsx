@@ -5,7 +5,7 @@ export default function EntriesList({
     onEntrySelect,
 }: {
     entries: ILogEntries;
-    onEntrySelect: (day: number) => void;
+    onEntrySelect: (id: string) => void;
 }) {
     return (
         <div className="flex flex-col h-dvh p-6 md:p-8">
@@ -19,7 +19,7 @@ export default function EntriesList({
                 {entries.data.map((entry: ILogEntry, index: number) => (
                     <button
                         key={index}
-                        onClick={() => onEntrySelect(entry.getDaysSinceStart())}
+                        onClick={() => onEntrySelect(entry.Id)}
                         className="w-full group"
                     >
                         <div
