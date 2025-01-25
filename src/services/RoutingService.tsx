@@ -31,8 +31,9 @@ export default function RoutingService() {
     }
 
     return (
+        <div className='grid h-dvh w-screen justify-items-center'>
+            <div className="md:w-1/2">
                 <Router>
-            <div className="body h-dvh">
                     <Routes>
                         <Route path="/" element={<Homepage />} />
                         <Route
@@ -40,12 +41,13 @@ export default function RoutingService() {
                             element={<Contentpage entries={entries} />}
                         />
                         <Route
-                            path="/Tag/:day"
+                            path="/Tag/:id"
                             element={<Entry entries={entries} />}
                         />
                         <Route path="/:slug" element={<Homepage />} />
                     </Routes>
+                </Router>
             </div>
-        </Router>
+        </div>
     );
 }

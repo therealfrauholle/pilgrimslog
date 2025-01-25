@@ -1,16 +1,11 @@
 import BlogEntry from '../components/BlogEntry';
 import { useParams } from 'react-router-dom';
-import HeaderBookmark from '../components/HeaderBookmark';
-import { useNavigate } from 'react-router-dom';
 import { ILogEntries } from '../services/FetchService';
-import NavigationButtons, {
-    LinkLocation,
-} from '../components/NavigationButtons';
+import { LinkLocation } from '../components/NavigationButtons';
+import Book from '../components/Book';
 
 export default function Entry({ entries }: { entries: ILogEntries }) {
     const { id } = useParams();
-
-    const navigate = useNavigate();
 
     let theEntry = entries.getDayById(id);
 
@@ -29,10 +24,11 @@ export default function Entry({ entries }: { entries: ILogEntries }) {
 
     return (
         <>
-            <HeaderBookmark isHome={false} onClick={() => navigate('/')} />
-            <BlogEntry data={theEntry} />
-
-            <NavigationButtons next={next} previous={previous} />
+            <Book
+                pageContent={<BlogEntry data={theEntry} />}
+                next={next}
+                previous={previous}
+            />
         </>
     );
 }

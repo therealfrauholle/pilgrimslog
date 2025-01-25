@@ -1,10 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import HeaderBookmark from '../components/HeaderBookmark';
 import EntriesList from '../components/EntriesList';
 import { ILogEntries } from '../services/FetchService';
-import NavigationButtons, {
-    LinkLocation,
-} from '../components/NavigationButtons';
+import { LinkLocation } from '../components/NavigationButtons';
+import Book from '../components/Book';
 
 export default function Contentpage({ entries }: { entries: ILogEntries }) {
     const navigate = useNavigate();
@@ -16,9 +14,8 @@ export default function Contentpage({ entries }: { entries: ILogEntries }) {
 
     return (
         <>
-            <HeaderBookmark isHome={false} onClick={() => navigate('/')} />
-            <EntriesList entries={entries} onEntrySelect={handleEntrySelect} />
-            <NavigationButtons
+            <Book
+                pageContent={<EntriesList entries={entries} onEntrySelect={handleEntrySelect} />}
                 previous={LinkLocation.homepage()}
                 next={LinkLocation.entry(entries.data[0])}
             />
