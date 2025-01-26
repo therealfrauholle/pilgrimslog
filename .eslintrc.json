@@ -3,9 +3,10 @@
     "react-app",
     "react-app/jest",
     "eslint:recommended",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
   "rules": {
+    "prettier/prettier": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error"
   }

@@ -6,7 +6,6 @@ import Entry from '../pages/Entry';
 import { fetchAll, ILogEntries } from '../services/FetchService';
 import { CircularProgress } from '@mui/material';
 
-
 export default function RoutingService() {
     const [error, setError] = useState(null);
     const [entries, setBlogEntries] = useState<ILogEntries>(null);
@@ -23,7 +22,11 @@ export default function RoutingService() {
     }, []);
 
     if (error == null && entries == null) {
-        return <><CircularProgress /></>;
+        return (
+            <>
+                <CircularProgress />
+            </>
+        );
     }
 
     if (error != null) {
@@ -31,7 +34,7 @@ export default function RoutingService() {
     }
 
     return (
-        <div className='flex grid w-screen justify-items-center'>
+        <div className="flex grid w-screen justify-items-center">
             <div className="flex flex-col h-dvh w-full md:w-1/2">
                 <Router>
                     <Routes>

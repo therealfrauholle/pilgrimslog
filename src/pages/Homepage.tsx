@@ -6,7 +6,7 @@ export default function Homepage() {
     return (
         <>
             <Book
-                pageContent= {<CoverPage/>}
+                pageContent={<CoverPage />}
                 previous={null}
                 next={LinkLocation.content()}
                 currentlySelectedDay={null}

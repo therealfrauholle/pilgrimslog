@@ -15,7 +15,12 @@ export default function Contentpage({ entries }: { entries: ILogEntries }) {
     return (
         <>
             <Book
-                pageContent={<EntriesList entries={entries} onEntrySelect={handleEntrySelect} />}
+                pageContent={
+                    <EntriesList
+                        entries={entries}
+                        onEntrySelect={handleEntrySelect}
+                    />
+                }
                 previous={LinkLocation.homepage()}
                 next={LinkLocation.entry(entries.data[0])}
                 currentlySelectedDay={null}

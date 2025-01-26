@@ -94,18 +94,23 @@ export default function BottomBar({
         );
     }
 
-    let description = (<></>);
-    if(currentlySelectedDay !== null){
-        description = (<>{currentlySelectedDay.getDaysSinceStart()}. Tag | ≈{currentlySelectedDay.km}km</>);
+    let description = <></>;
+    if (currentlySelectedDay !== null) {
+        description = (
+            <>
+                {currentlySelectedDay.getDaysSinceStart()}. Tag | ≈
+                {currentlySelectedDay.km}km
+            </>
+        );
     }
 
     return (
         <div className="flex flex-row pl-[20px] pr-[20px] pb-[10px]">
-            <div className="pointer-events-auto w-20" >{previousButton}</div>
+            <div className="pointer-events-auto w-20">{previousButton}</div>
             <div className="flex-grow p-4 text-center text-gray-600 text-lg">
                 {description}
             </div>
-            <div className="pointer-events-auto w-20">{nextButton}</div>     
+            <div className="pointer-events-auto w-20">{nextButton}</div>
         </div>
     );
 }
