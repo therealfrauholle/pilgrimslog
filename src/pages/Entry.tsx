@@ -25,11 +25,12 @@ export default function Entry({ entries }: { entries: ILogEntries }) {
     return (
         <>
             <Book
-                pageContent={<BlogEntry data={theEntry} />}
                 next={next}
                 previous={previous}
                 currentlySelectedDay={theEntry}
-            />
+            >
+                <BlogEntry data={theEntry} />
+            </Book>
         </>
     );
 }

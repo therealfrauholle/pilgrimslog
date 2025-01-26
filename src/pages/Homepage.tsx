@@ -6,11 +6,12 @@ export default function Homepage() {
     return (
         <>
             <Book
-                pageContent={<CoverPage />}
                 previous={null}
                 next={LinkLocation.content()}
                 currentlySelectedDay={null}
-            />
+            >
+                <CoverPage />
+            </Book>
         </>
     );
 }

@@ -2,14 +2,15 @@ import { ILogEntry } from '../services/FetchService';
 import HeaderBookmark from './HeaderBookmark';
 import BottomBar, { LinkLocation } from './BottomBar';
 import { useNavigate } from 'react-router-dom';
+import { JSX } from 'react/jsx-runtime';
 
 export default function Book({
-    pageContent,
+    children,
     previous,
     next,
     currentlySelectedDay,
 }: {
-    pageContent: any;
+    children: JSX.Element;
     previous: LinkLocation | undefined;
     next: LinkLocation | undefined;
     currentlySelectedDay: ILogEntry | undefined;
@@ -23,7 +24,7 @@ export default function Book({
                     isHome={previous !== null && currentlySelectedDay === null}
                     onClick={() => navigate('/Content')}
                 />
-                <div className="flex-grow min-h-0">{pageContent}</div>
+                <div className="flex-grow min-h-0">{children}</div>
                 <div className="flex-none">
                     <BottomBar
                         previous={previous}
