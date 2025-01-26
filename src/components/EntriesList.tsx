@@ -8,7 +8,7 @@ export default function EntriesList({
     onEntrySelect: (id: string) => void;
 }) {
     return (
-        <div className="flex flex-col h-dvh p-6 md:p-8">
+        <div className="flex flex-col h-full p-6 md:p-8">
             <div
                 className="text-4xl font-bold mb-6 text-gray-800"
                 style={{ padding: '40px' }}

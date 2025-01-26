@@ -13,7 +13,7 @@ export default function BlogEntry({ data }: { data: ILogEntry }) {
             style={{
                 padding: '50px 50px 10px 50px',
             }}
-            className="flex flex-col p-6 md:p-8 h-dvh"
+            className="flex flex-col p-6 md:p-8 h-full"
         >
             <h1
                 style={{
@@ -26,9 +26,6 @@ export default function BlogEntry({ data }: { data: ILogEntry }) {
             </h1>
             <div className="grow overflow-y-auto">
                 <StrapiMarkdownRenderer data={data.Content} />
-            </div>
-            <div className="p-4 text-gray-600 text-lg text-right">
-                {data.getDaysSinceStart()}. Tag | ≈{data.km}km
             </div>
         </div>
     );

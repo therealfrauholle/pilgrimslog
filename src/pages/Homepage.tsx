@@ -1,5 +1,5 @@
 import Book from '../components/Book';
-import { LinkLocation } from '../components/NavigationButtons';
+import { LinkLocation } from '../components/BottomBar';
 import CoverPage from './CoverPage';
 
 export default function Homepage() {
@@ -9,6 +9,7 @@ export default function Homepage() {
                 pageContent= {<CoverPage/>}
                 previous={null}
                 next={LinkLocation.content()}
+                currentlySelectedDay={null}
             />
         </>
     );

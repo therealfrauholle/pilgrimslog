@@ -34,12 +34,14 @@ export class LinkLocation {
     }
 }
 
-export default function NavigationButtons({
+export default function BottomBar({
     previous,
     next,
+    currentlySelectedDay,
 }: {
     previous: LinkLocation | undefined;
     next: LinkLocation | undefined;
+    currentlySelectedDay: ILogEntry | undefined;
 }) {
     const navigate = useNavigate();
     let previousButton: JSX.Element;
@@ -62,8 +64,8 @@ export default function NavigationButtons({
         previousButton = (
             <button
                 onClick={() => handleNavigation(previous)}
-                className="h-16 w-9 bg-gray-100/30 mx-1 hover:bg-gray-200/50 
-                          backdrop-blur-sm rounded-r-lg 
+                className="h-16 w-16 bg-gray-100/30 mx-1 hover:bg-gray-200/50 
+                          backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
                           transition-all duration-300 
                           shadow-md hover:shadow-xl 
@@ -79,8 +81,8 @@ export default function NavigationButtons({
         nextButton = (
             <button
                 onClick={() => handleNavigation(next)}
-                className="h-16 w-9 mx-1 bg-gray-100/30 hover:bg-gray-200/50 
-                          backdrop-blur-sm rounded-l-lg 
+                className="h-16 w-16 mx-1 bg-gray-100/30 hover:bg-gray-200/50 
+                          backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
                           transition-all duration-300 
                           shadow-md hover:shadow-xl 
@@ -92,10 +94,18 @@ export default function NavigationButtons({
         );
     }
 
+    let description = (<></>);
+    if(currentlySelectedDay !== null){
+        description = (<>{currentlySelectedDay.getDaysSinceStart()}. Tag | ≈{currentlySelectedDay.km}km</>);
+    }
+
     return (
-        <div className="fixed inset-y-0 left-0 right-0 pointer-events-none flex items-center justify-between">
-            <div className="pointer-events-auto">{previousButton}</div>
-            <div className="pointer-events-auto">{nextButton}</div>
+        <div className="flex flex-row pl-[20px] pr-[20px] pb-[10px]">
+            <div className="pointer-events-auto w-20" >{previousButton}</div>
+            <div className="flex-grow p-4 text-center text-gray-600 text-lg">
+                {description}
+            </div>
+            <div className="pointer-events-auto w-20">{nextButton}</div>     
         </div>
     );
 }

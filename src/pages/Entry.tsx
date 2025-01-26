@@ -1,7 +1,7 @@
 import BlogEntry from '../components/BlogEntry';
 import { useParams } from 'react-router-dom';
 import { ILogEntries } from '../services/FetchService';
-import { LinkLocation } from '../components/NavigationButtons';
+import { LinkLocation } from '../components/BottomBar';
 import Book from '../components/Book';
 
 export default function Entry({ entries }: { entries: ILogEntries }) {
@@ -28,6 +28,7 @@ export default function Entry({ entries }: { entries: ILogEntries }) {
                 pageContent={<BlogEntry data={theEntry} />}
                 next={next}
                 previous={previous}
+                currentlySelectedDay={theEntry}
             />
         </>
     );

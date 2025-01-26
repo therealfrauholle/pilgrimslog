@@ -1,18 +1,30 @@
+import { ILogEntry } from "../services/FetchService";
 import HeaderBookmark from "./HeaderBookmark";
-import NavigationButtons, { LinkLocation } from "./NavigationButtons";
+import BottomBar, { LinkLocation } from "./BottomBar";
+import { useNavigate } from "react-router-dom";
 
-export default function Book({ pageContent, previous, next }: { pageContent: any, previous: LinkLocation | undefined, next: LinkLocation | undefined }) {
+export default function Book({ pageContent, previous, next, currentlySelectedDay }: { pageContent: any, previous: LinkLocation | undefined, next: LinkLocation | undefined, currentlySelectedDay: ILogEntry | undefined }) {
 
-
+    const navigate = useNavigate();
 
     return (
         <>
-            <HeaderBookmark
-                isHome={true}
-                onClick={console.log('Already home!')}
-            />
-            {pageContent}
-            <NavigationButtons previous={previous} next={next} />
+            <div className="relative flex flex-col h-full w-full">
+                <HeaderBookmark
+                    isHome={previous !== null && currentlySelectedDay === null}
+                    onClick={() => navigate('/Content')}
+                />
+                <div className="flex-grow min-h-0">
+                    {pageContent}
+                </div>
+                <div className="flex-none">
+                    <BottomBar
+                        previous={previous}
+                        next={next}
+                        currentlySelectedDay={currentlySelectedDay}
+                    />
+                </div>
+            </div>
         </>
     )
 }
