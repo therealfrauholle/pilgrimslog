@@ -21,7 +21,7 @@ export default function Book({
         <>
             <div className="relative flex flex-col h-full w-full">
                 <HeaderBookmark
-                    isHome={previous !== null && currentlySelectedDay === null}
+                    isDisabled={previous !== null && currentlySelectedDay === null}
                     onClick={() => navigate('/Content')}
                 />
                 <div className="flex-grow min-h-0">{children}</div>
