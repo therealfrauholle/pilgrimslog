@@ -1,6 +1,6 @@
 import { ILogEntry } from '../services/FetchService';
 import HeaderBookmark from './HeaderBookmark';
-import BottomBar, { LinkLocation } from './BottomBar';
+import BottomBar, { BookPageIndex } from './BottomBar';
 import { useNavigate } from 'react-router-dom';
 import { JSX } from 'react/jsx-runtime';
 
@@ -11,8 +11,8 @@ export default function Book({
     currentlySelectedDay,
 }: {
     children: JSX.Element;
-    previous: LinkLocation | undefined;
-    next: LinkLocation | undefined;
+    previous: BookPageIndex | undefined;
+    next: BookPageIndex | undefined;
     currentlySelectedDay: ILogEntry | undefined;
 }) {
     const navigate = useNavigate();

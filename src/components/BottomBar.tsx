@@ -10,25 +10,25 @@ enum Page {
     Entry,
 }
 
-export class LinkLocation {
+export class BookPageIndex {
     page: Page;
     entry: ILogEntry;
 
-    static entry(entry: ILogEntry): LinkLocation {
-        let newLocation = new LinkLocation();
+    static entry(entry: ILogEntry): BookPageIndex {
+        let newLocation = new BookPageIndex();
         newLocation.page = Page.Entry;
         newLocation.entry = entry;
         return newLocation;
     }
 
-    static homepage(): LinkLocation {
-        let newLocation = new LinkLocation();
+    static homepage(): BookPageIndex {
+        let newLocation = new BookPageIndex();
         newLocation.page = Page.Homepage;
         return newLocation;
     }
 
-    static content(): LinkLocation {
-        let newLocation = new LinkLocation();
+    static content(): BookPageIndex {
+        let newLocation = new BookPageIndex();
         newLocation.page = Page.Content;
         return newLocation;
     }
@@ -39,15 +39,15 @@ export default function BottomBar({
     next,
     currentlySelectedDay,
 }: {
-    previous: LinkLocation | undefined;
-    next: LinkLocation | undefined;
+    previous: BookPageIndex | undefined;
+    next: BookPageIndex | undefined;
     currentlySelectedDay: ILogEntry | undefined;
 }) {
     const navigate = useNavigate();
     let previousButton: JSX.Element;
     let nextButton: JSX.Element;
 
-    const handleNavigation = (location: LinkLocation) => {
+    const handleNavigation = (location: BookPageIndex) => {
         switch (location.page) {
             case Page.Homepage:
                 navigate('/');

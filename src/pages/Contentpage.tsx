@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import EntriesList from '../components/EntriesList';
 import { ILogEntries } from '../services/FetchService';
-import { LinkLocation } from '../components/BottomBar';
+import { BookPageIndex } from '../components/BottomBar';
 import Book from '../components/Book';
 
 export default function Contentpage({ entries }: { entries: ILogEntries }) {
@@ -15,8 +15,8 @@ export default function Contentpage({ entries }: { entries: ILogEntries }) {
     return (
         <>
             <Book
-                previous={LinkLocation.homepage()}
-                next={LinkLocation.entry(entries.data[0])}
+                previous={BookPageIndex.homepage()}
+                next={BookPageIndex.entry(entries.data[0])}
                 currentlySelectedDay={null}
             >
                 <EntriesList

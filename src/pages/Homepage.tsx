@@ -1,5 +1,5 @@
 import Book from '../components/Book';
-import { LinkLocation } from '../components/BottomBar';
+import { BookPageIndex } from '../components/BottomBar';
 import CoverPage from './CoverPage';
 
 export default function Homepage() {
@@ -7,7 +7,7 @@ export default function Homepage() {
         <>
             <Book
                 previous={null}
-                next={LinkLocation.content()}
+                next={BookPageIndex.content()}
                 currentlySelectedDay={null}
             >
                 <CoverPage />

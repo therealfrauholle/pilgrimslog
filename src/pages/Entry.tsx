@@ -1,7 +1,7 @@
 import BlogEntry from '../components/BlogEntry';
 import { useParams } from 'react-router-dom';
 import { ILogEntries } from '../services/FetchService';
-import { LinkLocation } from '../components/BottomBar';
+import { BookPageIndex } from '../components/BottomBar';
 import Book from '../components/Book';
 
 export default function Entry({ entries }: { entries: ILogEntries }) {
@@ -11,15 +11,15 @@ export default function Entry({ entries }: { entries: ILogEntries }) {
 
     if (theEntry === null) return <div>Day not found</div>;
 
-    let previous = LinkLocation.content();
+    let previous = BookPageIndex.content();
     let next = null;
 
     if (theEntry.getPrevious() != null) {
-        previous = LinkLocation.entry(theEntry.getPrevious());
+        previous = BookPageIndex.entry(theEntry.getPrevious());
     }
 
     if (theEntry.getNext() != null) {
-        next = LinkLocation.entry(theEntry.getNext());
+        next = BookPageIndex.entry(theEntry.getNext());
     }
 
     return (
