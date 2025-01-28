@@ -3,23 +3,42 @@ import haversine from 'haversine-distance';
 export interface ILogEntries {
     data: ILogEntry[];
 
-    readonly getEntryByDay: (day: number) => ILogEntry;
-    readonly getDayById: (id: string) => ILogEntry;
+    readonly getEntryByDay: (day: number) => ILogEntry | null;
+    readonly getDayById: (id: string) => ILogEntry | null;
 }
 
-class LogEntries {
-    data: LogEntry[] = null;
+class LogEntries implements ILogEntries {
+    data: LogEntry[];
 
-    constructor(fetched: any) {
-        this.data = fetched.data.map((entry) => new LogEntry(entry));
+    constructor(fetched: StrapiEntries) {
+        const startgps = { lat: 52.5522859, lon: 13.3789186 };
 
-        let previous = null;
+        let total = 0.0;
+        let lastgps = startgps;
+
+        this.data = fetched.data.map((entry: StrapiEntry) => {
+            const thisgps = {
+                lat: entry.Where.lat,
+                lon: entry.Where.lng,
+            };
+            const newdistance = haversine(lastgps, thisgps);
+
+            total += newdistance * 1.25;
+
+            lastgps = thisgps;
+
+            const km = Math.round(total / 1000);
+
+            return new LogEntry(entry, km);
+        });
+
+        let previous: LogEntry | null = null;
         this.data.forEach((entry: LogEntry) => {
             entry.previous = previous;
             previous = entry;
         });
 
-        let next = null;
+        let next: LogEntry | null = null;
         this.data
             .slice() // copy because reverse mutates the array
             .reverse()
@@ -29,16 +48,20 @@ class LogEntries {
             });
     }
 
-    getEntryByDay(day: number): ILogEntry {
-        return this.data.find((entry) => {
-            return entry.getDaysSinceStart() === day;
-        });
+    getEntryByDay(day: number): ILogEntry | null {
+        return (
+            this.data.find((entry) => {
+                return entry.getDaysSinceStart() === day;
+            }) ?? null
+        );
     }
 
-    getDayById(id: string): ILogEntry {
-        return this.data.find((entry) => {
-            return entry.Id === id;
-        });
+    getDayById(id: string): ILogEntry | null {
+        return (
+            this.data.find((entry) => {
+                return entry.Id === id;
+            }) ?? null
+        );
     }
 }
 export interface ILogEntry {
@@ -54,31 +77,31 @@ export interface ILogEntry {
 
     readonly getDaysSinceStart: () => number;
 
-    readonly getPrevious: () => ILogEntry;
-    readonly getNext: () => ILogEntry;
+    readonly getPrevious: () => ILogEntry | null;
+    readonly getNext: () => ILogEntry | null;
 }
 
-class LogEntry {
+class LogEntry implements ILogEntry {
     Id: string;
-    When: string = null;
+    When: string;
     Where: {
         lat: number;
         lng: number;
-    } = null;
-    Location: string = null;
-    Content: string = null;
-    km: number = null;
+    };
+    Location: string;
+    Content: string;
+    km: number;
 
-    next: ILogEntry = null;
-    previous: ILogEntry = null;
+    next: ILogEntry | null = null;
+    previous: ILogEntry | null = null;
 
-    constructor(fetched: any) {
+    constructor(fetched: StrapiEntry, km: number) {
         this.Id = fetched.documentId;
         this.When = fetched.When;
         this.Where = fetched.Where;
         this.Content = fetched.Content;
         this.Location = fetched.Location;
-        this.km = fetched.km;
+        this.km = km;
     }
 
     getDaysSinceStart(): number {
@@ -90,56 +113,43 @@ class LogEntry {
         );
     }
 
-    getPrevious(): ILogEntry {
+    getPrevious(): ILogEntry | null {
         return this.previous;
     }
 
-    getNext(): ILogEntry {
+    getNext(): ILogEntry | null {
         return this.next;
     }
 }
 
-export async function fetchAll(): Promise<ILogEntries> {
+export interface StrapiEntries {
+    data: StrapiEntry[];
+}
+
+export interface StrapiEntry {
+    documentId: string;
+    When: string;
+    Where: {
+        lat: number;
+        lng: number;
+    };
+    Location: string;
+    Content: string;
+}
+
+export async function fetchRaw(): Promise<StrapiEntries> {
     const apiUrl =
         'https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc&pagination[pageSize]=10000';
 
-    return fetch(apiUrl)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            // TODO do sanity check of json
-            return response.json();
-        })
-        .then((json) => {
-            console.log('Full API Response:', json); // Log the full response
+    return (await fetch(apiUrl)).json();
+}
 
-            // Check the structure of the data
-            if (json) {
-                const data = new LogEntries(json);
+export function parse(entries: StrapiEntries): ILogEntries {
+    return new LogEntries(entries);
+}
 
-                const startgps = { lat: 52.5522859, lon: 13.3789186 };
-
-                let total = 0.0;
-                let lastgps = startgps;
-
-                data.data.forEach(function (entry: LogEntry) {
-                    const thisgps = {
-                        lat: entry.Where.lat,
-                        lon: entry.Where.lng,
-                    };
-                    const newdistance = haversine(lastgps, thisgps);
-
-                    total += newdistance * 1.25;
-
-                    lastgps = thisgps;
-
-                    entry.km = Math.round(total / 1000);
-                });
-                return data;
-            } else {
-                console.warn('Unexpected data structure:', json);
-                return null;
-            }
-        });
+export async function fetchAll(): Promise<ILogEntries | null> {
+    return fetchRaw().then((response) => {
+        return new LogEntries(response);
+    });
 }

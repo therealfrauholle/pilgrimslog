@@ -2,8 +2,6 @@ import { ILogEntry } from '../services/FetchService';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
 
 export default function BlogEntry({ data }: { data: ILogEntry }) {
-    console.log('Rendering entry: ', data);
-
     if (!data) {
         return <div>No blog posts available</div>;
     }

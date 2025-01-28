@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { ILogEntry } from '../services/FetchService';
 import { JSX } from 'react/jsx-runtime';
+import { useRouter } from 'next/navigation';
 
 enum Page {
     Homepage,
@@ -12,25 +12,23 @@ enum Page {
 
 export class BookPageIndex {
     page: Page;
-    entry: ILogEntry;
+    entry: ILogEntry | null;
+
+    constructor(page: Page, entry: ILogEntry | null) {
+        this.page = page;
+        this.entry = entry;
+    }
 
     static entry(entry: ILogEntry): BookPageIndex {
-        let newLocation = new BookPageIndex();
-        newLocation.page = Page.Entry;
-        newLocation.entry = entry;
-        return newLocation;
+        return new BookPageIndex(Page.Entry, entry);
     }
 
     static homepage(): BookPageIndex {
-        let newLocation = new BookPageIndex();
-        newLocation.page = Page.Homepage;
-        return newLocation;
+        return new BookPageIndex(Page.Homepage, null);
     }
 
     static content(): BookPageIndex {
-        let newLocation = new BookPageIndex();
-        newLocation.page = Page.Content;
-        return newLocation;
+        return new BookPageIndex(Page.Content, null);
     }
 }
 
@@ -39,24 +37,24 @@ export default function BottomBar({
     next,
     currentlySelectedDay,
 }: {
-    previous: BookPageIndex | undefined;
-    next: BookPageIndex | undefined;
-    currentlySelectedDay: ILogEntry | undefined;
+    previous: BookPageIndex | null;
+    next: BookPageIndex | null;
+    currentlySelectedDay: ILogEntry | null;
 }) {
-    const navigate = useNavigate();
-    let previousButton: JSX.Element;
-    let nextButton: JSX.Element;
+    const navigate = useRouter();
+    let previousButton: JSX.Element = <></>;
+    let nextButton: JSX.Element = <></>;
 
     const handleNavigation = (location: BookPageIndex) => {
         switch (location.page) {
             case Page.Homepage:
-                navigate('/');
+                navigate.push('/');
                 break;
             case Page.Content:
-                navigate('/Content');
+                navigate.push('/content');
                 break;
             case Page.Entry:
-                navigate('/Tag/' + location.entry.Id);
+                navigate.push('/tag/' + location.entry!.Id);
                 break;
         }
     };
@@ -95,7 +93,7 @@ export default function BottomBar({
     }
 
     let description = <></>;
-    if (currentlySelectedDay !== null) {
+    if (currentlySelectedDay != null) {
         description = (
             <>
                 {currentlySelectedDay.getDaysSinceStart()}. Tag | ≈
