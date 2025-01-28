@@ -1,6 +1,13 @@
 import haversine from 'haversine-distance';
 
+/**
+ * Just like {@link StrapiEntries}, but validated, a stable interface
+ * and provides additional methods to operate on the data.
+ */
 export interface ILogEntries {
+    /**
+     * All entries in this set, sorted ascending by log date.
+     */
     data: ILogEntry[];
 
     readonly getEntryByDay: (day: number) => ILogEntry | null;
@@ -64,6 +71,7 @@ class LogEntries implements ILogEntries {
         );
     }
 }
+
 export interface ILogEntry {
     Id: string;
     When: string;
@@ -80,6 +88,7 @@ export interface ILogEntry {
     readonly getPrevious: () => ILogEntry | null;
     readonly getNext: () => ILogEntry | null;
 }
+
 
 class LogEntry implements ILogEntry {
     Id: string;
@@ -121,11 +130,20 @@ class LogEntry implements ILogEntry {
         return this.next;
     }
 }
-
+/**
+ * A set of log entries, as provided by strapi
+ * .
+ * Naming of fielda needa to match the strapi format!
+ */
 export interface StrapiEntries {
     data: StrapiEntry[];
 }
 
+/**
+ * A log entry, as provided by strapi.
+ *
+ * Naming of fielda needa to match the strapi format!
+ */
 export interface StrapiEntry {
     documentId: string;
     When: string;
@@ -137,19 +155,21 @@ export interface StrapiEntry {
     Content: string;
 }
 
-export async function fetchRaw(): Promise<StrapiEntries> {
+export async function fetchFromStrapi(): Promise<StrapiEntries> {
     const apiUrl =
         'https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc&pagination[pageSize]=10000';
 
     return (await fetch(apiUrl)).json();
 }
-
+/**
+ * Validate and populate the entries with additional information.
+ */
 export function parse(entries: StrapiEntries): ILogEntries {
     return new LogEntries(entries);
 }
 
-export async function fetchAll(): Promise<ILogEntries | null> {
-    return fetchRaw().then((response) => {
+export async function fetchAndParse(): Promise<ILogEntries | null> {
+    return fetchFromStrapi().then((response) => {
         return new LogEntries(response);
     });
 }

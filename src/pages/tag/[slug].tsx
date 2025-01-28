@@ -1,7 +1,7 @@
 import BlogEntry from '@/components/BlogEntry';
 import Book from '@/components/Book';
 import { BookPageIndex } from '@/components/BottomBar';
-import { fetchRaw, parse } from '@/services/FetchService';
+import { fetchFromStrapi, parse } from '@/services/FetchService';
 
 interface Props {
     /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export async function getStaticPaths() {
-    const posts = await fetchRaw();
+    const posts = await fetchFromStrapi();
 
     /* eslint-disable  @typescript-eslint/no-explicit-any */
     const paths = posts.data.map((post: any) => ({
@@ -24,7 +24,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
-    const posts = await fetchRaw();
+    const posts = await fetchFromStrapi();
 
     return {
         props: { data: posts, id: params.slug },

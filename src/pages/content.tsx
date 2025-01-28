@@ -2,12 +2,12 @@ import { useRouter } from 'next/navigation';
 import Book from '@/components/Book';
 import EntriesList from '@/components/EntriesList';
 import { BookPageIndex } from '@/components/BottomBar';
-import { fetchRaw, parse, StrapiEntries } from '@/services/FetchService';
+import { fetchFromStrapi, parse, StrapiEntries } from '@/services/FetchService';
 
 // This function gets called at build time
 export async function getStaticProps() {
     // Call an external API endpoint to get posts
-    const entries = await fetchRaw();
+    const entries = await fetchFromStrapi();
 
     // By returning { props: { posts } }, the Blog component
     // will receive `posts` as a prop at build time
