@@ -34,8 +34,8 @@ export default function RoutingService() {
     }
 
     return (
-        <div className="flex grid w-screen justify-items-center">
-            <div className="flex flex-col h-dvh w-full md:w-1/2">
+        <div className="flex grid h-dvh w-screen justify-items-center bg-zinc-200 md:p-[20px]">
+            <div className="flex flex-col h-full min-h-0 w-full md:w-[700px] bg-mint-500 shadow-md">
                 <Router>
                     <Routes>
                         <Route path="/" element={<Homepage />} />
