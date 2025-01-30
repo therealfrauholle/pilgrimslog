@@ -59,6 +59,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             previous={previous}
             next={next}
             currentlySelectedDay={currentEntry}
+            entries={data}
         >
             <Component {...pageProps} entries={data} layout={ref} />
         </Book>

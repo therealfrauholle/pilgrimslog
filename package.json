@@ -11,6 +11,7 @@
         "formatcheck": "npx prettier --ignore-path \".gitignore\" -c \"**/*.{js,jsx,ts,tsx,json}\""
     },
     "dependencies": {
+        "@base-ui-components/react": "^1.0.0-alpha.5",
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
         "@mui/icons-material": "^6.4.1",
