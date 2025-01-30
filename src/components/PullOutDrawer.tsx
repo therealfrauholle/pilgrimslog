@@ -1,9 +1,7 @@
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { ILogEntries, ILogEntry } from '../services/FetchService';
-import { ILogEntries, ILogEntry } from '../services/FetchService';
 import { JSX } from 'react/jsx-runtime';
-import CustomSlider from './CustomSlider';
 import CustomSlider from './CustomSlider';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import { NavigationService } from '@/services/NavigationService';
@@ -15,12 +13,10 @@ export default function PullOutDrawer({
     next,
     currentlySelectedDay,
     entries
-    entries
 }: {
     previous: BookPageIndex | null;
     next: BookPageIndex | null;
     currentlySelectedDay: ILogEntry | null;
-    entries: ILogEntries;
     entries: ILogEntries;
 }) {
     
