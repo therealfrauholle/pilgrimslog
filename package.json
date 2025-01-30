@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "npx prettier --write \"src/**/*.{js,ts,tsx}\""
+    "format": "npx prettier --ignore-path \".gitignore\" --write \"**/*.{js,jsx,ts,tsx,json}\"",
+    "formatcheck": "npx prettier --ignore-path \".gitignore\" -c \"**/*.{js,jsx,ts,tsx,json}\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
