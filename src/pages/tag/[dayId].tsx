@@ -1,7 +1,8 @@
 import BlogEntry from '@/components/BlogEntry';
-import { BookPageIndex } from '@/components/PullOutDrawer';
+import { BookPageIndex } from '@/types/BookPageIndex';
 import { PageProps } from '../_app';
 import { useParams } from 'next/navigation';
+
 
 export default function Page({ entries, layout }: PageProps) {
     const { dayId } = useParams();

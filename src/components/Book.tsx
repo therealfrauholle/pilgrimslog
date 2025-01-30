@@ -1,7 +1,8 @@
 import { ILogEntry } from '../services/FetchService';
-import PullOutDrawer, { BookPageIndex } from './PullOutDrawer';
+import PullOutDrawer from './PullOutDrawer';
 import { JSX } from 'react/jsx-runtime';
 import Head from 'next/head';
+import { BookPageIndex } from '@/types/BookPageIndex';
 
 export default function Book({
     children,

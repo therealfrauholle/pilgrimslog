@@ -1,5 +1,5 @@
 import Book from '@/components/Book';
-import { BookPageIndex } from '@/components/PullOutDrawer';
+import { BookPageIndex } from '@/types/BookPageIndex';
 import { PageProps } from './_app';
 
 export default function Home({ entries, layout }: PageProps) {

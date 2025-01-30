@@ -2,37 +2,11 @@ import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { ILogEntry } from '../services/FetchService';
 import { JSX } from 'react/jsx-runtime';
-import { useRouter } from 'next/navigation';
 import Slider from './Slider';
+import { BookPageIndex } from '@/types/BookPageIndex';
+import { NavigationService } from '@/services/NavigationService';
+import { useRouter } from 'next/navigation';
 
-enum Page {
-    Homepage,
-    Entry,
-}
-
-export class BookPageIndex {
-    page: Page;
-    entry: ILogEntry | null;
-
-    constructor(page: Page, entry: ILogEntry | null) {
-        this.page = page;
-        this.entry = entry;
-    }
-
-    static entry(entry: ILogEntry): BookPageIndex {
-        return new BookPageIndex(Page.Entry, entry);
-    }
-
-    static homepage(): BookPageIndex {
-        return new BookPageIndex(Page.Homepage, null);
-    }
-
-    equals(other: BookPageIndex | null): boolean {
-        return other
-            ? this.page == other.page && this.entry == other.entry
-            : false;
-    }
-}
 
 export default function PullOutDrawer({
     previous,
@@ -43,24 +17,16 @@ export default function PullOutDrawer({
     next: BookPageIndex | null;
     currentlySelectedDay: ILogEntry | null;
 }) {
-    const navigate = useRouter();
+    
+    const router = useRouter();
+
     let previousButton: JSX.Element = <></>;
     let nextButton: JSX.Element = <></>;
 
-    const handleNavigation = (location: BookPageIndex) => {
-        switch (location.page) {
-            case Page.Homepage:
-                navigate.push('/');
-                break;
-            case Page.Entry:
-                navigate.push('/tag/' + location.entry!.Id);
-                break;
-        }
-    };
     if (previous != null) {
         previousButton = (
             <button
-                onClick={() => handleNavigation(previous)}
+                onClick={() => NavigationService.navigateTo(router, previous)}
                 className="h-16 w-16 bg-gray-100/30 mx-1 hover:bg-gray-200/50 
                           backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
@@ -77,7 +43,7 @@ export default function PullOutDrawer({
     if (next != null) {
         nextButton = (
             <button
-                onClick={() => handleNavigation(next)}
+                onClick={() => NavigationService.navigateTo(router,next)}
                 className="h-16 w-16 mx-1 bg-gray-100/30 hover:bg-gray-200/50 
                           backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 

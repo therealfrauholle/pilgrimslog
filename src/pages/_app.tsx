@@ -9,7 +9,7 @@ import {
 } from '@/services/FetchService';
 import { CircularProgress } from '@mui/material';
 import Book from '@/components/Book';
-import { BookPageIndex } from '@/components/PullOutDrawer';
+import { BookPageIndex } from '@/types/BookPageIndex';
 
 export type PageProps = { entries: ILogEntries; layout: BookLayout };
 export interface BookLayout {
