@@ -1,4 +1,4 @@
-import { ILogEntry } from '../services/FetchService';
+import { ILogEntries, ILogEntry } from '../services/FetchService';
 import PullOutDrawer from './PullOutDrawer';
 import { JSX } from 'react/jsx-runtime';
 import Head from 'next/head';
@@ -9,11 +9,13 @@ export default function Book({
     previous,
     next,
     currentlySelectedDay,
+    entries
 }: {
     children: JSX.Element;
     previous: BookPageIndex | null;
     next: BookPageIndex | null;
     currentlySelectedDay: ILogEntry | null;
+    entries: ILogEntries;
 }) {
     return (
         <>
@@ -50,6 +52,7 @@ export default function Book({
                                 previous={previous}
                                 next={next}
                                 currentlySelectedDay={currentlySelectedDay}
+                                entries={entries}
                             />
                         </div>
                     </div>

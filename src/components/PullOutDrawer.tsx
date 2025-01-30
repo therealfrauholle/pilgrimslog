@@ -1,8 +1,8 @@
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { ILogEntry } from '../services/FetchService';
+import { ILogEntries, ILogEntry } from '../services/FetchService';
 import { JSX } from 'react/jsx-runtime';
-import Slider from './Slider';
+import CustomSlider from './CustomSlider';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import { NavigationService } from '@/services/NavigationService';
 import { useRouter } from 'next/navigation';
@@ -12,10 +12,12 @@ export default function PullOutDrawer({
     previous,
     next,
     currentlySelectedDay,
+    entries
 }: {
     previous: BookPageIndex | null;
     next: BookPageIndex | null;
     currentlySelectedDay: ILogEntry | null;
+    entries: ILogEntries;
 }) {
     
     const router = useRouter();
@@ -76,7 +78,7 @@ export default function PullOutDrawer({
                 </div>
                 <div className="pointer-events-auto w-20">{nextButton}</div>
             </div>
-            <Slider></Slider>
+            <CustomSlider entries={entries}></CustomSlider>
         </>
     );
 }
