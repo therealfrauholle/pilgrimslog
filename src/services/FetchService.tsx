@@ -89,7 +89,6 @@ export interface ILogEntry {
     readonly getNext: () => ILogEntry | null;
 }
 
-
 class LogEntry implements ILogEntry {
     Id: string;
     When: string;
@@ -159,7 +158,8 @@ export async function fetchFromStrapi(): Promise<StrapiEntries> {
     const apiUrl =
         'https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc&pagination[pageSize]=10000';
 
-    return (await fetch(apiUrl)).json();
+    const result = await fetch(apiUrl);
+    return await result.json();
 }
 /**
  * Validate and populate the entries with additional information.

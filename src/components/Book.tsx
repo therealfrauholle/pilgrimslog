@@ -1,6 +1,5 @@
 import { ILogEntry } from '../services/FetchService';
-import HeaderBookmark from './HeaderBookmark';
-import BottomBar, { BookPageIndex } from './BottomBar';
+import PullOutDrawer, { BookPageIndex } from './PullOutDrawer';
 import { JSX } from 'react/jsx-runtime';
 import Head from 'next/head';
 
@@ -44,16 +43,9 @@ export default function Book({
             <div className="flex grid h-dvh w-screen justify-items-center bg-zinc-200 md:p-[20px]">
                 <div className="flex flex-col h-full min-h-0 w-full md:w-[700px] shadow-md">
                     <div className="relative flex flex-col h-full w-full">
-                        <HeaderBookmark
-                            isDisabled={
-                                previous !== null &&
-                                currentlySelectedDay === null
-                            }
-                            onClick={'/content'}
-                        />
                         <div className="flex-grow min-h-0">{children}</div>
                         <div className="flex-none">
-                            <BottomBar
+                            <PullOutDrawer
                                 previous={previous}
                                 next={next}
                                 currentlySelectedDay={currentlySelectedDay}

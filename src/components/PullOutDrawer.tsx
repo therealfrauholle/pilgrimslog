@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 
 enum Page {
     Homepage,
-    Content,
     Entry,
 }
 
@@ -27,12 +26,14 @@ export class BookPageIndex {
         return new BookPageIndex(Page.Homepage, null);
     }
 
-    static content(): BookPageIndex {
-        return new BookPageIndex(Page.Content, null);
+    equals(other: BookPageIndex | null): boolean {
+        return other
+            ? this.page == other.page && this.entry == other.entry
+            : false;
     }
 }
 
-export default function BottomBar({
+export default function PullOutDrawer({
     previous,
     next,
     currentlySelectedDay,
@@ -49,9 +50,6 @@ export default function BottomBar({
         switch (location.page) {
             case Page.Homepage:
                 navigate.push('/');
-                break;
-            case Page.Content:
-                navigate.push('/content');
                 break;
             case Page.Entry:
                 navigate.push('/tag/' + location.entry!.Id);
