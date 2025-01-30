@@ -3,6 +3,7 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import { ILogEntry } from '../services/FetchService';
 import { JSX } from 'react/jsx-runtime';
 import { useRouter } from 'next/navigation';
+import Slider from './Slider';
 
 enum Page {
     Homepage,
@@ -101,12 +102,16 @@ export default function PullOutDrawer({
     }
 
     return (
-        <div className="flex flex-row pl-[20px] pr-[20px] pb-[10px]">
-            <div className="pointer-events-auto w-20">{previousButton}</div>
-            <div className="flex-grow p-4 text-center text-gray-600 text-lg">
-                {description}
+        <>
+
+            <div className="flex flex-row pl-[20px] pr-[20px] pb-[10px]">
+                <div className="pointer-events-auto w-20">{previousButton}</div>
+                <div className="flex-grow p-4 text-center text-gray-600 text-lg">
+                    {description}
+                </div>
+                <div className="pointer-events-auto w-20">{nextButton}</div>
             </div>
-            <div className="pointer-events-auto w-20">{nextButton}</div>
-        </div>
+                <Slider></Slider>
+        </>
     );
 }
