@@ -99,9 +99,6 @@ export default function PullOutDrawer() {
                 <div className="flex-grow p-4 text-center text-gray-600 text-lg">
                     {description}
                 </div>
-                <div className="grow">
-                    <input type="text" />
-                </div>
                 <div className="pointer-events-auto w-20">{nextButton}</div>
             </div>
             {slider}
