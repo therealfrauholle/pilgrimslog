@@ -1,6 +1,5 @@
-import { ILogEntry } from "@/services/FetchService";
-import { Page } from "./Page";
-
+import { ILogEntry } from '@/services/FetchService';
+import { Page } from './Page';
 
 export class BookPageIndex {
     page: Page;
@@ -23,5 +22,14 @@ export class BookPageIndex {
         return other
             ? this.page == other.page && this.entry == other.entry
             : false;
+    }
+
+    asUrl(): string {
+        switch (this.page) {
+            case Page.Homepage:
+                return '/';
+            case Page.Entry:
+                return '/tag/' + this.entry!.Id;
+        }
     }
 }

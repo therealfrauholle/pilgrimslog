@@ -1,11 +1,4 @@
-import Book from '@/components/Book';
-import { BookPageIndex } from '@/types/BookPageIndex';
-import { PageProps } from './_app';
-
-export default function Home({ entries, layout }: PageProps) {
-    layout.setNext(BookPageIndex.entry(entries.data[0]));
-    layout.setPrevious(null);
-    layout.setCurrentEntry(null);
+export default function Home() {
     return (
         <div
             className="flex flex-col items-center justify-center h-full text-center px-6"

@@ -1,34 +1,50 @@
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { ILogEntries, ILogEntry } from '../services/FetchService';
+import { ILogEntry } from '../services/FetchService';
 import { JSX } from 'react/jsx-runtime';
 import CustomSlider from './CustomSlider';
-import { BookPageIndex } from '@/types/BookPageIndex';
-import { NavigationService } from '@/services/NavigationService';
 import { useRouter } from 'next/navigation';
+import { useContext } from 'react';
+import { BookContext } from './Book';
+import { BookPageIndex } from '@/types/BookPageIndex';
 
-
-export default function PullOutDrawer({
-    previous,
-    next,
-    currentlySelectedDay,
-    entries
-}: {
-    previous: BookPageIndex | null;
-    next: BookPageIndex | null;
-    currentlySelectedDay: ILogEntry | null;
-    entries: ILogEntries;
-}) {
-    
+export default function PullOutDrawer() {
     const router = useRouter();
+
+    const bookData = useContext(BookContext)!;
+    const entries = bookData!.entries;
+
+    const currentlySelectedDay: ILogEntry | null = bookData.current;
+
+    let previousLocation = null;
+    let nextLocation = null;
+
+    if (currentlySelectedDay != null) {
+        const previousEntry = currentlySelectedDay.getPrevious();
+        if (previousEntry != null) {
+            previousLocation = BookPageIndex.entry(previousEntry);
+        } else {
+            previousLocation = BookPageIndex.homepage();
+        }
+
+        const nextEntry = currentlySelectedDay.getNext();
+        if (nextEntry != null) {
+            nextLocation = BookPageIndex.entry(nextEntry);
+        } else {
+            nextLocation = null;
+        }
+    } else {
+        previousLocation = null;
+        nextLocation = BookPageIndex.entry(entries.data[0]);
+    }
 
     let previousButton: JSX.Element = <></>;
     let nextButton: JSX.Element = <></>;
 
-    if (previous != null) {
+    if (previousLocation != null) {
         previousButton = (
             <button
-                onClick={() => NavigationService.navigateTo(router, previous)}
+                onClick={() => router.push(previousLocation.asUrl())}
                 className="h-16 w-16 bg-gray-100/30 mx-1 hover:bg-gray-200/50 
                           backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
@@ -42,10 +58,10 @@ export default function PullOutDrawer({
         );
     }
 
-    if (next != null) {
+    if (nextLocation != null) {
         nextButton = (
             <button
-                onClick={() => NavigationService.navigateTo(router,next)}
+                onClick={() => router.push(nextLocation.asUrl())}
                 className="h-16 w-16 mx-1 bg-gray-100/30 hover:bg-gray-200/50 
                           backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
@@ -60,12 +76,19 @@ export default function PullOutDrawer({
     }
 
     let description = <></>;
+    let slider = <></>;
     if (currentlySelectedDay != null) {
         description = (
             <>
                 {currentlySelectedDay.getDaysSinceStart()}. Tag | ≈
                 {currentlySelectedDay.km}km
             </>
+        );
+        slider = (
+            <CustomSlider
+                entries={entries}
+                currentlySelectedDay={currentlySelectedDay}
+            ></CustomSlider>
         );
     }
 
@@ -76,9 +99,12 @@ export default function PullOutDrawer({
                 <div className="flex-grow p-4 text-center text-gray-600 text-lg">
                     {description}
                 </div>
+                <div className="grow">
+                    <input type="text" />
+                </div>
                 <div className="pointer-events-auto w-20">{nextButton}</div>
             </div>
-            <CustomSlider entries={entries} currentlySelectedDay={currentlySelectedDay}></CustomSlider>
+            {slider}
         </>
     );
 }
