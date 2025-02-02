@@ -11,6 +11,14 @@ export interface ILogEntries {
     data: ILogEntry[];
 
     readonly getEntryByDay: (day: number) => ILogEntry | null;
+
+    /**
+     * Obtain the entry which is closest to tge given day.
+     *
+     * When the next and previous entry after and before the day are
+     * the same amount of time apart, will return the earlirr day.
+     */
+    readonly getClosestEntryByDay: (day: number) => ILogEntry;
     readonly getDayById: (id: string) => ILogEntry | null;
 }
 
@@ -53,6 +61,9 @@ class LogEntries implements ILogEntries {
                 entry.next = next;
                 next = entry;
             });
+    }
+    getClosestEntryByDay(day: number): ILogEntry {
+        throw new Error('not implemented');
     }
 
     getEntryByDay(day: number): ILogEntry | null {
