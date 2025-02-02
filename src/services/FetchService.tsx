@@ -63,7 +63,21 @@ class LogEntries implements ILogEntries {
             });
     }
     getClosestEntryByDay(day: number): ILogEntry {
-        throw new Error('not implemented');
+        const nextDay = this.data.find(
+            (entry) => entry.getDaysSinceStart() > day,
+        );
+        if (nextDay == null) {
+            return this.data[this.data.length - 1];
+        }
+        const previousDay = nextDay.getPrevious()!;
+        if (
+            day - previousDay.getDaysSinceStart() >
+            nextDay.getDaysSinceStart() - day
+        ) {
+            return nextDay;
+        } else {
+            return previousDay;
+        }
     }
 
     getEntryByDay(day: number): ILogEntry | null {
