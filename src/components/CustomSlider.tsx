@@ -8,10 +8,7 @@ import { SliderThumb } from '@mui/material/Slider';
 import { ZoomIn } from '@mui/icons-material';
 import React from 'react';
 
-
 const myThumb: React.ElementType = (props) => {
-
-
     return (
         <SliderThumb
             {...props}
@@ -19,11 +16,9 @@ const myThumb: React.ElementType = (props) => {
                 props.onPointerDown?.(e); // Preserve default behavior
                 // handlePointerDown(); // Add custom behavior
             }}
-        >
-        </SliderThumb>
+        ></SliderThumb>
     );
-}
-
+};
 
 export default function CustomSlider({
     entries,
@@ -55,19 +50,24 @@ export default function CustomSlider({
         setIsZoomed(true);
     }
 
-
-    let smallTrack = 300;
-    let bigDick = 500;
-    let percentalOffset = index / entries.data.length;
-    let offsetCenter = 0.5 - percentalOffset;
-    let maximumAbsoluteOffset = (bigDick - smallTrack);
-    let marginRight = offsetCenter * maximumAbsoluteOffset;
-
+    const normalWidth = 300;
+    const zoomedWidth = 500;
+    const percentalOffset = index / entries.data.length;
+    const offsetCenter = 0.5 - percentalOffset;
+    const maximumAbsoluteOffset = zoomedWidth - normalWidth;
+    const marginRight = offsetCenter * maximumAbsoluteOffset;
 
     return (
         <div className="relative h-[100px] overflow-x-hidden w-full min-w-0 pt-[50px]">
-            <div className={'absolute left-[50%] translate-x-[-50%] transition-[width] min-w-0 place-self-center duration-300 ease-in-out ' + (isZoomed ? 'w-[500px]' : 'w-[300px]') + ' h-[50px]'}
-            style= {isZoomed ? {paddingRight: marginRight*2} : {}}
+            <div
+                className={
+                    'absolute left-[50%] translate-x-[-50%] transition-[width] min-w-0 place-self-center duration-300 ease-in-out ' +
+                    (isZoomed
+                        ? 'w-[' + zoomedWidth + 'px]'
+                        : 'w-[' + normalWidth + '300px]') +
+                    ' h-[50px]'
+                }
+                style={isZoomed ? { paddingRight: marginRight * 2 } : {}}
             >
                 <Slider
                     value={index}
@@ -88,10 +88,8 @@ export default function CustomSlider({
                     slotProps={{ thumb: { onPointerDown: handlePointerDown } }}
                     valueLabelDisplay="auto"
                     valueLabelFormat={(value) => value}
-                >
-                </Slider>
+                ></Slider>
             </div>
         </div>
     );
 }
-
