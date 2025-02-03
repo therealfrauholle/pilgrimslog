@@ -1,4 +1,4 @@
-import { ZoomDimensions } from '@/components/SliderLogic';
+import { SliderModel } from '@/util/SliderDataModel';
 import { test, describe, expect } from '@jest/globals';
 
 const normalSize = 200;
@@ -10,7 +10,7 @@ describe(
             {
                 const hover = 50;
                 test('with hover(' + hover + ') in center', () => {
-                    const generated = ZoomDimensions.generateCenter(
+                    const generated = SliderModel.generateCenter(
                         hover,
                         101,
                         normalSize,
@@ -22,7 +22,7 @@ describe(
             {
                 const hover = 40;
                 test('with hover(' + hover + ') left', () => {
-                    const generated = ZoomDimensions.generateCenter(
+                    const generated = SliderModel.generateCenter(
                         hover,
                         101,
                         normalSize,
@@ -34,7 +34,7 @@ describe(
             {
                 const hover = 0;
                 test('with hover(' + hover + ') left edge', () => {
-                    const generated = ZoomDimensions.generateCenter(
+                    const generated = SliderModel.generateCenter(
                         hover,
                         101,
                         normalSize,
@@ -46,7 +46,7 @@ describe(
             {
                 const hover = 100;
                 test('with hover(' + hover + ') right edge', () => {
-                    const generated = ZoomDimensions.generateCenter(
+                    const generated = SliderModel.generateCenter(
                         hover,
                         101,
                         normalSize,
@@ -62,7 +62,7 @@ describe(
                 {
                     const hover = 50;
                     describe('hovered (' + hover + ') in center', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -80,7 +80,7 @@ describe(
                 {
                     const hover = 40;
                     describe('hovered (' + hover + ') before edge', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -98,7 +98,7 @@ describe(
                 {
                     const hover = 30;
                     describe('hovered (' + hover + ') over left edge', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -116,7 +116,7 @@ describe(
                 {
                     const hover = 70;
                     describe('hovered (' + hover + ') over right edge', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -139,7 +139,7 @@ describe(
                 {
                     const hover = 30;
                     describe('hovered (' + hover + ') in center', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -157,7 +157,7 @@ describe(
                 {
                     const hover = 20;
                     describe('hovered (' + hover + ') before edge', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -175,7 +175,7 @@ describe(
                 {
                     const hover = 10;
                     describe('hovered (' + hover + ') over left edge', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -193,7 +193,7 @@ describe(
                 {
                     const hover = 50;
                     describe('hovered (' + hover + ') over right edge', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -216,7 +216,7 @@ describe(
                 {
                     const hover = 10;
                     describe('hovered (' + hover + ') in center', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,
@@ -234,7 +234,7 @@ describe(
                 {
                     const hover = 0;
                     describe('hovered (' + hover + ') at left end', () => {
-                        const dummy = new ZoomDimensions(
+                        const dummy = new SliderModel(
                             hover,
                             101,
                             center,

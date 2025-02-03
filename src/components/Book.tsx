@@ -4,7 +4,7 @@ import {
     ILogEntries,
     ILogEntry,
     parse,
-} from '../services/FetchService';
+} from '../util/FetchService';
 import PullOutDrawer from './PullOutDrawer';
 import { createContext, useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material';

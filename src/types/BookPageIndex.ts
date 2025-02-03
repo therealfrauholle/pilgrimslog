@@ -1,4 +1,4 @@
-import { ILogEntry } from '@/services/FetchService';
+import { ILogEntry } from '@/util/FetchService';
 import { Page } from './Page';
 
 export class BookPageIndex {

@@ -1,4 +1,3 @@
-import { ILogEntries, ILogEntry } from '@/services/FetchService';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Slider from '@mui/material/Slider';
@@ -6,7 +5,8 @@ import React from 'react';
 import SliderValueLabel from '@mui/material/Slider/SliderValueLabel';
 import { Mark } from '@mui/material/Slider/useSlider.types';
 import { BookPageIndex } from '@/types/BookPageIndex';
-import { ZoomDimensions } from './SliderLogic';
+import { ILogEntries, ILogEntry } from '@/util/FetchService';
+import { SliderModel } from '@/util/SliderDataModel';
 
 const labelHiddenWhenNoMark: React.ElementType = (props) => {
     const selectedValue = props.ownerState.value;
@@ -74,7 +74,7 @@ export default function CustomSlider({
             setZoomState(ZoomState.Zooming);
         }
         if (zoomState == ZoomState.Normal || zoomState == ZoomState.Release) {
-            const dim = ZoomDimensions.generateCenter(
+            const dim = SliderModel.generateCenter(
                 (newValue as number) - 1,
                 total,
                 normalWidth,
@@ -82,7 +82,7 @@ export default function CustomSlider({
             );
             setCenter(dim.newCenter());
         } else {
-            const dim = new ZoomDimensions(
+            const dim = new SliderModel(
                 (newValue as number) - 1,
                 total,
                 center,
@@ -99,8 +99,8 @@ export default function CustomSlider({
         setHoveredDay(newValue as number);
     };
 
-    function handlePointerDown(e) {
-        const dim = ZoomDimensions.generateCenter(
+    function handlePointerDown() {
+        const dim = SliderModel.generateCenter(
             theDay - 1,
             total,
             normalWidth,
@@ -112,7 +112,7 @@ export default function CustomSlider({
 
     const isZoomed = [ZoomState.Zooming, ZoomState.Zoomed].includes(zoomState);
 
-    const zoomDimensions = new ZoomDimensions(
+    const zoomDimensions = new SliderModel(
         hoveredDay - 1,
         total,
         center,
@@ -217,7 +217,7 @@ export default function CustomSlider({
                             thumb: { onPointerDown: handlePointerDown },
                         }}
                         valueLabelDisplay={'auto'}
-                        valueLabelFormat={(value, index) => {
+                        valueLabelFormat={(value) => {
                             const hoveredDay = entries.getEntryByDay(
                                 value as number,
                             );

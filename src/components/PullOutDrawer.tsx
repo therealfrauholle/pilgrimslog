@@ -1,12 +1,12 @@
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-import { ILogEntry } from '../services/FetchService';
+import { ILogEntry } from '../util/FetchService';
 import { JSX } from 'react/jsx-runtime';
-import CustomSlider from './CustomSlider';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { BookContext } from './Book';
 import { BookPageIndex } from '@/types/BookPageIndex';
+import CustomSlider from './CustomSlider';
 
 export default function PullOutDrawer() {
     const router = useRouter();

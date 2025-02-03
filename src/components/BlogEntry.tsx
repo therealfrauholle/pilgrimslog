@@ -1,4 +1,4 @@
-import { ILogEntry } from '../services/FetchService';
+import { ILogEntry } from '../util/FetchService';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
 
 export default function BlogEntry({ data }: { data: ILogEntry }) {
