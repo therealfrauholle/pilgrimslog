@@ -10,48 +10,56 @@ describe(
             {
                 const hover = 50;
                 test('with hover(' + hover + ') in center', () => {
-                    const generated = SliderModel.generateCenter(
+                    const generated = new SliderModel(
                         hover,
                         101,
+                        0,
                         normalSize,
                         expandedSize,
                     );
+                    generated.alignHovered();
                     expect(generated.newCenter()).toBe(50);
                 });
             }
             {
                 const hover = 40;
                 test('with hover(' + hover + ') left', () => {
-                    const generated = SliderModel.generateCenter(
+                    const generated = new SliderModel(
                         hover,
                         101,
+                        0,
                         normalSize,
                         expandedSize,
                     );
+                    generated.alignHovered();
                     expect(generated.newCenter()).toBe(42);
                 });
             }
             {
                 const hover = 0;
                 test('with hover(' + hover + ') left edge', () => {
-                    const generated = SliderModel.generateCenter(
+                    const generated = new SliderModel(
                         hover,
                         101,
+                        0,
                         normalSize,
                         expandedSize,
                     );
+                    generated.alignHovered();
                     expect(generated.newCenter()).toBe(10);
                 });
             }
             {
                 const hover = 100;
                 test('with hover(' + hover + ') right edge', () => {
-                    const generated = SliderModel.generateCenter(
+                    const generated = new SliderModel(
                         hover,
                         101,
+                        0,
                         normalSize,
                         expandedSize,
                     );
+                    generated.alignHovered();
                     expect(generated.newCenter()).toBe(90);
                 });
             }
