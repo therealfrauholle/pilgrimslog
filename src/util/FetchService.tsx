@@ -69,7 +69,10 @@ class LogEntries implements ILogEntries {
         if (nextDay == null) {
             return this.data[this.data.length - 1];
         }
-        const previousDay = nextDay.getPrevious()!;
+        const previousDay = nextDay.getPrevious();
+        if (previousDay == null) {
+            return nextDay;
+        }
         if (
             day - previousDay.getDaysSinceStart() >
             nextDay.getDaysSinceStart() - day

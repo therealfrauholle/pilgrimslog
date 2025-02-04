@@ -1,11 +1,7 @@
-import { ILogEntry } from '../util/FetchService';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
+import { ILogEntry } from '@/util/FetchService';
 
-export default function BlogEntry({ data }: { data: ILogEntry }) {
-    if (!data) {
-        return <div>No blog posts available</div>;
-    }
-
+export default function BlogEntry({ data: day }: { data: ILogEntry }) {
     return (
         <div
             style={{
@@ -20,10 +16,10 @@ export default function BlogEntry({ data }: { data: ILogEntry }) {
                     marginBottom: '2rem',
                 }}
             >
-                {data.Location || 'Untilted'}
+                {day.Location || 'Untilted'}
             </h1>
             <div className="grow overflow-y-auto">
-                <StrapiMarkdownRenderer data={data.Content} />
+                <StrapiMarkdownRenderer data={day.Content} />
             </div>
         </div>
     );
