@@ -51,7 +51,7 @@ export default function Book({ location }: { location: string | null }) {
     }
 
     function update(page: BookPageIndex) {
-        window.history.pushState(null, null, page.asUrl());
+        window.history.pushState(null, '', page.asUrl());
         setCurrent(page);
     }
 

@@ -1,0 +1,85 @@
+.container {
+    position: relative;
+    height: 100px;
+}
+
+.rail::before {
+    content: "";
+    width: 10px;
+    height: 100%;
+    left: -5px;
+    border-radius: 0 5px 5px 0;
+    background: red;
+    position: absolute;
+}
+
+.rail {
+    position: absolute;
+    top: 50%;
+    border-radius: 3px;
+    transform: translateY(-50%);
+    user-select: none;
+    touch-action: none;
+}
+
+.sticky {
+    position: absolute;
+    top: 50%;
+    height: 150%;
+    transform: translate(-50%, -50%);
+}
+
+.rail,
+.sticky {
+    transition-property: width, left;
+    transition-duration: 0.7s;
+}
+
+.scroll {
+    height: 100%;
+    position: absolute;
+    width: 100px;
+    transform: translateX(-50px);
+}
+
+.debug .container {
+    background: blue !important;
+    opacity: 0.2 !important;
+}
+
+.debug .sticky {
+    background: green !important;
+    opacity: 0.2 !important;
+}
+
+.debug .scroll {
+    background: red !important;
+    opacity: 0.2 !important;
+}
+
+.thumb {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 3px;
+    user-select: none;
+    touch-action: none;
+    top: 50%;
+    transition-property: left;
+    transition-duration: 0.3s;
+}
+
+.scrollleft {
+    left: 0;
+}
+
+.scrollright {
+    left: 100%;
+    transform: translateX(180deg);
+}
+
+.mark {
+    border-radius: 1px;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}

@@ -1,5 +1,5 @@
 import Book from '@/components/Book';
 
 export default function Home() {
-    return <Book></Book>;
+    return <Book location={null}></Book>;
 }

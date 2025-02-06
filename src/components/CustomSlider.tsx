@@ -32,16 +32,22 @@ export default function CustomSlider() {
     };
 
     return (
-        <div className="relative h-[100px] overflow-x-hidden w-full min-w-0 pt-[50px]">
+        <div className="relative h-[100px] overflow-x-hidden w-full min-w-0">
             <TouchSlider
-                zoomPadding={0.2}
                 value={(theDay - 1) / total}
                 onChange={handleChange}
                 onChangeCommitted={changeCommitted}
                 onStart={() => {}}
                 marks={marks}
-                zoomLevel={5}
-                scrollPads={0.3}
+                zoomFactor={10}
+                scrollSpeed={0.25}
+                slotClasses={{
+                    sticky: 'w-[60px]',
+                    rail: 'h-[30px] bg-amber-500/30',
+                    mark: 'h-[34px] w-[2px] bg-slate-800/60',
+                    thumb: 'h-[40px] w-[10px] bg-sky-800',
+                    container: 'mr-[50px] ml-[50px]',
+                }}
             />
         </div>
     );
