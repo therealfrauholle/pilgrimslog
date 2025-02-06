@@ -4,7 +4,7 @@ import { JSX } from 'react/jsx-runtime';
 import { useContext } from 'react';
 import { BookContext } from './Book';
 import { BookPageIndex } from '@/types/BookPageIndex';
-import CustomSlider from './CustomSlider';
+import DaySlider from './DaySlider';
 import { Page } from '@/types/Page';
 
 export default function PullOutDrawer() {
@@ -83,7 +83,7 @@ export default function PullOutDrawer() {
                 {currentPage.entry!.km}km
             </>
         );
-        slider = <CustomSlider></CustomSlider>;
+        slider = <DaySlider></DaySlider>;
     }
 
     return (
