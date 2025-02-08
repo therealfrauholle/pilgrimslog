@@ -172,6 +172,10 @@ class State {
         const shouldScrollMore =
             now - this.inner.lastScrollTime >
             1000 / this.inner.scrollUpdatesPerSecond;
+        // We cannot scroll when still zooming in
+        // Effectively when we update the "left" value, we restart the
+        // CSS transition but not for the "width". When both become out of
+        // sync, the sticky area will move from below the finger and weird things will happen
         const isZooming = this.remainingZoomFactor() != 1;
         if (scrollForce != null && shouldScrollMore && !isZooming) {
             const newCenterValue =
