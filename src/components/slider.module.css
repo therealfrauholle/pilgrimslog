@@ -17,9 +17,15 @@
     position: absolute;
     top: 50%;
     border-radius: 3px;
-    transform: translateY(-50%);
+    opacity: 1;
     user-select: none;
     touch-action: none;
+}
+
+.zoomedref {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    height: 100%;
 }
 
 .sticky {
@@ -27,12 +33,16 @@
     top: 50%;
     height: 150%;
     transform: translate(-50%, -50%);
+    transition-property: left;
+    transition-duration: 0.3s;
 }
 
 .rail,
-.sticky {
-    transition-property: width, left;
-    transition-duration: 0.7s;
+.sticky,
+.zoomedref {
+    transition-property: all;
+    transition-duration: 1s;
+    transition-timing-function: linear;
 }
 
 .scroll {

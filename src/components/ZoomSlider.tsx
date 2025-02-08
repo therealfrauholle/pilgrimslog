@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo, useReducer, useRef } from 'react';
+import { RefObject, useEffect, useReducer, useRef } from 'react';
 import { MouseEvent } from 'react';
 import styles from './slider.module.css';
 
@@ -13,10 +13,6 @@ export type TouchSliderProps = {
      */
     debug?: boolean;
     /**
-     * Multiplication factor by which the slider will grow when zoomed.
-     */
-    zoomFactor: number;
-    /**
      * How much the maximum slider scroll speed is, in units per second.
      */
     scrollSpeed: number;
@@ -30,12 +26,13 @@ export type TouchSliderProps = {
         scroll?: string;
         sticky?: string;
         thumb?: string;
+        zoomedRail?: string;
     };
 };
 
-type Action = {
+type UiAction = {
     action: 'down' | 'position' | 'up' | 'props';
-    value?: MouseEvent;
+    location?: MouseEvent;
     props?: TouchSliderProps;
 };
 
@@ -76,6 +73,8 @@ type InnerState = {
     leftScrollZone: RefObject<HTMLElement | null>;
     rightScrollZone: RefObject<HTMLElement | null>;
     stickyZone: RefObject<HTMLElement | null>;
+    zoomedRail: RefObject<HTMLElement | null>;
+    container: RefObject<HTMLElement | null>;
 };
 
 class State {
@@ -91,7 +90,6 @@ class State {
 
     withinStickyZone(position: MouseEvent): boolean {
         const stickyOffset = offsetX(position, this.inner.stickyZone.current!);
-        console.log('sticky offset', stickyOffset);
         return 0 <= stickyOffset && stickyOffset <= 1;
     }
     /**
@@ -142,22 +140,19 @@ class State {
         const touchedValue = this.clampedRailOffset(position);
         this.inner.props.onStart();
         const offsetToValue = this.inner.props.value - touchedValue;
+        const zoomFactor = this.remainingZoomFactor();
         if (this.withinStickyZone(position)) {
             const valueToLocateThumbUnderPointer =
-                this.inner.props.value +
-                offsetToValue / this.inner.props.zoomFactor;
+                this.inner.props.value + offsetToValue / zoomFactor;
             this.inner.valueInCenter = newCenter(
                 valueToLocateThumbUnderPointer,
-                this.inner.props.zoomFactor,
+                zoomFactor,
             );
-            console.log('Sticky start, center', this.inner.valueInCenter);
+            console.log('Sticky start, center', this.inner.lastInternalValue);
             this.inner.lastInternalValue = this.inner.props.value;
             this.inner.isSticky = true;
         } else {
-            this.inner.valueInCenter = newCenter(
-                touchedValue,
-                this.inner.props.zoomFactor,
-            );
+            this.inner.valueInCenter = newCenter(touchedValue, zoomFactor);
             this.inner.lastInternalValue = touchedValue;
             this.inner.props.onChange(touchedValue);
         }
@@ -165,27 +160,27 @@ class State {
     }
 
     processDragging(position: MouseEvent): boolean {
-        let mutated = false;
         if (this.inner.valueInCenter == null) {
             console.warn('will not update slider when not zoomed');
             return false;
         }
+        let mutated = false;
         const pointerAsValue = this.clampedRailOffset(position);
         const scrollForce = this.shouldScroll(position);
         const now = Date.now();
         //FIXME consider a fast swap of scroll direction - or we ignore it...
-        if (
-            scrollForce != null &&
+        const shouldScrollMore =
             now - this.inner.lastScrollTime >
-                1000 / this.inner.scrollUpdatesPerSecond
-        ) {
+            1000 / this.inner.scrollUpdatesPerSecond;
+        const isZooming = this.remainingZoomFactor() != 1;
+        if (scrollForce != null && shouldScrollMore && !isZooming) {
             const newCenterValue =
                 this.inner.valueInCenter +
                 (this.inner.props.scrollSpeed /
                     this.inner.scrollUpdatesPerSecond) *
                     Math.pow(scrollForce, 3);
             // We need to not scroll beyond the edges of the rail.
-            const lowerBound = 0.5 / this.inner.props.zoomFactor;
+            const lowerBound = 0.5 / this.maxZoom();
             const upperBound = 1 - lowerBound;
             const clampedCenterValue = clamp(
                 newCenterValue,
@@ -193,12 +188,6 @@ class State {
                 upperBound,
             )!;
             if (clampedCenterValue != this.inner.valueInCenter) {
-                console.log(
-                    'scrolling, center',
-                    clampedCenterValue,
-                    scrollForce,
-                    this.inner.valueInCenter,
-                );
                 this.inner.valueInCenter = clampedCenterValue;
                 this.inner.lastScrollTime = now;
                 mutated = true;
@@ -231,9 +220,30 @@ class State {
 
         return true;
     }
+
+    /**
+     * The maximum zoom faczor. Will remain static as long as HTML does not change.
+     */
+    maxZoom(): number {
+        return (
+            this.inner.zoomedRail.current!.getBoundingClientRect().width /
+            this.inner.container.current!.getBoundingClientRect().width
+        );
+    }
+
+    /**
+     * How much the slider can still be zoomed.
+     */
+    remainingZoomFactor(): number {
+        const railWidth =
+            this.inner.rail.current!.getBoundingClientRect().width;
+        const zoomedRailWidth =
+            this.inner.zoomedRail.current!.getBoundingClientRect().width;
+        return zoomedRailWidth / railWidth;
+    }
 }
 
-function generateNewState(previousState: State, action: Action): State {
+function generateNewState(previousState: State, action: UiAction): State {
     const newState: State = previousState.copy();
     if (mutateState(newState, action)) {
         return newState;
@@ -244,18 +254,18 @@ function generateNewState(previousState: State, action: Action): State {
 }
 
 /**
- * Perform the given action on tge state.
+ * Perform the given action on the state.
  *
  * Returm whether the state has been updated.
  */
-function mutateState(state: State, action: Action): boolean {
+function mutateState(state: State, action: UiAction): boolean {
     switch (action.action) {
         case 'down':
-            return state.processDragStart(action.value!);
+            return state.processDragStart(action.location!);
         case 'position':
-            return state.processDragging(action.value!);
+            return state.processDragging(action.location!);
         case 'up':
-            return state.processDragRelease(action.value!);
+            return state.processDragRelease(action.location!);
         case 'props':
             state.inner.props = action.props!;
             return true;
@@ -299,16 +309,18 @@ function newCenter(zoomToValue: number, zoomLevel: number) {
     return clampedTouch + offset / zoomLevel;
 }
 
-const TouchSlider = (props: TouchSliderProps) => {
-    const railRef = useRef<HTMLSpanElement | null>(null);
+export default function TouchSlider(props: TouchSliderProps) {
+    const railRef = useRef<HTMLDivElement | null>(null);
     const leftRef = useRef<HTMLSpanElement | null>(null);
     const rightRef = useRef<HTMLSpanElement | null>(null);
     const stickyRef = useRef<HTMLSpanElement | null>(null);
+    const zoomedRailRef = useRef<HTMLSpanElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const continousPointerReport = useRef<NodeJS.Timeout | null>(null);
 
     const UPDATES_PER_SECOND = 10;
 
-    const [sliderState, modifyZoomCenter] = useReducer(
+    const [sliderState, dispatchUiChange] = useReducer(
         generateNewState,
         new State({
             valueInCenter: null,
@@ -321,11 +333,13 @@ const TouchSlider = (props: TouchSliderProps) => {
             stickyZone: stickyRef,
             isSticky: false,
             scrollUpdatesPerSecond: UPDATES_PER_SECOND,
+            zoomedRail: zoomedRailRef,
+            container: containerRef,
         }),
     );
 
     useEffect(() => {
-        modifyZoomCenter({ action: 'props', props: props });
+        dispatchUiChange({ action: 'props', props: props });
     }, [props]);
 
     function uninstallTimer() {
@@ -343,7 +357,7 @@ const TouchSlider = (props: TouchSliderProps) => {
         // Timer must be short enough to work well with the automatic scroll updates
         continousPointerReport.current = setInterval(
             () => {
-                modifyZoomCenter({ action: 'position', value: position });
+                dispatchUiChange({ action: 'position', location: position });
             },
             1000 / (UPDATES_PER_SECOND * 2),
         );
@@ -354,21 +368,21 @@ const TouchSlider = (props: TouchSliderProps) => {
     function onRelease(this: Document, position: any) {
         deactivateGlobalHandlers();
         uninstallTimer();
-        modifyZoomCenter({ action: 'up', value: position });
+        dispatchUiChange({ action: 'up', location: position });
     }
 
     // Lint because of react vs. native types
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function onMove(this: Document, position: any) {
-        modifyZoomCenter({ action: 'position', value: position });
+        dispatchUiChange({ action: 'position', location: position });
         reinstallTimer(position);
     }
 
     function onDown(position: MouseEvent) {
         registerGlobalHandlers();
-        modifyZoomCenter({
+        dispatchUiChange({
             action: 'down',
-            value: position,
+            location: position,
         });
         reinstallTimer(position);
     }
@@ -383,30 +397,10 @@ const TouchSlider = (props: TouchSliderProps) => {
         document.removeEventListener('pointerup', onRelease);
     }
 
-    const thumbOffsetRail = clamp(props.value, 0, 1)!;
-    const width = sliderState.isZoomed() ? props.zoomFactor : 1;
-    const trackContainerOffset = sliderState.isZoomed()
-        ? 0.5 - sliderState.inner.valueInCenter! * props.zoomFactor
-        : 0;
-
     const slotClasses = props.slotClasses ? props.slotClasses : {};
-
-    const theMarks = useMemo(() => {
-        return props.marks.map((value, index) => {
-            return (
-                <span
-                    className={styles.mark + ' ' + slotClasses.mark}
-                    key={'mark' + value + index}
-                    style={{
-                        left: value * 100 + '%',
-                    }}
-                ></span>
-            );
-        });
-    }, [props.marks, slotClasses.mark]);
-
     return (
         <div
+            ref={containerRef}
             className={
                 (props.debug ? styles.debug : '') +
                 ' ' +
@@ -416,7 +410,6 @@ const TouchSlider = (props: TouchSliderProps) => {
             }
         >
             <span
-                key="scrollleft"
                 className={[
                     styles.scroll,
                     styles.scrollleft,
@@ -425,7 +418,6 @@ const TouchSlider = (props: TouchSliderProps) => {
                 ref={leftRef}
             ></span>
             <span
-                key="scrollrighz"
                 className={[
                     styles.scroll,
                     styles.scrollright,
@@ -434,35 +426,55 @@ const TouchSlider = (props: TouchSliderProps) => {
                 ref={rightRef}
             ></span>
             <span
-                key="rail"
+                ref={zoomedRailRef}
+                className={styles.zoomedref + ' ' + slotClasses.zoomedRail}
+            ></span>
+            <div
                 ref={railRef}
-                className={styles.rail + ' ' + slotClasses.rail}
+                className={
+                    styles.rail +
+                    ' ' +
+                    (sliderState.isZoomed()
+                        ? slotClasses.zoomedRail
+                        : slotClasses.rail + ' w-full')
+                }
                 style={{
-                    left: trackContainerOffset * 100 + '%',
-                    width: width * 100 + '%',
+                    left: sliderState.isZoomed()
+                        ? (0.5 -
+                              sliderState.inner.valueInCenter! *
+                                  sliderState.maxZoom()) *
+                              100 +
+                          '%'
+                        : '0%',
                 }}
                 onPointerDown={onDown}
             >
-                {theMarks}
                 <span
-                    key="sticky"
                     ref={stickyRef}
                     className={styles.sticky + ' ' + slotClasses.sticky}
                     style={{
-                        left: thumbOffsetRail * 100 + '%',
+                        left: clamp(props.value, 0, 1)! * 100 + '%',
                     }}
                 ></span>
+                {props.marks.map((value, index) => {
+                    return (
+                        <span
+                            className={styles.mark + ' ' + slotClasses.mark}
+                            key={'mark' + value + index}
+                            style={{
+                                left: value * 100 + '%',
+                            }}
+                        ></span>
+                    );
+                })}
                 <span
-                    key="thumb"
                     className={styles.thumb + ' ' + slotClasses.thumb}
                     style={{
-                        left: thumbOffsetRail * 100 + '%',
+                        left: clamp(props.value, 0, 1)! * 100 + '%',
                     }}
                     onPointerDown={onDown}
                 ></span>
-            </span>
+            </div>
         </div>
     );
-};
-
-export default TouchSlider;
+}

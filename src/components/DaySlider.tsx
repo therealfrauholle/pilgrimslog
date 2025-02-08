@@ -39,7 +39,6 @@ export default function DaySlider() {
                 onChangeCommitted={changeCommitted}
                 onStart={() => {}}
                 marks={marks}
-                zoomFactor={10}
                 scrollSpeed={0.25}
                 slotClasses={{
                     sticky: 'w-[60px]',
@@ -47,6 +46,7 @@ export default function DaySlider() {
                     mark: 'h-[34px] w-[2px] bg-slate-800/60',
                     thumb: 'h-[40px] w-[10px] bg-sky-800',
                     container: 'mr-[50px] ml-[50px]',
+                    zoomedRail: 'w-[1000px] h-[30px] bg-red-500/90',
                 }}
                 debug
             />
