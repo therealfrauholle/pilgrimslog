@@ -1,9 +1,8 @@
-'use client';
 import Book from '@/components/Book';
-import { useParams } from 'next/navigation';
+import { fetchFromStrapi } from '@/util/FetchService';
 
-export default function Page() {
-    const { dayId } = useParams();
+export default async function Page() {
+    const entries = await fetchFromStrapi();
 
-    return <Book location={dayId as string}></Book>;
+    return <Book data={{ entries: entries! }}></Book>;
 }

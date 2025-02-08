@@ -1,43 +1,34 @@
 'use client';
-import { fetchFromStrapi, ILogEntries, parse } from '../util/FetchService';
+import { ILogEntries, parse, StrapiEntries } from '../util/FetchService';
 import PullOutDrawer from './PullOutDrawer';
-import { createContext, useEffect, useState } from 'react';
-import { CircularProgress } from '@mui/material';
+import { createContext, useState } from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import { Page } from '@/types/Page';
 import Title from './Title';
 import BlogEntry from './BlogEntry';
+import { useParams } from 'next/navigation';
+
 export type BookData = {
     entries: ILogEntries;
     current: BookPageIndex;
     setCurrent: (current: BookPageIndex) => void;
 };
 
+export type StrapiData = {
+    entries: StrapiEntries;
+};
+
 export const BookContext = createContext<BookData | null>(null);
-export default function Book({ location }: { location: string | null }) {
-    const [data, setData] = useState<ILogEntries | null>(null);
+
+export default function Book({ data }: { data: StrapiData }) {
+    const entries = parse(data.entries);
+    const params = useParams();
+
     const [current, setCurrent] = useState<BookPageIndex>(
-        BookPageIndex.homepage(),
+        'dayId' in params
+            ? BookPageIndex.entry(entries.getDayById(params.dayId as string)!)
+            : BookPageIndex.homepage(),
     );
-
-    useEffect(() => {
-        (async () => {
-            if (data == null) {
-                const data = await fetchFromStrapi();
-                const parsed = parse(data);
-                let current = BookPageIndex.homepage();
-                if (location != null) {
-                    current = BookPageIndex.entry(parsed.getDayById(location)!);
-                }
-                setCurrent(current);
-                setData(parsed);
-            }
-        })();
-    }, [location, data]);
-
-    if (data == null) {
-        return <CircularProgress />;
-    }
 
     let children;
 
@@ -62,7 +53,7 @@ export default function Book({ location }: { location: string | null }) {
                     <div className="relative flex flex-col h-full w-full">
                         <BookContext.Provider
                             value={{
-                                entries: data,
+                                entries,
                                 current,
                                 setCurrent: update,
                             }}

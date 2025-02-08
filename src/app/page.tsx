@@ -1,5 +1,7 @@
 import Book from '@/components/Book';
+import { fetchFromStrapi } from '@/util/FetchService';
 
-export default function Home() {
-    return <Book location={null}></Book>;
+export default async function Home() {
+    const entries = await fetchFromStrapi();
+    return <Book data={{ entries: entries! }}></Book>;
 }
