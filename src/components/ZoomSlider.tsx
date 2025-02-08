@@ -202,7 +202,6 @@ class State {
             !this.inner.isSticky &&
             this.inner.lastInternalValue != pointerAsValue
         ) {
-            console.log('not sticky, slider val', pointerAsValue);
             this.inner.lastInternalValue = pointerAsValue;
             this.inner.props.onChange(pointerAsValue);
             mutated = true;
@@ -410,7 +409,8 @@ export default function TouchSlider(props: TouchSliderProps) {
                 ' ' +
                 styles.container +
                 ' ' +
-                slotClasses.container
+                slotClasses.container +
+                (sliderState.isZoomed() ? ' zoomed' : '')
             }
         >
             <span
@@ -438,9 +438,11 @@ export default function TouchSlider(props: TouchSliderProps) {
                 className={
                     styles.rail +
                     ' ' +
+                    slotClasses.rail +
+                    ' ' +
                     (sliderState.isZoomed()
                         ? slotClasses.zoomedRail
-                        : slotClasses.rail + ' w-full')
+                        : ' w-full')
                 }
                 style={{
                     left: sliderState.isZoomed()

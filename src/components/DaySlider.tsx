@@ -32,7 +32,7 @@ export default function DaySlider() {
     };
 
     return (
-        <div className="relative h-[100px] overflow-x-hidden w-full min-w-0">
+        <div className="h-[100px] overflow-x-hidden w-full min-w-0">
             <ZoomSlider
                 value={(theDay - 1) / total}
                 onChange={handleChange}
@@ -42,13 +42,13 @@ export default function DaySlider() {
                 scrollSpeed={0.25}
                 slotClasses={{
                     sticky: 'w-[60px]',
-                    rail: 'h-[30px] bg-amber-500/30',
-                    mark: 'h-[34px] w-[2px] bg-slate-800/60',
-                    thumb: 'h-[40px] w-[10px] bg-sky-800',
+                    scroll: 'w-[100px]',
+                    rail: 'rail',
+                    mark: 'mark',
+                    thumb: 'bg-sky-800 thumb',
                     container: 'mr-[50px] ml-[50px]',
-                    zoomedRail: 'w-[1000px] h-[30px] bg-red-500/90',
+                    zoomedRail: 'w-[1000px]',
                 }}
-                debug
             />
         </div>
     );

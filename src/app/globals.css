@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rail {
+    height: 10px;
+    background: rgb(70, 80, 138);
+}
+
+.zoomed .rail {
+    height: 30px;
+}
+
+
+.mark {
+    background: #ffbde2;
+    height: 6px;
+    width: 1px;
+}
+
+.zoomed .mark {
+    width: 2px;
+    height: 26px;
+}
+
+
+.thumb {
+    height: 35px;
+    width: 20px;
+}
+
+.zoomed .thumb {
+    height: 40px;
+    width: 10px;
+}
