@@ -479,6 +479,7 @@ export default function TouchSlider(props: TouchSliderProps) {
                         left: clamp(props.value, 0, 1)! * 100 + '%',
                     }}
                     onPointerDown={onDown}
+                    data-value={props.value}
                 ></span>
             </div>
         </div>

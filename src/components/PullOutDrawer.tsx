@@ -79,7 +79,7 @@ export default function PullOutDrawer() {
     if (currentPage.page == Page.Entry) {
         description = (
             <>
-                {currentPage.entry!.getDaysSinceStart()}. Tag | ≈
+                {currentPage.entry!.getDaysSinceStart() + 1}. Tag | ≈
                 {currentPage.entry!.km}km
             </>
         );

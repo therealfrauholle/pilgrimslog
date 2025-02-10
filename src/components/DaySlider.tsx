@@ -14,19 +14,19 @@ export default function DaySlider() {
         setDay(currentlySelectedDay);
     }, [currentlySelectedDay]);
 
-    const total = entries.data[entries.data.length - 1].getDaysSinceStart() - 1;
+    const total = entries.data[entries.data.length - 1].getDaysSinceStart() + 1;
 
     const handleChange = (value: number) => {
-        const day = Math.round((total - 1) * value) + 1;
+        const day = Math.round((total - 1) * value);
         setDay(entries.getClosestEntryByDay(day).getDaysSinceStart());
     };
 
     const marks = entries.data.map((entry) => {
-        return (entry.getDaysSinceStart() - 1) / total;
+        return entry.getDaysSinceStart() / total;
     });
 
     const changeCommitted = (value: number) => {
-        const day = Math.round((total - 1) * value) + 1;
+        const day = Math.round((total - 1) * value);
         const closestDay = entries.getClosestEntryByDay(day);
         setDisplayed(BookPageIndex.entry(closestDay));
     };
@@ -34,7 +34,7 @@ export default function DaySlider() {
     return (
         <div className="h-[100px] overflow-x-hidden w-full min-w-0">
             <ZoomSlider
-                value={(theDay - 1) / total}
+                value={theDay / total}
                 onChange={handleChange}
                 onChangeCommitted={changeCommitted}
                 onStart={() => {}}

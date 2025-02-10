@@ -13,7 +13,7 @@ export interface ILogEntries {
     readonly getEntryByDay: (day: number) => ILogEntry | null;
 
     /**
-     * Obtain the entry which is closest to tge given day.
+     * Obtain the entry which is closest to the given day.
      *
      * When the next and previous entry after and before the day are
      * the same amount of time apart, will return the earlirr day.
@@ -111,6 +111,11 @@ export interface ILogEntry {
     Content: string;
     km: number;
 
+    /**
+     * Days passed since the first day
+     *
+     * For the first day, will return 0.
+     */
     readonly getDaysSinceStart: () => number;
 
     readonly getPrevious: () => ILogEntry | null;
@@ -141,7 +146,7 @@ class LogEntry implements ILogEntry {
     }
 
     getDaysSinceStart(): number {
-        const startDate = new Date('2024-05-07'); // Start date: 8 May 2024
+        const startDate = new Date('2024-05-08'); // Start date: 8 May 2024
         const givenDate = new Date(this.When); // Convert the given date string to a Date object
 
         return (
