@@ -5,8 +5,8 @@ import { BookContext } from './Book';
 import ZoomSlider from './ZoomSlider';
 
 export default function DaySlider() {
-    const { entries, current, setCurrent } = useContext(BookContext)!;
-    const currentlySelectedEntry = current.entry!;
+    const { entries, displayed, setDisplayed } = useContext(BookContext)!;
+    const currentlySelectedEntry = displayed.entry!;
     const currentlySelectedDay = currentlySelectedEntry.getDaysSinceStart();
     const [theDay, setDay] = useState(currentlySelectedDay);
 
@@ -28,7 +28,7 @@ export default function DaySlider() {
     const changeCommitted = (value: number) => {
         const day = Math.round((total - 1) * value) + 1;
         const closestDay = entries.getClosestEntryByDay(day);
-        setCurrent(BookPageIndex.entry(closestDay));
+        setDisplayed(BookPageIndex.entry(closestDay));
     };
 
     return (

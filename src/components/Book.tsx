@@ -10,8 +10,14 @@ import { useParams } from 'next/navigation';
 
 export type BookData = {
     entries: ILogEntries;
-    current: BookPageIndex;
-    setCurrent: (current: BookPageIndex) => void;
+    /**
+     * The page currently shown in the main frame.
+     */
+    displayed: BookPageIndex;
+    /**
+     * Display this page in the main frame..
+     */
+    setDisplayed: (current: BookPageIndex) => void;
 };
 
 export type StrapiData = {
@@ -54,8 +60,8 @@ export default function Book({ data }: { data: StrapiData }) {
                         <BookContext.Provider
                             value={{
                                 entries,
-                                current,
-                                setCurrent: update,
+                                displayed: current,
+                                setDisplayed: update,
                             }}
                         >
                             <div className="flex-grow min-h-0">{children}</div>

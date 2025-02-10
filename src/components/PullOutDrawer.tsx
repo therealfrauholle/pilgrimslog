@@ -11,7 +11,7 @@ export default function PullOutDrawer() {
     const bookData = useContext(BookContext)!;
     const entries = bookData!.entries;
 
-    const currentPage: BookPageIndex = bookData.current;
+    const currentPage: BookPageIndex = bookData.displayed;
 
     let previousLocation = null;
     let nextLocation = null;
@@ -43,7 +43,7 @@ export default function PullOutDrawer() {
     if (previousLocation != null) {
         previousButton = (
             <button
-                onClick={() => bookData.setCurrent(previousLocation)}
+                onClick={() => bookData.setDisplayed(previousLocation)}
                 className="h-16 w-16 bg-gray-100/30 mx-1 hover:bg-gray-200/50 
                           backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
@@ -60,7 +60,7 @@ export default function PullOutDrawer() {
     if (nextLocation != null) {
         nextButton = (
             <button
-                onClick={() => bookData.setCurrent(nextLocation)}
+                onClick={() => bookData.setDisplayed(nextLocation)}
                 className="h-16 w-16 mx-1 bg-gray-100/30 hover:bg-gray-200/50 
                           backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
