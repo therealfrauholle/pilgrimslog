@@ -75,7 +75,6 @@ export default function PullOutDrawer() {
     }
 
     let description = <></>;
-    let slider = <></>;
     if (currentPage.page == Page.Entry) {
         description = (
             <>
@@ -83,7 +82,6 @@ export default function PullOutDrawer() {
                 {currentPage.entry!.km}km
             </>
         );
-        slider = <DaySlider></DaySlider>;
     }
 
     return (
@@ -95,7 +93,7 @@ export default function PullOutDrawer() {
                 </div>
                 <div className="pointer-events-auto w-20">{nextButton}</div>
             </div>
-            {slider}
+            <DaySlider />
         </>
     );
 }

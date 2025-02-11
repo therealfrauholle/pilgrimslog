@@ -461,6 +461,7 @@ export default function TouchSlider(props: TouchSliderProps) {
                     style={{
                         left: clamp(props.value, 0, 1)! * 100 + '%',
                     }}
+                    onPointerDown={onDown}
                 ></span>
                 {props.marks.map((value, index) => {
                     return (
