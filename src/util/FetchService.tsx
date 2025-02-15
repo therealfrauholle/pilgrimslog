@@ -194,11 +194,17 @@ export async function fetchFromStrapi(): Promise<StrapiEntries> {
     const result = await fetch(apiUrl);
     return await result.json();
 }
+// Store parsed entries. This will make the result conparable to data
+// returned by other calls, i.e. when using react strict mode
+const PARSED: Map<StrapiEntries, LogEntries> = new Map();
 /**
  * Validate and populate the entries with additional information.
  */
 export function parse(entries: StrapiEntries): ILogEntries {
-    return new LogEntries(entries);
+    return (
+        PARSED.get(entries) ||
+        PARSED.set(entries, new LogEntries(entries)).get(entries)!
+    );
 }
 
 export async function fetchAndParse(): Promise<ILogEntries | null> {
