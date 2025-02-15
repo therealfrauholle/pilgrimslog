@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useReducer, useRef } from 'react';
+import { RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { MouseEvent } from 'react';
 import styles from './slider.module.css';
 
@@ -33,7 +33,10 @@ export type TouchSliderProps = {
 type UiAction = {
     action: 'down' | 'position' | 'up' | 'props';
     location?: MouseEvent;
-    props?: TouchSliderProps;
+    props?: {
+        scrollSpeed: number;
+        value: number;
+    };
 };
 
 type InnerState = {
@@ -54,9 +57,13 @@ type InnerState = {
      */
     lastInternalValue: number;
     /**
-     * Current component properties.
+     * The current value of the thumb.
      */
-    props: TouchSliderProps;
+    value: number;
+    /**
+     * The maximum speed the slider should scroll, in pixels per second.
+     */
+    scrollSpeed: number;
     /**
      * If sticky, moving the bar will require touch input further away
      * from the thumb.
@@ -69,6 +76,10 @@ type InnerState = {
      * automatically.
      */
     scrollUpdatesPerSecond: number;
+    /**
+     * Events that happen in the reducer are queued in this list.
+     */
+    enqueueEvent: (newEvent: Event) => void;
     rail: RefObject<HTMLElement | null>;
     leftScrollZone: RefObject<HTMLElement | null>;
     rightScrollZone: RefObject<HTMLElement | null>;
@@ -138,23 +149,23 @@ class State {
             return false;
         }
         const touchedValue = this.clampedRailOffset(position);
-        this.inner.props.onStart();
-        const offsetToValue = this.inner.props.value - touchedValue;
+        this.inner.enqueueEvent({ type: 'start' });
+        const offsetToValue = this.inner.value - touchedValue;
         const zoomFactor = this.remainingZoomFactor();
         if (this.withinStickyZone(position)) {
             const valueToLocateThumbUnderPointer =
-                this.inner.props.value + offsetToValue / zoomFactor;
+                this.inner.value + offsetToValue / zoomFactor;
             this.inner.valueInCenter = newCenter(
                 valueToLocateThumbUnderPointer,
                 zoomFactor,
             );
             console.log('Sticky start, center', this.inner.lastInternalValue);
-            this.inner.lastInternalValue = this.inner.props.value;
+            this.inner.lastInternalValue = this.inner.value;
             this.inner.isSticky = true;
         } else {
             this.inner.valueInCenter = newCenter(touchedValue, zoomFactor);
             this.inner.lastInternalValue = touchedValue;
-            this.inner.props.onChange(touchedValue);
+            this.inner.enqueueEvent({ type: 'change', value: touchedValue });
         }
         return true;
     }
@@ -180,8 +191,7 @@ class State {
         if (scrollForce != null && shouldScrollMore && !isZooming) {
             const newCenterValue =
                 this.inner.valueInCenter +
-                (this.inner.props.scrollSpeed /
-                    this.inner.scrollUpdatesPerSecond) *
+                (this.inner.scrollSpeed / this.inner.scrollUpdatesPerSecond) *
                     Math.pow(scrollForce, 3);
             // We need to not scroll beyond the edges of the rail.
             const lowerBound = 0.5 / this.maxZoom();
@@ -203,7 +213,7 @@ class State {
             this.inner.lastInternalValue != pointerAsValue
         ) {
             this.inner.lastInternalValue = pointerAsValue;
-            this.inner.props.onChange(pointerAsValue);
+            this.inner.enqueueEvent({ type: 'change', value: pointerAsValue });
             mutated = true;
         }
         return mutated;
@@ -219,7 +229,10 @@ class State {
         }
         this.inner.isSticky = false;
         this.inner.valueInCenter = null;
-        this.inner.props.onChangeCommitted(this.inner.lastInternalValue);
+        this.inner.enqueueEvent({
+            type: 'commit',
+            value: this.inner.lastInternalValue,
+        });
 
         return true;
     }
@@ -270,7 +283,8 @@ function mutateState(state: State, action: UiAction): boolean {
         case 'up':
             return state.processDragRelease(action.location!);
         case 'props':
-            state.inner.props = action.props!;
+            state.inner.scrollSpeed = action.props!.scrollSpeed;
+            state.inner.value = action.props!.value;
             return true;
     }
 }
@@ -312,6 +326,14 @@ function newCenter(zoomToValue: number, zoomLevel: number) {
     return clampedTouch + offset / zoomLevel;
 }
 
+/**
+ * Internal variant for the UI event that is propagated to the parent.
+ */
+type Event = {
+    type: 'change' | 'commit' | 'start';
+    value?: number;
+};
+
 export default function TouchSlider(props: TouchSliderProps) {
     const railRef = useRef<HTMLDivElement | null>(null);
     const leftRef = useRef<HTMLSpanElement | null>(null);
@@ -321,6 +343,8 @@ export default function TouchSlider(props: TouchSliderProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const continousPointerReport = useRef<NodeJS.Timeout | null>(null);
 
+    const [events, setEvents] = useState<Event[]>([]);
+
     const UPDATES_PER_SECOND = 10;
 
     const [sliderState, dispatchUiChange] = useReducer(
@@ -329,7 +353,13 @@ export default function TouchSlider(props: TouchSliderProps) {
             valueInCenter: null,
             lastInternalValue: props.value,
             lastScrollTime: 0,
-            props: { ...props },
+            scrollSpeed: props.scrollSpeed,
+            value: props.value,
+            enqueueEvent: (newEvent: Event) => {
+                setEvents((events: Event[]) => {
+                    return [...events, newEvent];
+                });
+            },
             rail: railRef,
             leftScrollZone: leftRef,
             rightScrollZone: rightRef,
@@ -344,6 +374,28 @@ export default function TouchSlider(props: TouchSliderProps) {
     useEffect(() => {
         dispatchUiChange({ action: 'props', props: props });
     }, [props]);
+
+    const { onChangeCommitted, onStart, onChange } = props;
+
+    useEffect(() => {
+        events.forEach((event) => {
+            switch (event.type) {
+                case 'change':
+                    onChange(event.value!);
+                    break;
+                case 'commit':
+                    onChangeCommitted(event.value!);
+                    break;
+                case 'start':
+                    onStart();
+                    break;
+            }
+        });
+        setEvents((events: Event[]) => {
+            events.length = 0;
+            return events;
+        });
+    }, [events, onChange, onChangeCommitted, onStart]);
 
     function uninstallTimer() {
         if (continousPointerReport.current != null) {
@@ -374,10 +426,14 @@ export default function TouchSlider(props: TouchSliderProps) {
         dispatchUiChange({ action: 'up', location: position });
     }
 
+    let lastMoveUpdate = 0;
     // Lint because of react vs. native types
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function onMove(this: Document, position: any) {
-        dispatchUiChange({ action: 'position', location: position });
+        if (Date.now() - lastMoveUpdate > 1000 / UPDATES_PER_SECOND) {
+            dispatchUiChange({ action: 'position', location: position });
+            lastMoveUpdate = Date.now();
+        }
         reinstallTimer(position);
     }
 
