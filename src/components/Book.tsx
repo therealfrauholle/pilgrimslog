@@ -11,11 +11,11 @@ import { useParams } from 'next/navigation';
 export type BookData = {
     entries: ILogEntries;
     /**
-     * The page currently shown in the main frame.
+     * The page currently shown at the screen.
      */
     displayed: BookPageIndex;
     /**
-     * Display this page in the main frame..
+     * Display this page in the main window.
      */
     setDisplayed: (current: BookPageIndex) => void;
 };

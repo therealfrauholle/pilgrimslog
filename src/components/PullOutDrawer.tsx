@@ -1,14 +1,19 @@
+'use client';
+
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { JSX } from 'react/jsx-runtime';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { BookContext } from './Book';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import DaySlider from './DaySlider';
 import { Page } from '@/types/Page';
+import Map from './Map';
 
 export default function PullOutDrawer() {
     const bookData = useContext(BookContext)!;
+    const [hovered, setHovered] = useState<BookPageIndex | null>(null);
+
     const entries = bookData!.entries;
 
     const currentPage: BookPageIndex = bookData.displayed;
@@ -93,7 +98,15 @@ export default function PullOutDrawer() {
                 </div>
                 <div className="pointer-events-auto w-20">{nextButton}</div>
             </div>
-            <DaySlider />
+            <div
+                className={
+                    'w-full ' + (hovered == null ? 'h-[200px]' : 'h-[400px]')
+                }
+                style={{ transition: 'all 1s ease-in-out' }}
+            >
+                <Map hovered={hovered} />
+            </div>
+            <DaySlider hover={setHovered} />
         </>
     );
 }

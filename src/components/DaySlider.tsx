@@ -5,7 +5,11 @@ import { BookContext } from './Book';
 import ZoomSlider from './ZoomSlider';
 import { Page } from '@/types/Page';
 
-export default function DaySlider() {
+type DaySliderProps = {
+    hover: (entry: BookPageIndex | null) => void;
+};
+
+export default function DaySlider({ hover }: DaySliderProps) {
     const { entries, displayed, setDisplayed } = useContext(BookContext)!;
     const [sliderValue, setSliderValue] = useState(displayed);
 
@@ -43,9 +47,16 @@ export default function DaySlider() {
             ),
         );
     }
+    function onStart() {
+        hover(sliderValue);
+    }
 
     const handleChange = (value: number) => {
-        setSliderValue(sliderOffsetToIndex(value));
+        const index = sliderOffsetToIndex(value);
+        if (!index.equals(sliderValue)) {
+            setSliderValue(index);
+            hover(index);
+        }
     };
 
     const marks = entries.data.map((entry) => {
@@ -54,6 +65,7 @@ export default function DaySlider() {
 
     const changeCommitted = (value: number) => {
         setDisplayed(sliderOffsetToIndex(value));
+        hover(null);
     };
 
     return (
@@ -62,7 +74,7 @@ export default function DaySlider() {
                 value={indexToSliderOffset(sliderValue)}
                 onChange={handleChange}
                 onChangeCommitted={changeCommitted}
-                onStart={() => {}}
+                onStart={onStart}
                 marks={marks}
                 scrollSpeed={0.25}
                 slotClasses={{
@@ -72,7 +84,7 @@ export default function DaySlider() {
                     mark: 'mark',
                     thumb: 'thumb',
                     container: 'mr-[50px] ml-[50px]',
-                    zoomedRail: 'w-[1000px]',
+                    zoomedRail: 'w-[3000px]',
                 }}
             />
         </div>

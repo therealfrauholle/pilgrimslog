@@ -32,4 +32,8 @@ export class BookPageIndex {
                 return '/tag/' + this.entry!.Id;
         }
     }
+
+    getEntry(): ILogEntry | null {
+        return this.entry;
+    }
 }
