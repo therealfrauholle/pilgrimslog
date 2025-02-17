@@ -38,8 +38,13 @@ export default function Book({ data }: { data: StrapiData }) {
     );
 
     function update(page: BookPageIndex) {
-        window.history.pushState(null, '', page.asUrl());
-        setCurrent(page);
+        setCurrent((oldPage) => {
+            if (oldPage.equals(page)) {
+                return oldPage;
+            }
+            window.history.pushState(null, '', page.asUrl());
+            return page;
+        });
     }
 
     return (
