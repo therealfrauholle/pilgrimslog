@@ -98,14 +98,7 @@ export default function PullOutDrawer() {
                 </div>
                 <div className="pointer-events-auto w-20">{nextButton}</div>
             </div>
-            <div
-                className={
-                    'w-full ' + (hovered == null ? 'h-[200px]' : 'h-[400px]')
-                }
-                style={{ transition: 'all 1s ease-in-out' }}
-            >
-                <Map hovered={hovered} />
-            </div>
+            <Map hovered={hovered} />
             <DaySlider hover={setHovered} />
         </>
     );

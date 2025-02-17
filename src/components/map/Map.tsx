@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { MapContainer, Marker, Tooltip, useMap } from 'react-leaflet';
 import { BookContext } from './../Book';
 import { LocationOn } from '@mui/icons-material';
@@ -8,7 +8,6 @@ import CachedLayer from './CachedLayer';
 import { ReactIcon } from './ReactIcon';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import { Page } from '@/types/Page';
-import { useResizeDetector } from 'react-resize-detector';
 
 function SelectControl(props: {
     selected: BookPageIndex;
@@ -45,33 +44,35 @@ type MapProps = {
     hovered: BookPageIndex | null;
 };
 
-export default function Map(props: MapProps) {
+export default function Map({ hovered }: MapProps) {
     const bookData = useContext(BookContext)!;
     const mapRef = useRef<L.Map | null>(null);
 
-    const onResize = useCallback(() => {
-        mapRef.current!.invalidateSize({
-            animate: true,
-            pan: true,
-            duration: 0.1,
-        });
-    }, []);
-
-    const { ref } = useResizeDetector({
-        refreshMode: 'throttle',
-        refreshRate: 100,
-        onResize,
-    });
     return (
-        <div ref={ref} style={{ width: '100%', height: '100%' }}>
+        <div
+            style={{
+                position: 'relative',
+                width: '100%',
+                height: hovered ? '400px' : '200px',
+                overflow: 'hidden',
+                transition: 'all 1s linear',
+            }}
+        >
             <MapContainer
                 ref={mapRef}
-                style={{ height: '100%' }}
+                style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '400px',
+                    transform: 'translateY(-50%)',
+                    top: '50%',
+                }}
                 bounds={
                     new L.LatLngBounds(
                         bookData.entries.data.map((e) => e.Where),
                     )
                 }
+                zoomControl={false}
             >
                 <CachedLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -94,7 +95,7 @@ export default function Map(props: MapProps) {
                                               color: 'red',
                                               transition: 'all 1s linear',
                                           }
-                                        : props.hovered?.getEntry() == entry
+                                        : hovered?.getEntry() == entry
                                           ? {
                                                 color: 'blue',
                                                 transition: 'all 0.2s linear',
@@ -121,7 +122,7 @@ export default function Map(props: MapProps) {
                                     ),
                             }}
                         >
-                            {entry == props.hovered?.getEntry() ||
+                            {entry == hovered?.getEntry() ||
                             bookData.displayed.getEntry() == entry ? (
                                 <Tooltip direction={'top'} permanent={true}>
                                     {entry.km}km |{' '}
@@ -134,7 +135,7 @@ export default function Map(props: MapProps) {
 
                 <SelectControl
                     selected={bookData.displayed}
-                    hovered={props.hovered}
+                    hovered={hovered}
                 />
             </MapContainer>
         </div>
