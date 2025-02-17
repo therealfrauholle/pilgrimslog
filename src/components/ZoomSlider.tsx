@@ -30,9 +30,13 @@ export type TouchSliderProps = {
     };
 };
 
+type PointerLocation = {
+    pageX: number;
+};
+
 type UiAction = {
     action: 'down' | 'position' | 'up' | 'props';
-    location?: MouseEvent;
+    location?: PointerLocation;
     props?: {
         scrollSpeed: number;
         value: number;
@@ -55,7 +59,7 @@ type InnerState = {
      * Last position of the pointer we reported. Used for debouncing
      * change events.
      */
-    lastInternalValue: number;
+    lastReportedValue: number;
     /**
      * The current value of the thumb.
      */
@@ -78,6 +82,9 @@ type InnerState = {
     scrollUpdatesPerSecond: number;
     /**
      * Events that happen in the reducer are queued in this list.
+     *
+     * We cannot fire the handler in the reducer function, but must
+     * pustpone the propagation to within a useEffect call.
      */
     enqueueEvent: (newEvent: Event) => void;
     rail: RefObject<HTMLElement | null>;
@@ -99,17 +106,18 @@ class State {
         return new State(this.inner);
     }
 
-    withinStickyZone(position: MouseEvent): boolean {
+    withinStickyZone(position: PointerLocation): boolean {
         const stickyOffset = offsetX(position, this.inner.stickyZone.current!);
         return 0 <= stickyOffset && stickyOffset <= 1;
     }
+
     /**
      * Returns a value betweem -1 and 1 whem the pointer is not in the
      * middle of the container, over the scroll areas or even beyond.
      *
      * If the rail should not scroll, will return 0.
      */
-    shouldScroll(position: MouseEvent): number | null {
+    shouldScroll(position: PointerLocation): number | null {
         let left: number | null = -(
             1 - offsetX(position, this.inner.leftScrollZone.current!)
         );
@@ -135,7 +143,7 @@ class State {
         return right;
     }
 
-    clampedRailOffset(position: MouseEvent): number {
+    clampedRailOffset(position: PointerLocation): number {
         return clamp(offsetX(position, this.inner.rail.current!), 0, 1)!;
     }
 
@@ -143,7 +151,7 @@ class State {
         return this.inner.valueInCenter != null;
     }
 
-    processDragStart(position: MouseEvent): boolean {
+    processDragStart(position: PointerLocation): boolean {
         if (this.inner.valueInCenter != null) {
             console.warn('down event when already zoomed');
             return false;
@@ -159,18 +167,18 @@ class State {
                 valueToLocateThumbUnderPointer,
                 zoomFactor,
             );
-            console.log('Sticky start, center', this.inner.lastInternalValue);
-            this.inner.lastInternalValue = this.inner.value;
+            console.log('Sticky start, center', this.inner.lastReportedValue);
+            this.inner.lastReportedValue = this.inner.value;
             this.inner.isSticky = true;
         } else {
             this.inner.valueInCenter = newCenter(touchedValue, zoomFactor);
-            this.inner.lastInternalValue = touchedValue;
+            this.inner.lastReportedValue = touchedValue;
             this.inner.enqueueEvent({ type: 'change', value: touchedValue });
         }
         return true;
     }
 
-    processDragging(position: MouseEvent): boolean {
+    processDragging(position: PointerLocation): boolean {
         if (this.inner.valueInCenter == null) {
             console.warn('will not update slider when not zoomed');
             return false;
@@ -210,28 +218,28 @@ class State {
         this.inner.isSticky &&= this.withinStickyZone(position);
         if (
             !this.inner.isSticky &&
-            this.inner.lastInternalValue != pointerAsValue
+            this.inner.lastReportedValue != pointerAsValue
         ) {
-            this.inner.lastInternalValue = pointerAsValue;
+            this.inner.lastReportedValue = pointerAsValue;
             this.inner.enqueueEvent({ type: 'change', value: pointerAsValue });
             mutated = true;
         }
         return mutated;
     }
 
-    processDragRelease(action: MouseEvent): boolean {
+    processDragRelease(action: PointerLocation): boolean {
         if (this.inner.valueInCenter == null) {
             console.warn('Pointer up but not zoomed');
             return false;
         }
         if (!this.inner.isSticky) {
-            this.inner.lastInternalValue = this.clampedRailOffset(action);
+            this.inner.lastReportedValue = this.clampedRailOffset(action);
         }
         this.inner.isSticky = false;
         this.inner.valueInCenter = null;
         this.inner.enqueueEvent({
             type: 'commit',
-            value: this.inner.lastInternalValue,
+            value: this.inner.lastReportedValue,
         });
 
         return true;
@@ -295,7 +303,10 @@ function mutateState(state: State, action: UiAction): boolean {
  * within the X bounding boxes of the target, the values may exceed
  * this range.
  */
-function offsetX(position: MouseEvent, relativeTarget: HTMLElement): number {
+function offsetX(
+    position: PointerLocation,
+    relativeTarget: HTMLElement,
+): number {
     const bounds = relativeTarget.getBoundingClientRect();
     const leftOffset = bounds.x;
     const width = bounds.width;
@@ -343,7 +354,7 @@ export default function TouchSlider(props: TouchSliderProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const continousPointerReport = useRef<NodeJS.Timeout | null>(null);
 
-    const [events, setEvents] = useState<Event[]>([]);
+    const [queuedEvents, setEvents] = useState<Event[]>([]);
 
     const UPDATES_PER_SECOND = 10;
 
@@ -351,7 +362,7 @@ export default function TouchSlider(props: TouchSliderProps) {
         generateNewState,
         new State({
             valueInCenter: null,
-            lastInternalValue: props.value,
+            lastReportedValue: props.value,
             lastScrollTime: 0,
             scrollSpeed: props.scrollSpeed,
             value: props.value,
@@ -378,7 +389,7 @@ export default function TouchSlider(props: TouchSliderProps) {
     const { onChangeCommitted, onStart, onChange } = props;
 
     useEffect(() => {
-        events.forEach((event) => {
+        queuedEvents.forEach((event) => {
             switch (event.type) {
                 case 'change':
                     onChange(event.value!);
@@ -395,7 +406,7 @@ export default function TouchSlider(props: TouchSliderProps) {
             events.length = 0;
             return events;
         });
-    }, [events, onChange, onChangeCommitted, onStart]);
+    }, [queuedEvents, onChange, onChangeCommitted, onStart]);
 
     function uninstallTimer() {
         if (continousPointerReport.current != null) {
@@ -403,11 +414,12 @@ export default function TouchSlider(props: TouchSliderProps) {
             continousPointerReport.current = null;
         }
     }
+
     /**
      * Supposed to be calles always whem the position of the pointer
      * is known.
      */
-    function reinstallTimer(position: MouseEvent) {
+    function reinstallTimer(position: PointerLocation) {
         uninstallTimer();
         // Timer must be short enough to work well with the automatic scroll updates
         continousPointerReport.current = setInterval(
@@ -419,17 +431,14 @@ export default function TouchSlider(props: TouchSliderProps) {
     }
 
     // Lint because of react vs. native types
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function onRelease(this: Document, position: any) {
+    function onRelease(this: Document, position: PointerEvent) {
         deactivateGlobalHandlers();
         uninstallTimer();
         dispatchUiChange({ action: 'up', location: position });
     }
 
     let lastMoveUpdate = 0;
-    // Lint because of react vs. native types
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function onMove(this: Document, position: any) {
+    function onMove(this: Document, position: PointerEvent) {
         if (Date.now() - lastMoveUpdate > 1000 / UPDATES_PER_SECOND) {
             dispatchUiChange({ action: 'position', location: position });
             lastMoveUpdate = Date.now();
