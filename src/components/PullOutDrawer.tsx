@@ -11,36 +11,11 @@ import { Page } from '@/types/Page';
 import Map from './Map';
 
 export default function PullOutDrawer() {
-    const bookData = useContext(BookContext)!;
+    const { displayed, setDisplayed } = useContext(BookContext)!;
     const [hovered, setHovered] = useState<BookPageIndex | null>(null);
 
-    const entries = bookData!.entries;
-
-    const currentPage: BookPageIndex = bookData.displayed;
-
-    let previousLocation = null;
-    let nextLocation = null;
-
-    switch (currentPage.page) {
-        case Page.Entry:
-            const previousEntry = currentPage.entry!.getPrevious();
-            if (previousEntry != null) {
-                previousLocation = BookPageIndex.entry(previousEntry);
-            } else {
-                previousLocation = BookPageIndex.homepage();
-            }
-            const nextEntry = currentPage.entry!.getNext();
-            if (nextEntry != null) {
-                nextLocation = BookPageIndex.entry(nextEntry);
-            } else {
-                nextLocation = null;
-            }
-            break;
-        case Page.Homepage:
-            previousLocation = null;
-            nextLocation = BookPageIndex.entry(entries.data[0]);
-            break;
-    }
+    const previousLocation = displayed.navPrev();
+    const nextLocation = displayed.navNext();
 
     let previousButton: JSX.Element = <></>;
     let nextButton: JSX.Element = <></>;
@@ -48,7 +23,7 @@ export default function PullOutDrawer() {
     if (previousLocation != null) {
         previousButton = (
             <button
-                onClick={() => bookData.setDisplayed(previousLocation)}
+                onClick={() => setDisplayed(previousLocation)}
                 className="h-16 w-16 bg-gray-100/30 mx-1 hover:bg-gray-200/50 
                           backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
@@ -65,7 +40,7 @@ export default function PullOutDrawer() {
     if (nextLocation != null) {
         nextButton = (
             <button
-                onClick={() => bookData.setDisplayed(nextLocation)}
+                onClick={() => setDisplayed(nextLocation)}
                 className="h-16 w-16 mx-1 bg-gray-100/30 hover:bg-gray-200/50 
                           backdrop-blur-sm rounded-lg 
                           flex items-center justify-center 
@@ -80,11 +55,11 @@ export default function PullOutDrawer() {
     }
 
     let description = <></>;
-    if (currentPage.page == Page.Entry) {
+    if (displayed.page == Page.Entry) {
         description = (
             <>
-                {currentPage.entry!.getDaysSinceStart() + 1}. Tag | ≈
-                {currentPage.entry!.km}km
+                {displayed.entry!.getDaysSinceStart() + 1}. Tag | ≈
+                {displayed.entry!.km}km
             </>
         );
     }

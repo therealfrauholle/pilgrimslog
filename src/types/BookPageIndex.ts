@@ -1,21 +1,23 @@
-import { ILogEntry } from '@/util/FetchService';
+import { ILogEntries, ILogEntry } from '@/util/FetchService';
 import { Page } from './Page';
 
 export class BookPageIndex {
     page: Page;
     entry: ILogEntry | null;
+    entries: ILogEntries;
 
-    constructor(page: Page, entry: ILogEntry | null) {
+    constructor(page: Page, entry: ILogEntry | null, entries: ILogEntries) {
         this.page = page;
         this.entry = entry;
+        this.entries = entries;
     }
 
-    static entry(entry: ILogEntry): BookPageIndex {
-        return new BookPageIndex(Page.Entry, entry);
+    static entry(entry: ILogEntry, entries: ILogEntries): BookPageIndex {
+        return new BookPageIndex(Page.Entry, entry, entries);
     }
 
-    static homepage(): BookPageIndex {
-        return new BookPageIndex(Page.Homepage, null);
+    static homepage(entries: ILogEntries): BookPageIndex {
+        return new BookPageIndex(Page.Homepage, null, entries);
     }
 
     equals(other: BookPageIndex | null): boolean {
@@ -35,5 +37,31 @@ export class BookPageIndex {
 
     getEntry(): ILogEntry | null {
         return this.entry;
+    }
+
+    navNext(): BookPageIndex | null {
+        switch (this.page) {
+            case Page.Entry:
+                const nextEntry = this.entry!.getNext();
+                if (nextEntry == null) {
+                    return null;
+                }
+                return BookPageIndex.entry(nextEntry, this.entries);
+            case Page.Homepage:
+                return BookPageIndex.entry(this.entries.data[0], this.entries);
+        }
+    }
+
+    navPrev(): BookPageIndex | null {
+        switch (this.page) {
+            case Page.Entry:
+                const previousEntry = this.entry!.getPrevious();
+                if (previousEntry == null) {
+                    return BookPageIndex.homepage(this.entries);
+                }
+                return BookPageIndex.entry(previousEntry, this.entries);
+            case Page.Homepage:
+                return null;
+        }
     }
 }

@@ -36,7 +36,7 @@ export default function DaySlider({ hover }: DaySliderProps) {
 
     function sliderOffsetToIndex(offset: number): BookPageIndex {
         if (offset < gapToFirst / 2) {
-            return BookPageIndex.homepage();
+            return BookPageIndex.homepage(entries);
         }
 
         return BookPageIndex.entry(
@@ -45,6 +45,7 @@ export default function DaySlider({ hover }: DaySliderProps) {
                     (1 / OFFSET) *
                     total,
             ),
+            entries,
         );
     }
     function onStart() {

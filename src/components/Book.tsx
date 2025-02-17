@@ -32,8 +32,11 @@ export default function Book({ data }: { data: StrapiData }) {
 
     const [current, setCurrent] = useState<BookPageIndex>(
         'dayId' in params
-            ? BookPageIndex.entry(entries.getDayById(params.dayId as string)!)
-            : BookPageIndex.homepage(),
+            ? BookPageIndex.entry(
+                  entries.getDayById(params.dayId as string)!,
+                  entries,
+              )
+            : BookPageIndex.homepage(entries),
     );
 
     let children;

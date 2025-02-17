@@ -13,7 +13,7 @@ function SelectControl(props: {
     selected: BookPageIndex;
     hovered: BookPageIndex | null;
 }) {
-    const bookData = useContext(BookContext)!;
+    const { entries } = useContext(BookContext)!;
     const map = useMap();
     useEffect(() => {
         if (
@@ -33,10 +33,10 @@ function SelectControl(props: {
             );
         } else {
             map.flyToBounds(
-                new L.LatLngBounds(bookData.entries.data.map((e) => e.Where)),
+                new L.LatLngBounds(entries.data.map((e) => e.Where)),
             );
         }
-    }, [props, bookData.entries, map]);
+    }, [props, entries, map]);
     return <></>;
 }
 
@@ -45,7 +45,7 @@ type MapProps = {
 };
 
 export default function Map({ hovered }: MapProps) {
-    const bookData = useContext(BookContext)!;
+    const { entries, displayed, setDisplayed } = useContext(BookContext)!;
     const mapRef = useRef<L.Map | null>(null);
 
     return (
@@ -67,11 +67,7 @@ export default function Map({ hovered }: MapProps) {
                     transform: 'translateY(-50%)',
                     top: '50%',
                 }}
-                bounds={
-                    new L.LatLngBounds(
-                        bookData.entries.data.map((e) => e.Where),
-                    )
-                }
+                bounds={new L.LatLngBounds(entries.data.map((e) => e.Where))}
                 zoomControl={false}
             >
                 <CachedLayer
@@ -80,7 +76,7 @@ export default function Map({ hovered }: MapProps) {
                     edgeBuffer={2}
                     updateWhenZooming={true}
                 />
-                {bookData.entries.data.map((entry) => {
+                {entries.data.map((entry) => {
                     const icon = new ReactIcon(
                         {
                             iconSize: [48, 48],
@@ -90,7 +86,7 @@ export default function Map({ hovered }: MapProps) {
                         (
                             <LocationOn
                                 style={{
-                                    ...(bookData.displayed.getEntry() == entry
+                                    ...(displayed.getEntry() == entry
                                         ? {
                                               color: 'red',
                                               transition: 'all 1s linear',
@@ -117,13 +113,13 @@ export default function Map({ hovered }: MapProps) {
                             position={entry.Where}
                             eventHandlers={{
                                 click: () =>
-                                    bookData.setDisplayed(
-                                        BookPageIndex.entry(entry),
+                                    setDisplayed(
+                                        BookPageIndex.entry(entry, entries),
                                     ),
                             }}
                         >
                             {entry == hovered?.getEntry() ||
-                            bookData.displayed.getEntry() == entry ? (
+                            displayed.getEntry() == entry ? (
                                 <Tooltip direction={'top'} permanent={true}>
                                     {entry.km}km |{' '}
                                     {entry.getDaysSinceStart() + 1} Tage
@@ -133,10 +129,7 @@ export default function Map({ hovered }: MapProps) {
                     );
                 })}
 
-                <SelectControl
-                    selected={bookData.displayed}
-                    hovered={hovered}
-                />
+                <SelectControl selected={displayed} hovered={hovered} />
             </MapContainer>
         </div>
     );
