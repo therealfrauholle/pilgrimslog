@@ -3,10 +3,8 @@ import { ILogEntries, parse, StrapiEntries } from '../util/FetchService';
 import PullOutDrawer from './PullOutDrawer';
 import { createContext, useState } from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
-import { Page } from '@/types/Page';
-import Title from './Title';
-import BlogEntry from './BlogEntry';
 import { useParams } from 'next/navigation';
+import { BookPage } from './BookPage';
 
 export type BookData = {
     entries: ILogEntries;
@@ -39,17 +37,6 @@ export default function Book({ data }: { data: StrapiData }) {
             : BookPageIndex.homepage(entries),
     );
 
-    let children;
-
-    switch (current.page) {
-        case Page.Homepage:
-            children = <Title />;
-            break;
-        case Page.Entry:
-            children = <BlogEntry data={current.entry!} />;
-            break;
-    }
-
     function update(page: BookPageIndex) {
         window.history.pushState(null, '', page.asUrl());
         setCurrent(page);
@@ -67,7 +54,9 @@ export default function Book({ data }: { data: StrapiData }) {
                                 setDisplayed: update,
                             }}
                         >
-                            <div className="flex-grow min-h-0">{children}</div>
+                            <div className="flex-grow min-h-0">
+                                <BookPage current={current} />
+                            </div>
                             <div className="flex-none">
                                 <PullOutDrawer />
                             </div>
