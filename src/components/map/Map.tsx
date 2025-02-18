@@ -7,7 +7,6 @@ import React from 'react';
 import CachedLayer from './CachedLayer';
 import { ReactIcon } from './ReactIcon';
 import { BookPageIndex } from '@/types/BookPageIndex';
-import { Page } from '@/types/Page';
 
 function SelectControl(props: {
     selected: BookPageIndex;
@@ -16,19 +15,21 @@ function SelectControl(props: {
     const { entries } = useContext(BookContext)!;
     const map = useMap();
     useEffect(() => {
+        let selectedEntry;
+        let hoveredEntry;
         if (
-            props.selected.page == Page.Entry &&
+            (selectedEntry = props.selected.getEntry()) &&
             (props.hovered == null || props.hovered.equals(props.selected))
         ) {
-            map.flyTo(props.selected.getEntry()!.Where, 10);
+            map.flyTo(selectedEntry.Where, 10);
         } else if (
-            props.selected.page == Page.Entry &&
-            props.hovered!.page == Page.Entry
+            (selectedEntry = props.selected.getEntry()) &&
+            (hoveredEntry = props.hovered!.getEntry())
         ) {
             map.flyToBounds(
                 new L.LatLngBounds([
-                    props.hovered!.getEntry()!.Where,
-                    props.selected.getEntry()!.Where,
+                    hoveredEntry.Where,
+                    selectedEntry.Where,
                 ]).pad(0.5),
             );
         } else {

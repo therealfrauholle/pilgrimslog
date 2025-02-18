@@ -3,7 +3,6 @@ import React from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import { BookContext } from './Book';
 import ZoomSlider from './ZoomSlider';
-import { Page } from '@/types/Page';
 
 type DaySliderProps = {
     hover: (entry: BookPageIndex | null) => void;
@@ -23,14 +22,11 @@ export default function DaySlider({ hover }: DaySliderProps) {
     const gapToFirst = 1 - OFFSET;
 
     function indexToSliderOffset(index: BookPageIndex): number {
-        switch (index.page) {
-            case Page.Homepage:
-                return 0;
-            case Page.Entry:
-                return (
-                    gapToFirst +
-                    (index.entry!.getDaysSinceStart() * OFFSET) / total
-                );
+        let entry;
+        if ((entry = index.getEntry())) {
+            return gapToFirst + (entry.getDaysSinceStart() * OFFSET) / total;
+        } else {
+            return 0;
         }
     }
 

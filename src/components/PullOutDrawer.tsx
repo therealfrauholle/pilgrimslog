@@ -7,7 +7,6 @@ import { useContext, useState } from 'react';
 import { BookContext } from './Book';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import DaySlider from './DaySlider';
-import { Page } from '@/types/Page';
 import Map from './Map';
 
 export default function PullOutDrawer() {
@@ -54,12 +53,13 @@ export default function PullOutDrawer() {
         );
     }
 
+    let displayedEntry;
     let description = <></>;
-    if (displayed.page == Page.Entry) {
+    if ((displayedEntry = displayed.getEntry())) {
         description = (
             <>
-                {displayed.entry!.getDaysSinceStart() + 1}. Tag | ≈
-                {displayed.entry!.km}km
+                {displayedEntry.getDaysSinceStart() + 1}. Tag | ≈
+                {displayedEntry!.km}km
             </>
         );
     }

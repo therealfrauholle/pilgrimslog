@@ -1,23 +1,31 @@
 import { ILogEntries, ILogEntry } from '@/util/FetchService';
-import { Page } from './Page';
+
+enum IndexType {
+    Homepage,
+    Entry,
+}
 
 export class BookPageIndex {
-    page: Page;
-    entry: ILogEntry | null;
-    entries: ILogEntries;
+    private page: IndexType;
+    private entry: ILogEntry | null;
+    private entries: ILogEntries;
 
-    constructor(page: Page, entry: ILogEntry | null, entries: ILogEntries) {
+    private constructor(
+        page: IndexType,
+        entry: ILogEntry | null,
+        entries: ILogEntries,
+    ) {
         this.page = page;
         this.entry = entry;
         this.entries = entries;
     }
 
     static entry(entry: ILogEntry, entries: ILogEntries): BookPageIndex {
-        return new BookPageIndex(Page.Entry, entry, entries);
+        return new BookPageIndex(IndexType.Entry, entry, entries);
     }
 
     static homepage(entries: ILogEntries): BookPageIndex {
-        return new BookPageIndex(Page.Homepage, null, entries);
+        return new BookPageIndex(IndexType.Homepage, null, entries);
     }
 
     equals(other: BookPageIndex | null): boolean {
@@ -28,9 +36,9 @@ export class BookPageIndex {
 
     asUrl(): string {
         switch (this.page) {
-            case Page.Homepage:
+            case IndexType.Homepage:
                 return '/';
-            case Page.Entry:
+            case IndexType.Entry:
                 return '/tag/' + this.entry!.Id;
         }
     }
@@ -41,35 +49,35 @@ export class BookPageIndex {
 
     navNext(): BookPageIndex | null {
         switch (this.page) {
-            case Page.Entry:
+            case IndexType.Entry:
                 const nextEntry = this.entry!.getNext();
                 if (nextEntry == null) {
                     return null;
                 }
                 return BookPageIndex.entry(nextEntry, this.entries);
-            case Page.Homepage:
+            case IndexType.Homepage:
                 return BookPageIndex.entry(this.entries.data[0], this.entries);
         }
     }
 
     navPrev(): BookPageIndex | null {
         switch (this.page) {
-            case Page.Entry:
+            case IndexType.Entry:
                 const previousEntry = this.entry!.getPrevious();
                 if (previousEntry == null) {
                     return BookPageIndex.homepage(this.entries);
                 }
                 return BookPageIndex.entry(previousEntry, this.entries);
-            case Page.Homepage:
+            case IndexType.Homepage:
                 return null;
         }
     }
 
     toString(): string {
         switch (this.page) {
-            case Page.Entry:
+            case IndexType.Entry:
                 return '[entry ' + this.entry + ']';
-            case Page.Homepage:
+            case IndexType.Homepage:
                 return '[homepage]';
         }
     }
