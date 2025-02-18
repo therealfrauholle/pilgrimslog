@@ -64,4 +64,13 @@ export class BookPageIndex {
                 return null;
         }
     }
+
+    toString(): string {
+        switch (this.page) {
+            case Page.Entry:
+                return '[entry ' + this.entry + ']';
+            case Page.Homepage:
+                return '[homepage]';
+        }
+    }
 }
