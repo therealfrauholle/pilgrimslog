@@ -1,7 +1,12 @@
+import React from 'react';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
 import { ILogEntry } from '@/util/FetchService';
 
-export default function BlogEntry({ data: day }: { data: ILogEntry }) {
+const BlogEntry = React.memo(function BlogEntry({
+    data: day,
+}: {
+    data: ILogEntry;
+}) {
     return (
         <div
             style={{
@@ -23,4 +28,6 @@ export default function BlogEntry({ data: day }: { data: ILogEntry }) {
             </div>
         </div>
     );
-}
+});
+
+export default BlogEntry;

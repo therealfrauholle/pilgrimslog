@@ -34,6 +34,32 @@ export class BookPageIndex {
             : false;
     }
 
+    isBefore(index: BookPageIndex): boolean {
+        if (index.entries != this.entries) {
+            throw new Error('Cannot conpare indexes with different entries');
+        }
+        if (this.equals(index)) {
+            return false;
+        }
+        if (this.page == IndexType.Homepage && index.page == IndexType.Entry) {
+            return true;
+        }
+        if (this.page == IndexType.Entry && index.page == IndexType.Homepage) {
+            return false;
+        }
+        return (
+            this.entries.data.indexOf(this.entry!) <
+            this.entries.data.indexOf(index.entry!)
+        );
+    }
+
+    isAfter(index: BookPageIndex): boolean {
+        if (this.equals(index)) {
+            return false;
+        }
+        return index.isBefore(this);
+    }
+
     asUrl(): string {
         switch (this.page) {
             case IndexType.Homepage:

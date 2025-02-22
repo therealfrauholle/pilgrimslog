@@ -5,9 +5,7 @@ export default function Title() {
             style={{ padding: '30px' }}
         >
             <div className="tracking-tight max-w-lg mx-auto text-center text-gray-800 transition-colors">
-                <h1 className="text-6xl font-extrabold mb-6 bg-mint-500">
-                    Logbuch
-                </h1>
+                <h1 className="text-6xl font-extrabold mb-6">Logbuch</h1>
                 <div className="text-3xl text-left pl-4">eines Pilgers</div>
             </div>
             <div style={{ padding: '30px' }}>

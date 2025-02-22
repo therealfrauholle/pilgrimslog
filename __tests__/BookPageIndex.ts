@@ -43,6 +43,11 @@ describe('BookPageIndex', () => {
         test('has no entry', () => {
             expect(homepage.getEntry()).toBeNull();
         });
+        test('is before entry', () => {
+            expect(
+                homepage.isBefore(BookPageIndex.entry(DATA.data[0], DATA)),
+            ).toBe(true);
+        });
     });
     describe('first index', () => {
         const entry = BookPageIndex.entry(DATA.data[0], DATA);
@@ -53,6 +58,16 @@ describe('BookPageIndex', () => {
             expect(entry.navNext()).toMatchIndex(
                 BookPageIndex.entry(DATA.data[1], DATA),
             );
+        });
+        test('is after homepage', () => {
+            expect(entry.isAfter(BookPageIndex.homepage(DATA))).toBe(true);
+        });
+        test('is before last entry', () => {
+            expect(
+                entry.isBefore(
+                    BookPageIndex.entry(DATA.data[DATA.data.length - 1], DATA),
+                ),
+            ).toBe(true);
         });
     });
     describe('last index', () => {
@@ -68,6 +83,11 @@ describe('BookPageIndex', () => {
                 BookPageIndex.entry(DATA.data[DATA.data.length - 2], DATA),
             );
         });
+        test('is after first entry', () => {
+            expect(entry.isAfter(BookPageIndex.entry(DATA.data[0], DATA))).toBe(
+                true,
+            );
+        });
     });
     describe('equals', () => {
         describe('when equal', () => {
@@ -76,14 +96,14 @@ describe('BookPageIndex', () => {
                     BookPageIndex.homepage(DATA).equals(
                         BookPageIndex.homepage(DATA),
                     ),
-                ).toBeTruthy();
+                ).toBe(true);
             });
             test('entry', () => {
                 expect(
                     BookPageIndex.entry(DATA.data[0], DATA).equals(
                         BookPageIndex.entry(DATA.data[0], DATA),
                     ),
-                ).toBeTruthy();
+                ).toBe(true);
             });
         });
         describe('when not equal', () => {
@@ -92,14 +112,14 @@ describe('BookPageIndex', () => {
                     BookPageIndex.homepage(DATA).equals(
                         BookPageIndex.entry(DATA.data[0], DATA),
                     ),
-                ).toBeFalsy();
+                ).toBe(false);
             });
             test('entries', () => {
                 expect(
                     BookPageIndex.entry(DATA.data[0], DATA).equals(
                         BookPageIndex.entry(DATA.data[1], DATA),
                     ),
-                ).toBeFalsy();
+                ).toBe(false);
             });
         });
     });

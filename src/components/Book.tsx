@@ -60,7 +60,7 @@ export default function Book({ data }: { data: StrapiData }) {
                             }}
                         >
                             <div className="flex-grow min-h-0">
-                                <BookPage current={current} />
+                                <BookPage />
                             </div>
                             <div className="flex-none">
                                 <PullOutDrawer />
