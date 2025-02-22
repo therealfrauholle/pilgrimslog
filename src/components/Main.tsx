@@ -1,10 +1,8 @@
 'use client';
 import { ILogEntries, parse, StrapiEntries } from '../util/FetchService';
-import PullOutDrawer from './PullOutDrawer';
 import { createContext, useState } from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
-import { useParams } from 'next/navigation';
-import { BookPage } from './BookPage';
+import Book from './Book';
 
 export type BookData = {
     entries: ILogEntries;
@@ -24,16 +22,18 @@ export type StrapiData = {
 
 export const BookContext = createContext<BookData | null>(null);
 
-export default function MainLayout({ data }: { data: StrapiData }) {
+export default function MainLayout({
+    data,
+    id,
+}: {
+    data: StrapiData;
+    id?: string;
+}) {
     const entries = parse(data.entries);
-    const params = useParams();
 
     const [current, setCurrent] = useState<BookPageIndex>(
-        'dayId' in params
-            ? BookPageIndex.entry(
-                  entries.getDayById(params.dayId as string)!,
-                  entries,
-              )
+        id
+            ? BookPageIndex.entry(entries.getDayById(id)!, entries)
             : BookPageIndex.homepage(entries),
     );
 
@@ -59,12 +59,7 @@ export default function MainLayout({ data }: { data: StrapiData }) {
                                 setDisplayed: update,
                             }}
                         >
-                            <div className="flex-grow min-h-0">
-                                <BookPage />
-                            </div>
-                            <div className="flex-none">
-                                <PullOutDrawer />
-                            </div>
+                            <Book />
                         </BookContext.Provider>
                     </div>
                 </div>
