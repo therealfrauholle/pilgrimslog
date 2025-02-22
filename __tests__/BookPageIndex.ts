@@ -49,6 +49,21 @@ describe('BookPageIndex', () => {
             ).toBe(true);
         });
     });
+    describe('not found', () => {
+        const notFound = BookPageIndex.notFound(DATA);
+        test('is not sorted with homepage', () => {
+            expect(notFound.isBefore(BookPageIndex.homepage(DATA))).toBe(false);
+            expect(notFound.isAfter(BookPageIndex.homepage(DATA))).toBe(false);
+        });
+        test('is not sorted with entry', () => {
+            expect(
+                notFound.isBefore(BookPageIndex.entry(DATA.data[0], DATA)),
+            ).toBe(false);
+            expect(
+                notFound.isAfter(BookPageIndex.entry(DATA.data[0], DATA)),
+            ).toBe(false);
+        });
+    });
     describe('first index', () => {
         const entry = BookPageIndex.entry(DATA.data[0], DATA);
         test('has the homepage as previous index', () => {
@@ -105,6 +120,13 @@ describe('BookPageIndex', () => {
                     ),
                 ).toBe(true);
             });
+            test('not found', () => {
+                expect(
+                    BookPageIndex.notFound(DATA).equals(
+                        BookPageIndex.notFound(DATA),
+                    ),
+                ).toBe(true);
+            });
         });
         describe('when not equal', () => {
             test('homepage and entry', () => {
@@ -118,6 +140,18 @@ describe('BookPageIndex', () => {
                 expect(
                     BookPageIndex.entry(DATA.data[0], DATA).equals(
                         BookPageIndex.entry(DATA.data[1], DATA),
+                    ),
+                ).toBe(false);
+            });
+            test('not found', () => {
+                expect(
+                    BookPageIndex.notFound(DATA).equals(
+                        BookPageIndex.entry(DATA.data[0], DATA),
+                    ),
+                ).toBe(false);
+                expect(
+                    BookPageIndex.notFound(DATA).equals(
+                        BookPageIndex.homepage(DATA),
                     ),
                 ).toBe(false);
             });

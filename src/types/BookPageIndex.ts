@@ -3,6 +3,7 @@ import { ILogEntries, ILogEntry } from '@/util/FetchService';
 enum IndexType {
     Homepage,
     Entry,
+    NotFound,
 }
 
 export class BookPageIndex {
@@ -28,6 +29,14 @@ export class BookPageIndex {
         return new BookPageIndex(IndexType.Homepage, null, entries);
     }
 
+    static notFound(entries: ILogEntries): BookPageIndex {
+        return new BookPageIndex(IndexType.NotFound, null, entries);
+    }
+
+    is404() {
+        return this.page == IndexType.NotFound;
+    }
+
     equals(other: BookPageIndex | null): boolean {
         return other
             ? this.page == other.page && this.entry == other.entry
@@ -39,6 +48,12 @@ export class BookPageIndex {
             throw new Error('Cannot conpare indexes with different entries');
         }
         if (this.equals(index)) {
+            return false;
+        }
+        if (
+            this.page == IndexType.NotFound ||
+            index.page == IndexType.NotFound
+        ) {
             return false;
         }
         if (this.page == IndexType.Homepage && index.page == IndexType.Entry) {
@@ -57,6 +72,12 @@ export class BookPageIndex {
         if (this.equals(index)) {
             return false;
         }
+        if (
+            this.page == IndexType.NotFound ||
+            index.page == IndexType.NotFound
+        ) {
+            return false;
+        }
         return index.isBefore(this);
     }
 
@@ -66,6 +87,8 @@ export class BookPageIndex {
                 return '/';
             case IndexType.Entry:
                 return '/tag/' + this.entry!.Id;
+            case IndexType.NotFound:
+                throw new Error('404 has no url');
         }
     }
 
@@ -83,6 +106,8 @@ export class BookPageIndex {
                 return BookPageIndex.entry(nextEntry, this.entries);
             case IndexType.Homepage:
                 return BookPageIndex.entry(this.entries.data[0], this.entries);
+            case IndexType.NotFound:
+                return null;
         }
     }
 
@@ -96,6 +121,8 @@ export class BookPageIndex {
                 return BookPageIndex.entry(previousEntry, this.entries);
             case IndexType.Homepage:
                 return null;
+            case IndexType.NotFound:
+                return null;
         }
     }
 
@@ -105,6 +132,8 @@ export class BookPageIndex {
                 return '[entry ' + this.entry + ']';
             case IndexType.Homepage:
                 return '[homepage]';
+            case IndexType.NotFound:
+                return '[404]';
         }
     }
 }

@@ -25,16 +25,20 @@ export const BookContext = createContext<BookData | null>(null);
 export default function MainLayout({
     data,
     id,
+    notFound,
 }: {
     data: StrapiData;
     id?: string;
+    notFound?: boolean;
 }) {
     const entries = parse(data.entries);
 
     const [current, setCurrent] = useState<BookPageIndex>(
-        id
-            ? BookPageIndex.entry(entries.getDayById(id)!, entries)
-            : BookPageIndex.homepage(entries),
+        notFound
+            ? BookPageIndex.notFound(entries)
+            : id
+              ? BookPageIndex.entry(entries.getDayById(id)!, entries)
+              : BookPageIndex.homepage(entries),
     );
 
     function update(page: BookPageIndex) {
