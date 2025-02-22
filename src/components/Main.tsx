@@ -24,7 +24,7 @@ export type StrapiData = {
 
 export const BookContext = createContext<BookData | null>(null);
 
-export default function Book({ data }: { data: StrapiData }) {
+export default function MainLayout({ data }: { data: StrapiData }) {
     const entries = parse(data.entries);
     const params = useParams();
 

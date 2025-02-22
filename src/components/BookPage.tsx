@@ -3,7 +3,7 @@ import Title from './Title';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import { useSwipeable } from 'react-swipeable';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
-import { BookContext } from './Book';
+import { BookContext } from './Main';
 
 type Action = {
     type: 'display' | 'swipe' | 'swipeend';

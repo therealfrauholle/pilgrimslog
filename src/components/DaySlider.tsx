@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
-import { BookContext } from './Book';
+import { BookContext } from './Main';
 import ZoomSlider from './ZoomSlider';
 
 type DaySliderProps = {
