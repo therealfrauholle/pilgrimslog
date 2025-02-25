@@ -22,10 +22,12 @@ export class CachedTiles {
             return this.database;
         }
         this.database = await openDB<TileStore>('leaflet.offline', 1, {
-            upgrade(db) {
-                db.createObjectStore('tiles', {
-                    keyPath: 'key',
-                });
+            upgrade(db, old) {
+                if (old == 0) {
+                    db.createObjectStore('tiles', {
+                        keyPath: 'key',
+                    });
+                }
             },
         });
         return this.database;
@@ -40,7 +42,7 @@ export class CachedTiles {
             console.log('Fetching for the first time', props.tile.url);
             const image = await (await fetch(props.tile.url)).blob();
             const newTileStore = {
-                key: props.tile.url,
+                key: props.tile.key,
                 data: image,
             };
             await this.db()

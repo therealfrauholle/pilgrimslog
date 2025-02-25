@@ -18,10 +18,7 @@ const ImgTile: TileComponent = (props) => {
     return <CachedTile {...props} />;
 };
 
-function boundsToCenter(
-    bounds: GeolibBounds,
-    size: Size,
-): [Coordinates, number] {
+function boundsToCenter(bounds: GeolibBounds, size: Size): MapState {
     const latDiff = bounds.maxLat - bounds.minLat;
     const lngDiff = bounds.maxLng - bounds.minLng;
 
@@ -40,7 +37,7 @@ function boundsToCenter(
         lat: bounds.minLat + latDiff / 2,
         lng: bounds.minLng + lngDiff / 2,
     };
-    return [center, exactZoomLevel];
+    return { center, zoom: exactZoomLevel };
 }
 
 function newCenter(
@@ -48,14 +45,14 @@ function newCenter(
     selected: BookPageIndex,
     hovered: BookPageIndex | null,
     size: Size,
-): [Coordinates, number] {
+): MapState {
     let selectedEntry;
     let hoveredEntry;
     if (
         (selectedEntry = selected.getEntry()) &&
         (hovered == null || hovered.equals(selected))
     ) {
-        return [selectedEntry.Where, 11];
+        return { center: selectedEntry.Where, zoom: 11 };
     } else if (
         (selectedEntry = selected.getEntry()) &&
         (hoveredEntry = hovered!.getEntry())
@@ -81,6 +78,11 @@ type Size = {
     height: number;
 };
 
+type MapState = {
+    zoom: number;
+    center: Coordinates;
+};
+
 export default function ControlledMap({ hovered }: MapProps) {
     const { entries, displayed, setDisplayed } = useContext(BookContext)!;
     const [size, setSize] = useState<Size | null>(null);
@@ -101,7 +103,7 @@ export default function ControlledMap({ hovered }: MapProps) {
         }
     }, [containerRef]);
 
-    const [center, zoom] = newCenter(
+    const { center, zoom } = newCenter(
         entries,
         displayed,
         hovered,
@@ -129,6 +131,8 @@ export default function ControlledMap({ hovered }: MapProps) {
                     return (
                         <Marker
                             key={entry.km}
+                            width={48}
+                            height={48}
                             style={{
                                 ...(displayed.getEntry() == entry
                                     ? {
@@ -144,8 +148,6 @@ export default function ControlledMap({ hovered }: MapProps) {
                                             color: 'black',
                                             transition: 'color 0.2s linear',
                                         }),
-                                width: '48px',
-                                height: '48px',
                             }}
                             anchor={[entry.Where.lat, entry.Where.lng]}
                             onClick={() =>
@@ -154,7 +156,15 @@ export default function ControlledMap({ hovered }: MapProps) {
                                 )
                             }
                         >
-                            <LocationOn style={{ pointerEvents: 'auto' }} />
+                            <div style={{ width: 48, height: 48 }}>
+                                <LocationOn
+                                    style={{
+                                        pointerEvents: 'auto',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                />
+                            </div>
                         </Marker>
                     );
                 })}
