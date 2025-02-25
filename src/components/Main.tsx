@@ -3,6 +3,7 @@ import { ILogEntries, parse, StrapiEntries } from '../util/FetchService';
 import { createContext, useState } from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import Book from './Book';
+import { createHash } from 'crypto';
 
 export type BookData = {
     entries: ILogEntries;

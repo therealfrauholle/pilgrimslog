@@ -1,137 +1,164 @@
-import * as L from 'leaflet';
-import { useContext, useEffect, useRef } from 'react';
-import { MapContainer, Marker, Tooltip, useMap } from 'react-leaflet';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { BookContext } from './../Main';
 import { LocationOn } from '@mui/icons-material';
+import { GeolibBounds } from 'geolib/es/types';
 import React from 'react';
-import CachedLayer from './CachedLayer';
-import { ReactIcon } from './ReactIcon';
 import { BookPageIndex } from '@/types/BookPageIndex';
+import { Map, Marker, TileComponent } from 'pigeon-maps';
+import { getBounds } from 'geolib';
+import { ILogEntries } from '@/util/FetchService';
+import { CachedTile } from './CachedTile';
 
-function SelectControl(props: {
-    selected: BookPageIndex;
-    hovered: BookPageIndex | null;
-}) {
-    const { entries } = useContext(BookContext)!;
-    const map = useMap();
-    useEffect(() => {
-        let selectedEntry;
-        let hoveredEntry;
-        if (
-            (selectedEntry = props.selected.getEntry()) &&
-            (props.hovered == null || props.hovered.equals(props.selected))
-        ) {
-            map.flyTo(selectedEntry.Where, 10);
-        } else if (
-            (selectedEntry = props.selected.getEntry()) &&
-            (hoveredEntry = props.hovered!.getEntry())
-        ) {
-            map.flyToBounds(
-                new L.LatLngBounds([
-                    hoveredEntry.Where,
-                    selectedEntry.Where,
-                ]).pad(0.5),
-            );
-        } else {
-            map.flyToBounds(
-                new L.LatLngBounds(entries.data.map((e) => e.Where)),
-            );
-        }
-    }, [props, entries, map]);
-    return <></>;
+type Coordinates = {
+    lat: number;
+    lng: number;
+};
+
+const ImgTile: TileComponent = (props) => {
+    return <CachedTile {...props} />;
+};
+
+function boundsToCenter(
+    bounds: GeolibBounds,
+    size: Size,
+): [Coordinates, number] {
+    const latDiff = bounds.maxLat - bounds.minLat;
+    const lngDiff = bounds.maxLng - bounds.minLng;
+
+    const degreePerPixelLat = latDiff / size.width;
+    const degreePerPixelLng = lngDiff / size.height;
+
+    const degreePerPixel = Math.max(degreePerPixelLat, degreePerPixelLng);
+
+    const fractionPerPixel = degreePerPixel / 360;
+
+    const PIXEL_PER_TILE = 256;
+    const fractionPerTile = fractionPerPixel * PIXEL_PER_TILE;
+    const exactZoomLevel = Math.log2(1 / fractionPerTile) * 0.9;
+
+    const center = {
+        lat: bounds.minLat + latDiff / 2,
+        lng: bounds.minLng + lngDiff / 2,
+    };
+    return [center, exactZoomLevel];
+}
+
+function newCenter(
+    entries: ILogEntries,
+    selected: BookPageIndex,
+    hovered: BookPageIndex | null,
+    size: Size,
+): [Coordinates, number] {
+    let selectedEntry;
+    let hoveredEntry;
+    if (
+        (selectedEntry = selected.getEntry()) &&
+        (hovered == null || hovered.equals(selected))
+    ) {
+        return [selectedEntry.Where, 11];
+    } else if (
+        (selectedEntry = selected.getEntry()) &&
+        (hoveredEntry = hovered!.getEntry())
+    ) {
+        return boundsToCenter(
+            getBounds([hoveredEntry.Where, selectedEntry.Where]),
+            size,
+        );
+    } else {
+        return boundsToCenter(
+            getBounds(entries.data.map((e) => e.Where)),
+            size,
+        );
+    }
 }
 
 type MapProps = {
     hovered: BookPageIndex | null;
 };
 
-export default function Map({ hovered }: MapProps) {
+type Size = {
+    width: number;
+    height: number;
+};
+
+export default function ControlledMap({ hovered }: MapProps) {
     const { entries, displayed, setDisplayed } = useContext(BookContext)!;
-    const mapRef = useRef<L.Map | null>(null);
+    const [size, setSize] = useState<Size | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (containerRef.current !== null) {
+            const observer = new ResizeObserver(() => {
+                if (containerRef.current !== null) {
+                    const rect = containerRef.current.getBoundingClientRect();
+                    setSize({ width: rect.width, height: rect.height });
+                }
+            });
+            observer.observe(containerRef.current);
+            return () => {
+                observer.disconnect();
+            };
+        }
+    }, [containerRef]);
+
+    const [center, zoom] = newCenter(
+        entries,
+        displayed,
+        hovered,
+        size ?? { width: 400, height: 200 },
+    );
 
     return (
         <div
+            ref={containerRef}
             style={{
                 position: 'relative',
                 width: '100%',
                 height: hovered ? '400px' : '200px',
-                overflow: 'hidden',
                 transition: 'all 1s linear',
             }}
         >
-            <MapContainer
-                ref={mapRef}
-                style={{
-                    position: 'absolute',
-                    width: '100%',
-                    height: '400px',
-                    transform: 'translateY(-50%)',
-                    top: '50%',
-                }}
-                bounds={new L.LatLngBounds(entries.data.map((e) => e.Where))}
-                zoomControl={false}
+            <Map
+                center={[center.lat, center.lng]}
+                zoom={zoom}
+                zoomSnap={false}
+                tileComponent={ImgTile}
+                animateMaxScreens={999999}
             >
-                <CachedLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    keepBuffer={3}
-                    edgeBuffer={2}
-                    updateWhenZooming={true}
-                />
                 {entries.data.map((entry) => {
-                    const icon = new ReactIcon(
-                        {
-                            iconSize: [48, 48],
-                            iconAnchor: [24, 48],
-                            tooltipAnchor: [0, -48],
-                        },
-                        (
-                            <LocationOn
-                                style={{
-                                    ...(displayed.getEntry() == entry
-                                        ? {
-                                              color: 'red',
-                                              transition: 'all 1s linear',
-                                          }
-                                        : hovered?.getEntry() == entry
-                                          ? {
-                                                color: 'blue',
-                                                transition: 'all 0.2s linear',
-                                            }
-                                          : {
-                                                color: 'black',
-                                                transition: 'all 0.2s linear',
-                                            }),
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                            />
-                        ),
-                    );
                     return (
                         <Marker
                             key={entry.km}
-                            icon={icon}
-                            position={entry.Where}
-                            eventHandlers={{
-                                click: () =>
-                                    setDisplayed(
-                                        BookPageIndex.entry(entry, entries),
-                                    ),
+                            style={{
+                                ...(displayed.getEntry() == entry
+                                    ? {
+                                          color: 'red',
+                                          transition: 'color 1s linear',
+                                      }
+                                    : hovered?.getEntry() == entry
+                                      ? {
+                                            color: 'blue',
+                                            transition: 'color 0.2s linear',
+                                        }
+                                      : {
+                                            color: 'black',
+                                            transition: 'color 0.2s linear',
+                                        }),
+                                width: '48px',
+                                height: '48px',
                             }}
+                            anchor={[entry.Where.lat, entry.Where.lng]}
+                            onClick={() =>
+                                setDisplayed(
+                                    BookPageIndex.entry(entry, entries),
+                                )
+                            }
                         >
-                            {entry == hovered?.getEntry() ||
-                            displayed.getEntry() == entry ? (
-                                <Tooltip direction={'top'} permanent={true}>
-                                    {entry.km}km |{' '}
-                                    {entry.getDaysSinceStart() + 1} Tage
-                                </Tooltip>
-                            ) : null}
+                            <LocationOn style={{ pointerEvents: 'auto' }} />
                         </Marker>
                     );
                 })}
-
-                <SelectControl selected={displayed} hovered={hovered} />
-            </MapContainer>
+            </Map>
         </div>
     );
 }

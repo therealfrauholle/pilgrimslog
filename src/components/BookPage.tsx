@@ -24,35 +24,38 @@ type UiState = {
     c: ElementState;
 };
 
+type Parameters = {
+    /**
+     * When a navigation is committed by the user, this callback is fired.
+     */
+    setNewIndex: (e: BookPageIndex) => void;
+    /**
+     * How much the user must move the page to finish navigatiob.
+     */
+    swipeThreshold: number;
+};
 type InnerState = {
     pages: [BookPageIndex | null, BookPageIndex | null, BookPageIndex | null];
     center: number;
     rotateDirection: 'toRight' | 'toLeft';
     offset: number;
-    requestSet: (e: BookPageIndex) => void;
     fastChange: boolean;
-    swipeThreshold: number;
 };
 
 class State {
-    inner: InnerState;
-    constructor(inner: InnerState) {
+    inner: InnerState & Parameters;
+    constructor(inner: InnerState & Parameters) {
         this.inner = inner;
     }
 
-    static default(
-        current: BookPageIndex,
-        swipeThreshold: number,
-        requestSet: (e: BookPageIndex) => void,
-    ): State {
+    static default(current: BookPageIndex, config: Parameters): State {
         return new State({
+            ...config,
             pages: [current.navPrev(), current, current.navNext()],
             center: 1,
             offset: 0,
             rotateDirection: 'toRight',
-            requestSet,
             fastChange: false,
-            swipeThreshold,
         });
     }
 
@@ -129,7 +132,7 @@ class State {
                             result.main().navNext();
                     }
                 }
-                this.inner.requestSet(result.main());
+                this.inner.setNewIndex(result.main());
                 return result;
         }
     }
@@ -201,22 +204,25 @@ function toContainer(element: ElementState, fastChange: boolean) {
 export function BookPage() {
     const { setDisplayed, displayed: current } = useContext(BookContext)!;
     const containerRef = useRef<HTMLDivElement>(null);
-    const [request, setRequest] = useState<BookPageIndex | null>(null);
+    const [newIndex, setNewIndex] = useState<BookPageIndex | null>(null);
     const [state, dispatch] = useReducer<State, [Action]>(
         (state: State, action: Action) => state.update(action),
-        State.default(current, 0.3, setRequest),
+        State.default(current, {
+            swipeThreshold: 0.3,
+            setNewIndex: setNewIndex,
+        }),
     );
 
     const main = state.main();
 
     useEffect(() => {
-        if (request != null) {
-            setDisplayed(request);
-            setRequest(null);
+        if (newIndex != null) {
+            setDisplayed(newIndex);
+            setNewIndex(null);
         } else if (!main.equals(current)) {
             dispatch({ type: 'display', display: current });
         }
-    }, [main, setDisplayed, current, request]);
+    }, [main, setDisplayed, current, newIndex]);
 
     const handlers = useSwipeable({
         onSwiping: (eventData) => {
