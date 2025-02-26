@@ -5,10 +5,10 @@ import { BookContext } from './Main';
 import ZoomSlider from './ZoomSlider';
 
 type DaySliderProps = {
-    hover: (entry: BookPageIndex | null) => void;
+    activeValue: (entry: BookPageIndex | null) => void;
 };
 
-export default function DaySlider({ hover }: DaySliderProps) {
+export default function DaySlider({ activeValue }: DaySliderProps) {
     const { entries, displayed, setDisplayed } = useContext(BookContext)!;
     const [sliderValue, setSliderValue] = useState(displayed);
 
@@ -44,15 +44,16 @@ export default function DaySlider({ hover }: DaySliderProps) {
             entries,
         );
     }
+
     function onStart() {
-        hover(sliderValue);
+        activeValue(sliderValue);
     }
 
     const handleChange = (value: number) => {
         const index = sliderOffsetToIndex(value);
         if (!index.equals(sliderValue)) {
             setSliderValue(index);
-            hover(index);
+            activeValue(index);
         }
     };
 
@@ -61,8 +62,8 @@ export default function DaySlider({ hover }: DaySliderProps) {
     });
 
     const changeCommitted = (value: number) => {
-        setDisplayed(sliderOffsetToIndex(value));
-        hover(null);
+        activeValue(sliderOffsetToIndex(value));
+        activeValue(null);
     };
 
     return (

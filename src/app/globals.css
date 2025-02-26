@@ -2,9 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --size-map-small: 100px;
+    --size-tooltip: 50px;
+    --size-map-large: 350px;
+    --fraction-tooltip: 80%;
+    --marker-size: 32px;
+    --marker-size-large: 48px;
+
+    --color-plog-neutral: #F5F5DC;
+    --color-plog-extra: #101010;
+    --color-plog-normal: #1c1c1c;
+    --color-plog-feature: #8A2BE2;
+    --color-plog-highlight: #E63946;
+    --color-plog-detail: #5A5A5A;
+    --color-plog-accent: #A9A9A9;
+}
+
 .rail {
     height: 10px;
-    background: rgb(70, 80, 138);
+    background: var(--color-plog-accent);
 }
 
 .zoomed .rail {
@@ -13,12 +30,13 @@
 
 
 .mark {
-    background: #ffbde2;
+    background: none;
     height: 6px;
     width: 1px;
 }
 
 .zoomed .mark {
+    background: var(--color-plog-feature) !important;
     width: 2px;
     height: 26px;
 }
@@ -27,7 +45,7 @@
 .thumb {
     height: 40px;
     width: 10px;
-    background-color: #a30073;
+    background-color: var(--color-plog-highlight);
 }
 
 

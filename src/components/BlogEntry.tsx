@@ -15,6 +15,7 @@ const BlogEntry = React.memo(function BlogEntry({
             className="flex flex-col p-6 md:p-8 h-full"
         >
             <h1
+                className="text-extra"
                 style={{
                     fontSize: '2rem',
                     fontWeight: 'bold',

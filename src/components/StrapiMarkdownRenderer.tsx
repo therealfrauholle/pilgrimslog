@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm';
 
 export default function StrapiMarkdownRenderer({ data }: { data: string }) {
     return (
-        <div className="strapi-markdown-content prose">
+        <div className="prose prose-plog">
             <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown>
         </div>
     );

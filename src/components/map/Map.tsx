@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { BookContext } from './../Main';
-import { LocationOn } from '@mui/icons-material';
+import { ChevronLeftSharp, LocationOn } from '@mui/icons-material';
 import { GeolibBounds } from 'geolib/es/types';
 import React from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
@@ -31,7 +31,7 @@ function boundsToCenter(bounds: GeolibBounds, size: Size): MapState {
 
     const PIXEL_PER_TILE = 256;
     const fractionPerTile = fractionPerPixel * PIXEL_PER_TILE;
-    const exactZoomLevel = Math.log2(1 / fractionPerTile) * 0.9;
+    const exactZoomLevel = Math.log2(1 / fractionPerTile);
 
     const center = {
         lat: bounds.minLat + latDiff / 2,
@@ -43,24 +43,11 @@ function boundsToCenter(bounds: GeolibBounds, size: Size): MapState {
 function newCenter(
     entries: ILogEntries,
     selected: BookPageIndex,
-    hovered: BookPageIndex | null,
     size: Size,
 ): MapState {
     let selectedEntry;
-    let hoveredEntry;
-    if (
-        (selectedEntry = selected.getEntry()) &&
-        (hovered == null || hovered.equals(selected))
-    ) {
-        return { center: selectedEntry.Where, zoom: 11 };
-    } else if (
-        (selectedEntry = selected.getEntry()) &&
-        (hoveredEntry = hovered!.getEntry())
-    ) {
-        return boundsToCenter(
-            getBounds([hoveredEntry.Where, selectedEntry.Where]),
-            size,
-        );
+    if ((selectedEntry = selected.getEntry())) {
+        return { center: selectedEntry.Where, zoom: 7 };
     } else {
         return boundsToCenter(
             getBounds(entries.data.map((e) => e.Where)),
@@ -70,7 +57,7 @@ function newCenter(
 }
 
 type MapProps = {
-    hovered: BookPageIndex | null;
+    expanded: boolean;
 };
 
 type Size = {
@@ -83,92 +70,136 @@ type MapState = {
     center: Coordinates;
 };
 
-export default function ControlledMap({ hovered }: MapProps) {
+export default function ControlledMap({ expanded }: MapProps) {
     const { entries, displayed, setDisplayed } = useContext(BookContext)!;
-    const [size, setSize] = useState<Size | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (containerRef.current !== null) {
-            const observer = new ResizeObserver(() => {
-                if (containerRef.current !== null) {
-                    const rect = containerRef.current.getBoundingClientRect();
-                    setSize({ width: rect.width, height: rect.height });
-                }
-            });
-            observer.observe(containerRef.current);
-            return () => {
-                observer.disconnect();
-            };
-        }
-    }, [containerRef]);
+    let size;
+    if (containerRef.current !== null) {
+        const rect = containerRef.current.getBoundingClientRect();
+        size = { width: rect.width, height: rect.height };
+    } else {
+        size = { width: 400, height: 200 };
+    }
+    const isHome = displayed.equals(BookPageIndex.homepage(entries));
 
-    const { center, zoom } = newCenter(
-        entries,
-        displayed,
-        hovered,
-        size ?? { width: 400, height: 200 },
-    );
+    const { center, zoom } = newCenter(entries, displayed, size);
+
+    const theEntry = displayed.getEntry();
+    const description = theEntry
+        ? theEntry.getDaysSinceStart() + 1 + '.Tag | ' + theEntry.km + 'km'
+        : '';
 
     return (
-        <div
-            ref={containerRef}
-            style={{
-                position: 'relative',
-                width: '100%',
-                height: hovered ? '400px' : '200px',
-                transition: 'all 1s linear',
-            }}
-        >
-            <Map
-                center={[center.lat, center.lng]}
-                zoom={zoom}
-                zoomSnap={false}
-                tileComponent={ImgTile}
-                animateMaxScreens={999999}
+        <>
+            <div
+                className="absolute left-0"
+                style={{
+                    height:
+                        expanded && !isHome
+                            ? 'var(--size-tooltip)'
+                            : 'var(--size-map-small)',
+                    zIndex: 999,
+                    padding: '5px',
+                    width:
+                        expanded && !isHome
+                            ? '100%'
+                            : 'var(--fraction-tooltip)',
+                    bottom: expanded && !isHome ? '-15px' : 0,
+                    pointerEvents: 'none',
+                    transition: 'all 1s ease-out',
+                    opacity: isHome ? 0 : 0.8,
+                }}
             >
-                {entries.data.map((entry) => {
-                    return (
-                        <Marker
-                            key={entry.km}
-                            width={48}
-                            height={48}
-                            style={{
-                                ...(displayed.getEntry() == entry
-                                    ? {
-                                          color: 'red',
-                                          transition: 'color 1s linear',
-                                      }
-                                    : hovered?.getEntry() == entry
-                                      ? {
-                                            color: 'blue',
-                                            transition: 'color 0.2s linear',
-                                        }
-                                      : {
-                                            color: 'black',
-                                            transition: 'color 0.2s linear',
-                                        }),
-                            }}
-                            anchor={[entry.Where.lat, entry.Where.lng]}
-                            onClick={() =>
-                                setDisplayed(
-                                    BookPageIndex.entry(entry, entries),
-                                )
-                            }
-                        >
-                            <div style={{ width: 48, height: 48 }}>
-                                <LocationOn
+                <div className="h-full relative">
+                    <span
+                        style={{
+                            position: 'absolute',
+                            transform: 'translate(-50%, -50%)',
+                            left: '50%',
+                            top: '50%',
+                            fontSize: '25px',
+                            fontWeight: 'bold',
+                            whiteSpace: 'nowrap',
+                            transition: 'all 1s ease-out',
+                            textShadow: expanded
+                                ? 'none'
+                                : '1px 1px 4px var(--color-plog-neutral)',
+                        }}
+                    >
+                        {description}
+                    </span>
+                </div>
+            </div>
+            <div
+                ref={containerRef}
+                style={{ width: '100%', height: '100%', overflow: 'hidden' }}
+            >
+                <div
+                    style={{
+                        width: '200%',
+                        height: 'calc(var(--marker-size-large) + 100%)',
+                        marginTop: 'calc(- var(marker-size-large) / 2)',
+                        marginLeft: expanded
+                            ? '-50%'
+                            : 'calc((var(--fraction-tooltip) - 100%) / 2)',
+                        transition: 'all 1s linear',
+                    }}
+                >
+                    <Map
+                        center={[center.lat, center.lng]}
+                        zoom={zoom}
+                        zoomSnap={false}
+                        tileComponent={ImgTile}
+                        animateSpeed={1000}
+                        animateMaxScreens={999999}
+                        mouseEvents={expanded}
+                        touchEvents={expanded}
+                    >
+                        {entries.data.map((entry) => {
+                            return (
+                                <Marker
+                                    key={entry.km}
                                     style={{
-                                        pointerEvents: 'auto',
-                                        width: '100%',
-                                        height: '100%',
+                                        transitionProperty:
+                                            'color, opacity, width, height',
+                                        transitionTimingFunction: 'ease-out',
+                                        transitionDuration: '1s',
+                                        transitionDelay: '0s',
+                                        color: 'var(--color-plog-normal)',
+                                        opacity: 0.5,
+                                        height: 'var(--marker-size)',
+                                        width: 'var(--marker-size)',
+                                        ...(displayed.getEntry() == entry
+                                            ? {
+                                                  color: 'var(--color-plog-highlight)',
+                                                  zIndex: 950,
+                                                  opacity: 0.8,
+                                                  height: 'var(--marker-size-large)',
+                                                  width: 'var(--marker-size-large)',
+                                              }
+                                            : {}),
                                     }}
-                                />
-                            </div>
-                        </Marker>
-                    );
-                })}
-            </Map>
-        </div>
+                                    anchor={[entry.Where.lat, entry.Where.lng]}
+                                    onClick={() => {
+                                        setDisplayed(
+                                            BookPageIndex.entry(entry, entries),
+                                        );
+                                    }}
+                                >
+                                    <LocationOn
+                                        style={{
+                                            pointerEvents: 'auto',
+                                            width: '100%',
+                                            height: '100%',
+                                        }}
+                                    />
+                                </Marker>
+                            );
+                        })}
+                    </Map>
+                </div>
+            </div>
+        </>
     );
 }

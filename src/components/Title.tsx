@@ -4,12 +4,14 @@ export default function Title() {
             className="flex flex-col items-center justify-center h-full text-center px-6"
             style={{ padding: '30px' }}
         >
-            <div className="tracking-tight max-w-lg mx-auto text-center text-gray-800 transition-colors">
-                <h1 className="text-6xl font-extrabold mb-6">Logbuch</h1>
-                <div className="text-3xl text-left pl-4">eines Pilgers</div>
+            <div className="tracking-tight max-w-lg mx-auto text-center transition-colors">
+                <h2 className="text-6xl font-extrabold mb-6 text-extra">
+                    Logbuch
+                </h2>
+                <div className="text-2xl pl-4 text-nornal">eines Pilgers</div>
             </div>
             <div style={{ padding: '30px' }}>
-                <p className="text-lg md:text-xl text-gray-600">
+                <p className="text-md md:text-xl text-normal">
                     Wir sind alle Pilger im Leben: Einen Tag kommen wir, den
                     anderen gehen wir. Nur auf der Durchreise.
                     <br />

@@ -6,6 +6,7 @@
 .rail {
     position: absolute;
     top: 50%;
+    transform: translateY(-50%);
     border-radius: 3px;
     opacity: 1;
     user-select: none;

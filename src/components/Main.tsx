@@ -54,8 +54,8 @@ export default function MainLayout({
 
     return (
         <>
-            <div className="flex grid h-dvh w-screen justify-items-center bg-zinc-200 md:p-[20px]">
-                <div className="flex flex-col h-full min-h-0 w-full md:w-[700px] shadow-md">
+            <div className="flex grid h-dvh w-screen justify-items-center bg-ivory md:p-[20px]">
+                <div className="flex flex-col h-full min-h-0 w-full md:w-[700px] shadow-md bg-neutral">
                     <div className="relative flex flex-col h-full w-full">
                         <BookContext.Provider
                             value={{
