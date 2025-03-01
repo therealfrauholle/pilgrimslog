@@ -9,7 +9,7 @@ type DaySliderProps = {
 };
 
 export default function DaySlider({ activeValue }: DaySliderProps) {
-    const { entries, displayed, setDisplayed } = useContext(BookContext)!;
+    const { entries, displayed } = useContext(BookContext)!;
     const [sliderValue, setSliderValue] = useState(displayed);
 
     useEffect(() => {

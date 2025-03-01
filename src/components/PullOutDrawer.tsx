@@ -28,6 +28,7 @@ export default function PullOutDrawer() {
     return (
         <div
             style={{
+                position: 'relative',
                 overflow: 'hidden',
                 paddingTop: '5px',
                 boxShadow: isHome
@@ -40,51 +41,34 @@ export default function PullOutDrawer() {
             }}
         >
             <div
+                className="absolute"
                 style={{
-                    position: 'relative',
-                    height: isOpen
-                        ? 'var(--size-map-large)'
-                        : 'var(--size-map-small)',
-                    paddingBottom:
-                        isOpen && !isHome ? 'var(--size-tooltip)' : '0px',
+                    zIndex: 1500,
+                    transform: 'translate(-50%, 0%)',
+                    top: '-5px',
+                    left: '50%',
+                    background: 'var(--color-plog-neutral)',
+                    borderRadius: '3px',
+                    paddingTop: '5px',
+                    width: isOpen ? '40px' : '30px',
+                    height: isOpen ? '40px' : '30px',
                     transition: 'all 1s ease-out',
+                    opacity: isHome ? 0 : 1,
                 }}
-                onClick={() => {
-                    if (!isOpen) {
-                        setExtended(true);
-                    }
-                }}
+                onClick={() => setExtended(!extended)}
             >
-                <div
-                    className="absolute"
+                <ChevronLeftSharp
                     style={{
-                        zIndex: 1500,
-                        transform: 'translate(-50%, 0%)',
-                        top: '-5px',
-                        left: '50%',
-                        background: 'var(--color-plog-neutral)',
-                        borderRadius: '3px',
-                        paddingTop: '5px',
-                        width: isOpen ? '40px' : '30px',
-                        height: isOpen ? '40px' : '30px',
+                        transform:
+                            'rotate(90deg) ' +
+                            (extended ? 'scale(-1,1)' : 'scale(1,1)'),
                         transition: 'all 1s ease-out',
-                        opacity: isHome ? 0 : 1,
+                        height: '100%',
+                        width: '100%',
                     }}
-                    onClick={() => setExtended(!extended)}
-                >
-                    <ChevronLeftSharp
-                        style={{
-                            transform:
-                                'rotate(90deg) ' +
-                                (extended ? 'scale(-1,1)' : 'scale(1,1)'),
-                            transition: 'all 1s ease-out',
-                            height: '100%',
-                            width: '100%',
-                        }}
-                    />
-                </div>
-                <ControlledMap expanded={isOpen} />
+                />
             </div>
+            <ControlledMap expanded={isOpen} expand={() => setExtended(true)} />
             <DaySlider activeValue={setHover} />
         </div>
     );

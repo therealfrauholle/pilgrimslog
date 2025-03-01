@@ -10,13 +10,13 @@
     --marker-size: 32px;
     --marker-size-large: 48px;
 
-    --color-plog-neutral: #F5F5DC;
-    --color-plog-extra: #101010;
-    --color-plog-normal: #1c1c1c;
+    --color-plog-neutral: #FEF4EC;
+    --color-plog-extra: #303030;
+    --color-plog-normal: #3d3d3d;
     --color-plog-feature: #8A2BE2;
-    --color-plog-highlight: #E63946;
+    --color-plog-highlight: #cc5803;
     --color-plog-detail: #5A5A5A;
-    --color-plog-accent: #A9A9A9;
+    --color-plog-accent: #d9d9d9;
 }
 
 .rail {
