@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import React from 'react';
-import { BookPageIndex } from '@/types/BookPageIndex';
+import { BookPageIndex } from '@/util/BookPageIndex';
 import { BookContext } from './Main';
 import ZoomSlider from './ZoomSlider';
 

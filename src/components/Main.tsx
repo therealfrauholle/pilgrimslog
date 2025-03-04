@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useState } from 'react';
-import { BookPageIndex } from '@/types/BookPageIndex';
+import { BookPageIndex } from '@/util/BookPageIndex';
 import Book from './Book';
 import { StrapiEntries } from '@/util/FetchService';
 import { ILogEntries, parse } from '@/util/PageModel';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext, useState } from 'react';
-import { BookPageIndex } from '@/types/BookPageIndex';
+import { BookPageIndex } from '@/util/BookPageIndex';
 import DaySlider from './DaySlider';
 import ControlledMap from './map/Map';
 import { BookContext } from './Main';

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import rawResponse from './services/apiresponse.json';
-import { ILogEntries, parse } from '@/util/FetchService';
-import { BookPageIndex } from '@/types/BookPageIndex';
+import { ILogEntries, parse } from '@/util/PageModel';
+import { BookPageIndex } from '@/util/BookPageIndex';
 
 const DATA: ILogEntries = parse(rawResponse);
 

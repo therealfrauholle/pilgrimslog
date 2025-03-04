@@ -1,6 +1,6 @@
 import BlogEntry from './BlogEntry';
 import Title from './Title';
-import { BookPageIndex } from '@/types/BookPageIndex';
+import { BookPageIndex } from '@/util/BookPageIndex';
 import { useSwipeable } from 'react-swipeable';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { BookContext } from './Main';

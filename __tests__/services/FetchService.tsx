@@ -1,6 +1,6 @@
 import { test, describe, expect } from '@jest/globals';
 import rawResponse from './apiresponse.json';
-import { ILogEntries, parse } from '@/util/FetchService';
+import { ILogEntries, parse } from '@/util/PageModel';
 
 const DATA: ILogEntries = parse(rawResponse);
 

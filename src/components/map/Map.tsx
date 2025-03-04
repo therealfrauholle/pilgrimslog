@@ -3,7 +3,7 @@ import { BookContext } from './../Main';
 import { LocationOn } from '@mui/icons-material';
 import { GeolibBounds } from 'geolib/es/types';
 import React from 'react';
-import { BookPageIndex } from '@/types/BookPageIndex';
+import { BookPageIndex } from '@/util/BookPageIndex';
 import { Map, Marker, TileComponent } from 'pigeon-maps';
 import { getBounds } from 'geolib';
 import { CachedTile } from './CachedTile';
