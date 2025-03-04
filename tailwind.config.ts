@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import * as T from '@tailwindcss/typography';
+import { PluginUtils } from 'tailwindcss/types/config';
 
 export default {
     content: [
@@ -18,7 +19,7 @@ export default {
                 detail: 'var(--color-plog-detail)',
                 accent: 'var(--color-plog-accent)',
             },
-            typography: ({ theme }) => ({
+            typography: ({ theme }: PluginUtils) => ({
                 plog: {
                     css: {
                         '--tw-prose-headings': theme('colors.extra'),
