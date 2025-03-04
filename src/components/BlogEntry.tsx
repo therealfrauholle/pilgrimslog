@@ -1,6 +1,6 @@
 import React from 'react';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
-import { ILogEntry } from '@/util/FetchService';
+import { ILogEntry } from '@/util/PageModel';
 
 const BlogEntry = React.memo(function BlogEntry({
     data: day,

@@ -1,4 +1,4 @@
-import { ILogEntries, ILogEntry } from '@/util/FetchService';
+import { ILogEntries, ILogEntry } from '@/util/PageModel';
 
 enum IndexType {
     Homepage,

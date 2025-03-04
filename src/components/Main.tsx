@@ -1,8 +1,9 @@
 'use client';
-import { ILogEntries, parse, StrapiEntries } from '../util/FetchService';
 import { createContext, useState } from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import Book from './Book';
+import { StrapiEntries } from '@/util/FetchService';
+import { ILogEntries, parse } from '@/util/PageModel';
 
 export type BookData = {
     entries: ILogEntries;

@@ -6,8 +6,8 @@ import React from 'react';
 import { BookPageIndex } from '@/types/BookPageIndex';
 import { Map, Marker, TileComponent } from 'pigeon-maps';
 import { getBounds } from 'geolib';
-import { ILogEntries } from '@/util/FetchService';
 import { CachedTile } from './CachedTile';
+import { ILogEntries } from '@/util/PageModel';
 
 type Coordinates = {
     lat: number;
