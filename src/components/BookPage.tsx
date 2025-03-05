@@ -4,6 +4,7 @@ import { BookPageIndex } from '@/util/BookPageIndex';
 import { SwipeEventData, useSwipeable } from 'react-swipeable';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { BookContext } from './Main';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 type Action = {
     type: 'display' | 'swipe' | 'swipeend';
@@ -257,6 +258,25 @@ export function BookPage() {
             }}
             className="relative w-full h-full overflow-hidden"
         >
+            <div
+                style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '0%',
+                    transform: 'translateY(50%)',
+                    background: 'var(--color-plog-neutral)',
+                    zIndex: 2000,
+                    border: '1px solid var(--color-plog-highlight)',
+                    borderRadius: '2px',
+                    marginLeft: '5px',
+                    opacity: selected.navPrev() ? 1 : 0,
+                    transition: 'opacity 1s',
+                }}
+                onClick={() => setDisplayed(selected.navPrev()!)}
+                role="button"
+            >
+                <ChevronLeft />
+            </div>
             {toPageDiv(
                 BookPageIndex.homepage(entries),
                 offset,
@@ -271,6 +291,25 @@ export function BookPage() {
                     fastChange,
                 ),
             )}
+            <div
+                style={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: '0%',
+                    transform: 'translateY(50%)',
+                    background: 'var(--color-plog-neutral)',
+                    zIndex: 2000,
+                    border: '1px solid var(--color-plog-highlight)',
+                    borderRadius: '2px',
+                    marginRight: '5px',
+                    opacity: selected.navNext() ? 1 : 0,
+                    transition: 'opacity 1s',
+                }}
+                onClick={() => setDisplayed(selected.navNext()!)}
+                role="button"
+            >
+                <ChevronRight />
+            </div>
         </div>
     );
 }
