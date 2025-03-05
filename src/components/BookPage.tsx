@@ -1,13 +1,16 @@
 import BlogEntry from './BlogEntry';
 import Title from './Title';
 import { BookPageIndex } from '@/util/BookPageIndex';
-import { useSwipeable } from 'react-swipeable';
+import { SwipeEventData, useSwipeable } from 'react-swipeable';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { BookContext } from './Main';
 
 type Action = {
     type: 'display' | 'swipe' | 'swipeend';
-    swipe?: number;
+    swipe?: {
+        x: number;
+        y: number;
+    };
     display?: BookPageIndex;
 };
 
@@ -37,10 +40,14 @@ type UiState = {
     fastChange: boolean;
 };
 
-class State {
-    inner: UiState & Parameters;
+type InnerState = {
+    swipeStatus: 'free' | 'horizontal' | 'locked';
+};
 
-    constructor(inner: UiState & Parameters) {
+class State {
+    inner: UiState & Parameters & InnerState;
+
+    constructor(inner: UiState & Parameters & InnerState) {
         this.inner = inner;
     }
 
@@ -50,6 +57,7 @@ class State {
             selected: current,
             offset: 0,
             fastChange: false,
+            swipeStatus: 'free',
         });
     }
 
@@ -64,10 +72,27 @@ class State {
                 result.inner.selected = action.display!;
                 return result;
             case 'swipe':
-                result.inner.offset = action.swipe!;
+                const { x, y } = action.swipe!;
+                switch (this.inner.swipeStatus) {
+                    case 'locked':
+                        return this;
+                    case 'free':
+                        if (Math.abs(y) < 0.05) {
+                            if (Math.abs(x) < 0.05) {
+                                return this;
+                            } else {
+                                result.inner.swipeStatus = 'horizontal';
+                            }
+                        } else {
+                            result.inner.offset = 0;
+                            result.inner.swipeStatus = 'locked';
+                            return result;
+                        }
+                }
+                result.inner.offset = x;
                 // Allow the user to swipe slightly beyond the ends of the book
                 const BOUNCE_LIMIT = 0.2;
-                if (action.swipe! > 0) {
+                if (x > 0) {
                     if (this.inner.selected.navPrev() == null) {
                         result.inner.offset = Math.min(
                             result.inner.offset,
@@ -87,8 +112,12 @@ class State {
             case 'swipeend':
                 result.inner.offset = 0;
                 result.inner.fastChange = false;
-                if (Math.abs(action.swipe!) > this.inner.swipeThreshold) {
-                    if (action.swipe! > 0) {
+                result.inner.swipeStatus = 'free';
+                if (
+                    Math.abs(action.swipe!.x) > this.inner.swipeThreshold &&
+                    this.inner.swipeStatus != 'locked'
+                ) {
+                    if (action.swipe!.x > 0) {
                         if (this.inner.selected.navPrev() == null) {
                             return result;
                         }
@@ -99,8 +128,8 @@ class State {
                         }
                         result.inner.selected = this.inner.selected.navNext()!;
                     }
+                    this.inner.setNewIndex(result.inner.selected);
                 }
-                this.inner.setNewIndex(result.inner.selected);
                 return result;
         }
     }
@@ -198,19 +227,25 @@ export function BookPage() {
         }
     }, [selected, setDisplayed, current, newIndex]);
 
+    function updateSwipe(
+        eventData: SwipeEventData,
+        type: 'swipe' | 'swipeend',
+    ) {
+        const fractionX =
+            eventData.deltaX /
+            containerRef.current!.getBoundingClientRect().width;
+        const fractionY =
+            eventData.deltaY /
+            containerRef.current!.getBoundingClientRect().height;
+        dispatch({
+            type,
+            swipe: { x: fractionX, y: fractionY },
+        });
+    }
+
     const handlers = useSwipeable({
-        onSwiping: (eventData) => {
-            const swipePercent =
-                eventData.deltaX /
-                containerRef.current!.getBoundingClientRect().width;
-            dispatch({ type: 'swipe', swipe: swipePercent });
-        },
-        onSwiped: (eventData) => {
-            const swipePercent =
-                eventData.deltaX /
-                containerRef.current!.getBoundingClientRect().width;
-            dispatch({ type: 'swipeend', swipe: swipePercent });
-        },
+        onSwiping: (eventData) => updateSwipe(eventData, 'swipe'),
+        onSwiped: (eventData) => updateSwipe(eventData, 'swipeend'),
     });
 
     return (
