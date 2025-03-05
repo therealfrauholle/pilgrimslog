@@ -38,6 +38,7 @@ export default function PullOutDrawer() {
                     ? 'none'
                     : '1px solid var(--color-plog-accent)',
                 transition: 'all 1s ease-out',
+                zIndex: 1100,
             }}
         >
             <div

@@ -11,19 +11,6 @@ type Action = {
     display?: BookPageIndex;
 };
 
-type ElementState = {
-    element: BookPageIndex | null;
-    animate: boolean;
-    offset: number;
-};
-
-type UiState = {
-    fastChange: boolean;
-    a: ElementState;
-    b: ElementState;
-    c: ElementState;
-};
-
 type Parameters = {
     /**
      * When a navigation is committed by the user, this callback is fired.
@@ -34,79 +21,66 @@ type Parameters = {
      */
     swipeThreshold: number;
 };
-type InnerState = {
-    pages: [BookPageIndex | null, BookPageIndex | null, BookPageIndex | null];
-    center: number;
-    rotateDirection: 'toRight' | 'toLeft';
+
+type UiState = {
+    /**
+     * Currently selected index
+     */
+    selected: BookPageIndex;
+    /**
+     * Percentage offset of the selected page, changes when swiped.
+     */
     offset: number;
+    /**
+     * True when changes should be animated fast.
+     */
     fastChange: boolean;
 };
 
 class State {
-    inner: InnerState & Parameters;
-    constructor(inner: InnerState & Parameters) {
+    inner: UiState & Parameters;
+
+    constructor(inner: UiState & Parameters) {
         this.inner = inner;
     }
 
     static default(current: BookPageIndex, config: Parameters): State {
         return new State({
             ...config,
-            pages: [current.navPrev(), current, current.navNext()],
-            center: 1,
+            selected: current,
             offset: 0,
-            rotateDirection: 'toRight',
             fastChange: false,
         });
-    }
-
-    main(): BookPageIndex {
-        return this.inner.pages[this.inner.center]!;
     }
 
     update(action: Action): State {
         const result = new State({ ...this.inner });
         switch (action.type) {
             case 'display':
-                if (this.main().equals(action.display!)) {
+                if (this.inner.selected.equals(action.display!)) {
                     return this;
                 }
-                if (this.main().isBefore(action.display!)) {
-                    result.inner.center = (result.inner.center + 1) % 3;
-                    result.inner.pages[result.inner.center] = action.display!;
-                    result.inner.pages[(result.inner.center + 1) % 3] =
-                        action.display!.navNext();
-                    result.inner.rotateDirection = 'toLeft';
-                } else {
-                    result.inner.center = (result.inner.center + 2) % 3;
-                    result.inner.pages[result.inner.center] = action.display!;
-                    result.inner.pages[(result.inner.center + 2) % 3] =
-                        action.display!.navPrev();
-                    result.inner.rotateDirection = 'toRight';
-                }
                 result.inner.fastChange = false;
+                result.inner.selected = action.display!;
                 return result;
             case 'swipe':
                 result.inner.offset = action.swipe!;
-                result.inner.pages[(result.inner.center + 1) % 3] =
-                    this.main().navNext();
-                result.inner.pages[(result.inner.center + 2) % 3] =
-                    this.main().navPrev();
+                // Allow the user to swipe slightly beyond the ends of the book
+                const BOUNCE_LIMIT = 0.2;
                 if (action.swipe! > 0) {
-                    if (this.main().navPrev() == null) {
+                    if (this.inner.selected.navPrev() == null) {
                         result.inner.offset = Math.min(
                             result.inner.offset,
-                            0.2,
+                            BOUNCE_LIMIT,
                         );
                     }
-                    result.inner.rotateDirection = 'toLeft';
                 } else {
-                    if (this.main().navNext() == null) {
+                    if (this.inner.selected.navNext() == null) {
                         result.inner.offset = Math.max(
                             result.inner.offset,
-                            -0.2,
+                            -BOUNCE_LIMIT,
                         );
                     }
-                    result.inner.rotateDirection = 'toRight';
                 }
                 result.inner.fastChange = true;
                 return result;
@@ -115,94 +89,94 @@ class State {
                 result.inner.fastChange = false;
                 if (Math.abs(action.swipe!) > this.inner.swipeThreshold) {
                     if (action.swipe! > 0) {
-                        if (this.main().navPrev() == null) {
+                        if (this.inner.selected.navPrev() == null) {
                             return result;
                         }
-                        result.inner.rotateDirection = 'toRight';
-                        result.inner.center = (result.inner.center + 2) % 3;
-                        result.inner.pages[(result.inner.center + 2) % 3] =
-                            result.main().navPrev();
+                        result.inner.selected = this.inner.selected.navPrev()!;
                     } else {
-                        if (this.main().navNext() == null) {
+                        if (this.inner.selected.navNext() == null) {
                             return result;
                         }
-                        result.inner.rotateDirection = 'toLeft';
-                        result.inner.center = (result.inner.center + 1) % 3;
-                        result.inner.pages[(result.inner.center + 1) % 3] =
-                            result.main().navNext();
+                        result.inner.selected = this.inner.selected.navNext()!;
                     }
                 }
-                this.inner.setNewIndex(result.main());
+                this.inner.setNewIndex(result.inner.selected);
                 return result;
         }
     }
 
     ui(): UiState {
-        return {
-            fastChange: this.inner.fastChange,
-            a: {
-                element: this.inner.pages[0],
-                offset:
-                    -(((this.inner.center + 1) % 3) - 1) + this.inner.offset,
-                animate:
-                    (this.inner.rotateDirection == 'toRight' &&
-                        this.inner.center != 1) ||
-                    (this.inner.rotateDirection == 'toLeft' &&
-                        this.inner.center != 2),
-            },
-            b: {
-                element: this.inner.pages[1],
-                offset: -(this.inner.center - 1) + this.inner.offset,
-                animate:
-                    (this.inner.rotateDirection == 'toRight' &&
-                        this.inner.center != 2) ||
-                    (this.inner.rotateDirection == 'toLeft' &&
-                        this.inner.center != 0),
-            },
-            c: {
-                element: this.inner.pages[2],
-                offset:
-                    -(((this.inner.center + 2) % 3) - 1) + this.inner.offset,
-                animate:
-                    (this.inner.rotateDirection == 'toRight' &&
-                        this.inner.center != 0) ||
-                    (this.inner.rotateDirection == 'toLeft' &&
-                        this.inner.center != 1),
-            },
-        };
+        return this.inner;
     }
 }
 
-function toElement(current: BookPageIndex) {
+function toElement(index: BookPageIndex) {
     let entry;
-    if ((entry = current.getEntry())) {
+    if ((entry = index.getEntry())) {
         return <BlogEntry data={entry} />;
     } else {
         return <Title />;
     }
 }
 
-function toContainer(element: ElementState, fastChange: boolean) {
+/**
+ * Render an index as rhe UI element
+ *
+ * @param theElement the index to render
+ * @param fastChange whether changes should use fasf css transitions
+ * @param scrollOffset the current (manual) offset (when swiping)
+ * @param selectedIndex the index visible in the center (not necessarily the index that is to be rendered)
+ * @param [padding=0.02] padding between pages
+ * @param [visibleZIndex=1000] the z-index of the currently selected index. All other elements will be placed with a lower z-index.
+ */
+function toPageDiv(
+    theElement: BookPageIndex,
+    scrollOffset: number,
+    selectedIndex: BookPageIndex,
+    fastChange: boolean,
+    visibleZIndex: number = 1000,
+    padding: number = 0.02,
+) {
+    let zIndex: number;
+    let left: number;
+    const indexOffset = theElement.index() - selectedIndex.index();
+    if (theElement.isBefore(selectedIndex)) {
+        zIndex = visibleZIndex + indexOffset;
+        left = -1 + padding * indexOffset + scrollOffset;
+    } else if (theElement.isAfter(selectedIndex)) {
+        zIndex = visibleZIndex - indexOffset;
+        left = 1 + padding * indexOffset + scrollOffset;
+    } else {
+        zIndex = visibleZIndex;
+        left = scrollOffset;
+    }
     return (
         <div
+            key={theElement.index()}
             className={
-                'absolute w-full border-x-2 border-solid border-slate-400 h-full transition-all ' +
+                'absolute w-full h-full transition-all bg-white ' +
                 (fastChange
                     ? 'duration-100 ease-linear'
                     : 'duration-1000 ease-in-out')
             }
             style={{
-                left: element.offset * 100 + '%',
-                ...(element.animate ? {} : { transition: 'none' }),
+                background: 'var(--color-plog-neutral)',
+                boxShadow: '0px 0px 4px #dddddd',
+                left: left * 100 + '%',
+                zIndex: zIndex,
             }}
         >
-            {element.element ? toElement(element.element) : null}
+            {toElement(theElement)}
         </div>
     );
 }
 
 export function BookPage() {
-    const { setDisplayed, displayed: current } = useContext(BookContext)!;
+    const {
+        setDisplayed,
+        displayed: current,
+        entries,
+    } = useContext(BookContext)!;
     const containerRef = useRef<HTMLDivElement>(null);
     const [newIndex, setNewIndex] = useState<BookPageIndex | null>(null);
     const [state, dispatch] = useReducer<State, [Action]>(
@@ -213,16 +187,16 @@ export function BookPage() {
         }),
     );
 
-    const main = state.main();
+    const { fastChange, selected, offset } = state.ui();
 
     useEffect(() => {
         if (newIndex != null) {
             setDisplayed(newIndex);
             setNewIndex(null);
-        } else if (!main.equals(current)) {
+        } else if (!selected.equals(current)) {
             dispatch({ type: 'display', display: current });
         }
-    }, [main, setDisplayed, current, newIndex]);
+    }, [selected, setDisplayed, current, newIndex]);
 
     const handlers = useSwipeable({
         onSwiping: (eventData) => {
@@ -238,7 +212,7 @@ export function BookPage() {
             dispatch({ type: 'swipeend', swipe: swipePercent });
         },
     });
-    const { a, b, c, fastChange } = state.ui();
+
     return (
         <div
             {...handlers}
@@ -248,9 +222,20 @@ export function BookPage() {
             }}
             className="relative w-full h-full overflow-hidden"
         >
-            {toContainer(a, fastChange)}
-            {toContainer(b, fastChange)}
-            {toContainer(c, fastChange)}
+            {toPageDiv(
+                BookPageIndex.homepage(entries),
+                offset,
+                selected,
+                fastChange,
+            )}
+            {entries.data.map((element) =>
+                toPageDiv(
+                    BookPageIndex.entry(element, entries),
+                    offset,
+                    selected,
+                    fastChange,
+                ),
+            )}
         </div>
     );
 }

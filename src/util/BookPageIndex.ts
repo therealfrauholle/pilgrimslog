@@ -43,6 +43,17 @@ export class BookPageIndex {
             : false;
     }
 
+    index(): number {
+        switch (this.page) {
+            case IndexType.Homepage:
+                return 0;
+            case IndexType.Entry:
+                return 1 + this.entries.data.indexOf(this.entry!);
+            case IndexType.NotFound:
+                throw new Error('Not found page has no index');
+        }
+    }
+
     isBefore(index: BookPageIndex): boolean {
         if (index.entries != this.entries) {
             throw new Error('Cannot conpare indexes with different entries');
