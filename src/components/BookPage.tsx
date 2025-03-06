@@ -272,7 +272,12 @@ export function BookPage() {
                     opacity: selected.navPrev() ? 1 : 0,
                     transition: 'opacity 1s',
                 }}
-                onClick={() => setDisplayed(selected.navPrev()!)}
+                onClick={() => {
+                    const previous = selected.navPrev();
+                    if (previous) {
+                        setDisplayed(previous);
+                    }
+                }}
                 role="button"
             >
                 <ChevronLeft />
@@ -305,7 +310,12 @@ export function BookPage() {
                     opacity: selected.navNext() ? 1 : 0,
                     transition: 'opacity 1s',
                 }}
-                onClick={() => setDisplayed(selected.navNext()!)}
+                onClick={() => {
+                    const next = selected.navNext();
+                    if (next) {
+                        setDisplayed(next);
+                    }
+                }}
                 role="button"
             >
                 <ChevronRight />
