@@ -261,13 +261,16 @@ export function BookPage() {
             <div
                 style={{
                     position: 'absolute',
+                    width: '50px',
+                    height: '50px',
+                    padding: '10px',
                     top: '50%',
                     left: '0%',
-                    transform: 'translateY(50%)',
+                    transform: 'translateY(-50%)',
                     background: 'var(--color-plog-neutral)',
                     zIndex: 2000,
                     border: '1px solid var(--color-plog-highlight)',
-                    borderRadius: '2px',
+                    borderRadius: '35px',
                     marginLeft: '5px',
                     opacity: selected.navPrev() ? 1 : 0,
                     transition: 'opacity 1s',
@@ -280,7 +283,7 @@ export function BookPage() {
                 }}
                 role="button"
             >
-                <ChevronLeft />
+                <ChevronLeft style={{ width: '100%', height: '100%' }} />
             </div>
             {toPageDiv(
                 BookPageIndex.homepage(entries),
@@ -299,13 +302,16 @@ export function BookPage() {
             <div
                 style={{
                     position: 'absolute',
+                    width: '50px',
+                    height: '50px',
+                    padding: '10px',
                     top: '50%',
                     right: '0%',
-                    transform: 'translateY(50%)',
+                    transform: 'translateY(-50%)',
                     background: 'var(--color-plog-neutral)',
                     zIndex: 2000,
                     border: '1px solid var(--color-plog-highlight)',
-                    borderRadius: '2px',
+                    borderRadius: '35px',
                     marginRight: '5px',
                     opacity: selected.navNext() ? 1 : 0,
                     transition: 'opacity 1s',
@@ -318,7 +324,7 @@ export function BookPage() {
                 }}
                 role="button"
             >
-                <ChevronRight />
+                <ChevronRight style={{ width: '100%', height: '100%' }} />
             </div>
         </div>
     );
