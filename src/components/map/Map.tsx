@@ -115,7 +115,7 @@ export default function ControlledMap({ expanded, expand }: MapProps) {
                 ref={setContainer}
                 style={{
                     position: 'absolute',
-                    height: 'calc(var(--size-map-large)  - var(--marker-size-large))',
+                    height: 'calc(var(--size-map-large) - var(--marker-size-large))',
                     visibility: 'hidden',
                     width: 'calc(100% - var(--marker-size))',
                 }}
@@ -185,10 +185,10 @@ export default function ControlledMap({ expanded, expand }: MapProps) {
                     <div
                         style={{
                             width: '200%',
-                            height: 'calc(var(--marker-size-large) * 2 + 100%)',
+                            height: 'calc(var(--marker-size-large) + 100%)',
                             marginTop: isHome
-                                ? 'calc((- var(--marker-size-large) - var(--marker-size)) / 2)'
-                                : 'calc(- var(marker-size-large))',
+                                ? 'calc(0px - var(--marker-size-large))'
+                                : 'calc(0px - var(--marker-size-large)/2)',
                             marginLeft: expanded
                                 ? '-50%'
                                 : 'calc((var(--fraction-tooltip) - 100%) / 2)',
