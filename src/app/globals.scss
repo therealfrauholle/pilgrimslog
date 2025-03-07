@@ -94,24 +94,6 @@
 }
 
 .drawer {
-    &.expanded:not(.home) {
-        .description {
-            height: var(--size-tooltip);
-            width: 100%;
-            bottom: -15px;
-        }
-
-        padding-bottom: var(--size-tooltip);
-    }
-
-    &.expanded.home {
-        padding-bottom: 0px;
-    }
-
-    &:not(.expanded) {
-        height: var(--size-map-small);
-    }
-
     position: relative;
     transition: all 1s ease-out;
 
@@ -139,6 +121,24 @@
         }
     }
 
+    &.expanded:not(.home) {
+        .description {
+            height: var(--size-tooltip);
+            width: 100%;
+            bottom: -15px;
+        }
+
+        padding-bottom: var(--size-tooltip);
+    }
+
+    &.expanded.home {
+        padding-bottom: 0px;
+    }
+
+    &:not(.expanded) {
+        height: var(--size-map-small);
+    }
+
     &.home .description {
         opacity: 0;
     }
@@ -164,7 +164,6 @@
     .map {
         width: 200%;
         height: calc(var(--marker-size-large) + 100%);
-        margin-top: 0px;
         margin-left: calc((var(--fraction-tooltip) - 100%) / 2);
         transition: all 1s linear;
 
@@ -179,7 +178,6 @@
             width: var(--marker-size);
 
             .icon {
-
                 pointer-events: auto;
                 width: 100%;
                 height: 100%;
@@ -193,10 +191,6 @@
             }
 
         }
-    }
-
-    &.home .map {
-        margin-top: 0px;
     }
 }
 
