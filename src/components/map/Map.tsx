@@ -111,25 +111,13 @@ export default function ControlledMap({ expanded, expand }: MapProps) {
 
     return (
         <>
+            <div ref={setContainer} className="mapreference"></div>
             <div
-                ref={setContainer}
-                style={{
-                    position: 'absolute',
-                    height: 'calc(var(--size-map-large) - var(--marker-size-large))',
-                    visibility: 'hidden',
-                    width: 'calc(100% - var(--marker-size))',
-                }}
-            ></div>
-            <div
-                style={{
-                    position: 'relative',
-                    height: expanded
-                        ? 'var(--size-map-large)'
-                        : 'var(--size-map-small)',
-                    paddingBottom:
-                        expanded && !isHome ? 'var(--size-tooltip)' : '0px',
-                    transition: 'all 1s ease-out',
-                }}
+                className={
+                    'drawer ' +
+                    (expanded ? 'expanded ' : '') +
+                    (isHome ? 'home ' : '')
+                }
                 onClick={() => {
                     if (!expanded) {
                         expand();
@@ -137,64 +125,17 @@ export default function ControlledMap({ expanded, expand }: MapProps) {
                 }}
             >
                 <div
-                    className="absolute left-0"
+                    className="description"
                     style={{
-                        height:
-                            expanded && !isHome
-                                ? 'var(--size-tooltip)'
-                                : 'var(--size-map-small)',
                         zIndex: 999,
-                        padding: '5px',
-                        width:
-                            expanded && !isHome
-                                ? '100%'
-                                : 'var(--fraction-tooltip)',
-                        bottom: expanded && !isHome ? '-15px' : 0,
-                        pointerEvents: 'none',
-                        transition: 'all 1s ease-out',
-                        opacity: isHome ? 0 : 0.8,
                     }}
                 >
                     <div className="h-full relative">
-                        <span
-                            style={{
-                                position: 'absolute',
-                                transform: 'translate(-50%, -50%)',
-                                left: '50%',
-                                top: '50%',
-                                fontSize: '25px',
-                                fontWeight: 'bold',
-                                whiteSpace: 'nowrap',
-                                transition: 'all 1s ease-out',
-                                textShadow: expanded
-                                    ? 'none'
-                                    : '1px 1px 4px var(--color-plog-neutral)',
-                            }}
-                        >
-                            {description}
-                        </span>
+                        <span className="innerdescription">{description}</span>
                     </div>
                 </div>
-                <div
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        overflow: 'hidden',
-                    }}
-                >
-                    <div
-                        style={{
-                            width: '200%',
-                            height: 'calc(var(--marker-size-large) + 100%)',
-                            marginTop: isHome
-                                ? 'calc(0px - var(--marker-size-large))'
-                                : 'calc(0px - var(--marker-size-large)/2)',
-                            marginLeft: expanded
-                                ? '-50%'
-                                : 'calc((var(--fraction-tooltip) - 100%) / 2)',
-                            transition: 'all 1s linear',
-                        }}
-                    >
+                <div className="mapframe">
+                    <div className="map">
                         <Map
                             center={[center.lat, center.lng]}
                             zoom={zoom}
@@ -209,26 +150,17 @@ export default function ControlledMap({ expanded, expand }: MapProps) {
                                 return (
                                     <Marker
                                         key={entry.km}
+                                        className={
+                                            'marker ' +
+                                            (displayed.getEntry() == entry
+                                                ? 'selected'
+                                                : '')
+                                        }
                                         style={{
-                                            transitionProperty:
-                                                'color, opacity, width, height',
-                                            transitionTimingFunction:
-                                                'ease-out',
-                                            transitionDuration: '1s',
-                                            transitionDelay: '0s',
-                                            color: 'var(--color-plog-normal)',
-                                            opacity: 0.5,
-                                            height: 'var(--marker-size)',
-                                            width: 'var(--marker-size)',
-                                            ...(displayed.getEntry() == entry
-                                                ? {
-                                                      color: 'var(--color-plog-highlight)',
-                                                      zIndex: 950,
-                                                      opacity: 0.8,
-                                                      height: 'var(--marker-size-large)',
-                                                      width: 'var(--marker-size-large)',
-                                                  }
-                                                : {}),
+                                            zIndex:
+                                                displayed.getEntry() == entry
+                                                    ? 950
+                                                    : 900,
                                         }}
                                         anchor={[
                                             entry.Where.lat,
@@ -243,12 +175,7 @@ export default function ControlledMap({ expanded, expand }: MapProps) {
                                             );
                                         }}
                                     >
-                                        <LocationOn
-                                            style={{
-                                                pointerEvents: 'auto',
-                                                width: '100%',
-                                                height: '100%',
-                                            }}
+                                        <LocationOn className="icon"
                                         />
                                     </Marker>
                                 );
