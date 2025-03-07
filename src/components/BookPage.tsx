@@ -259,21 +259,11 @@ export function BookPage() {
             className="relative w-full h-full overflow-hidden"
         >
             <div
+                className="nav-button"
                 style={{
-                    position: 'absolute',
-                    width: '50px',
-                    height: '50px',
-                    padding: '10px',
-                    top: '50%',
                     left: '0%',
-                    transform: 'translateY(-50%)',
-                    background: 'var(--color-plog-neutral)',
                     zIndex: 2000,
-                    border: '1px solid var(--color-plog-highlight)',
-                    borderRadius: '35px',
-                    marginLeft: '5px',
                     opacity: selected.navPrev() ? 1 : 0,
-                    transition: 'opacity 1s',
                 }}
                 onClick={() => {
                     const previous = selected.navPrev();
@@ -283,7 +273,7 @@ export function BookPage() {
                 }}
                 role="button"
             >
-                <ChevronLeft style={{ width: '100%', height: '100%' }} />
+                <ChevronLeft className="h-full w-full" />
             </div>
             {toPageDiv(
                 BookPageIndex.homepage(entries),
@@ -300,21 +290,11 @@ export function BookPage() {
                 ),
             )}
             <div
+                className="nav-button"
                 style={{
-                    position: 'absolute',
-                    width: '50px',
-                    height: '50px',
-                    padding: '10px',
-                    top: '50%',
                     right: '0%',
-                    transform: 'translateY(-50%)',
-                    background: 'var(--color-plog-neutral)',
                     zIndex: 2000,
-                    border: '1px solid var(--color-plog-highlight)',
-                    borderRadius: '35px',
-                    marginRight: '5px',
                     opacity: selected.navNext() ? 1 : 0,
-                    transition: 'opacity 1s',
                 }}
                 onClick={() => {
                     const next = selected.navNext();
@@ -324,7 +304,7 @@ export function BookPage() {
                 }}
                 role="button"
             >
-                <ChevronRight style={{ width: '100%', height: '100%' }} />
+                <ChevronRight className="h-full w-full" />
             </div>
         </div>
     );
