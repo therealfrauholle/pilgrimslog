@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { BookContext } from './../Main';
-import { LocationOn } from '@mui/icons-material';
 import { GeolibBounds } from 'geolib/es/types';
 import React from 'react';
 import { BookPageIndex } from '@/util/BookPageIndex';
@@ -8,6 +7,7 @@ import { Map, Marker, TileComponent } from 'pigeon-maps';
 import { getBounds } from 'geolib';
 import { CachedTile } from './CachedTile';
 import { ILogEntries } from '@/util/PageModel';
+import MorphMarker from '../MorphMarker';
 
 type Coordinates = {
     lat: number;
@@ -175,7 +175,9 @@ export default function ControlledMap({ expanded, expand }: MapProps) {
                                             );
                                         }}
                                     >
-                                        <LocationOn className="icon"
+                                        <MorphMarker
+                                            isDot={isHome}
+                                            className="icon"
                                         />
                                     </Marker>
                                 );
