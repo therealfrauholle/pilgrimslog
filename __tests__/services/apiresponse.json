@@ -1,0 +1,412 @@
+{
+    "data": [
+        {
+            "id": "id-0",
+            "documentId": "documentId-0",
+            "Location": "location 0",
+            "Content": "content 0",
+            "When": "2024-05-08",
+            "Where": {
+                "lat": 52.516422424615136,
+                "lng": 13.379256263171165
+            },
+            "createdAt": "2024-11-25T19:21:52.551Z",
+            "updatedAt": "2024-12-05T22:07:35.989Z",
+            "publishedAt": "2024-12-05T22:07:35.979Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-1",
+            "documentId": "documentId-1",
+            "Location": "location 1",
+            "Content": "content 1",
+            "When": "2024-05-09",
+            "Where": {
+                "lat": 52.391496,
+                "lng": 13.171897
+            },
+            "createdAt": "2024-11-25T19:31:23.915Z",
+            "updatedAt": "2024-11-25T21:34:14.851Z",
+            "publishedAt": "2024-11-25T21:34:14.877Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-2",
+            "documentId": "documentId-2",
+            "Location": "location 2",
+            "Content": "content 2",
+            "When": "2024-05-14",
+            "Where": {
+                "lat": 51.47121,
+                "lng": 12.460033
+            },
+            "createdAt": "2024-11-25T19:34:02.960Z",
+            "updatedAt": "2024-11-25T19:34:02.960Z",
+            "publishedAt": "2024-11-25T19:34:02.972Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-3",
+            "documentId": "documentId-3",
+            "Location": "location 3",
+            "Content": "content 3",
+            "When": "2024-05-21",
+            "Where": {
+                "lat": 50.95678,
+                "lng": 10.453813
+            },
+            "createdAt": "2024-11-26T21:20:30.779Z",
+            "updatedAt": "2024-11-26T21:20:30.779Z",
+            "publishedAt": "2024-11-26T21:20:30.790Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-4",
+            "documentId": "documentId-4",
+            "Location": "location 4",
+            "Content": "content 4",
+            "When": "2024-05-22",
+            "Where": {
+                "lat": 50.974969,
+                "lng": 10.319114
+            },
+            "createdAt": "2024-11-26T21:22:22.622Z",
+            "updatedAt": "2024-11-26T21:24:21.108Z",
+            "publishedAt": "2024-11-26T21:24:21.119Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-5",
+            "documentId": "documentId-5",
+            "Location": "location 5",
+            "Content": "content 5",
+            "When": "2024-05-25",
+            "Where": {
+                "lat": 51.116657,
+                "lng": 9.667284
+            },
+            "createdAt": "2024-11-26T21:31:00.664Z",
+            "updatedAt": "2024-12-16T13:06:26.304Z",
+            "publishedAt": "2024-12-16T13:06:26.321Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-6",
+            "documentId": "documentId-6",
+            "Location": "location 6",
+            "Content": "content 6",
+            "When": "2024-05-27",
+            "Where": {
+                "lat": 50.878616,
+                "lng": 9.121822
+            },
+            "createdAt": "2024-11-26T21:37:04.911Z",
+            "updatedAt": "2024-12-03T21:54:02.606Z",
+            "publishedAt": "2024-12-03T21:54:02.596Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-7",
+            "documentId": "documentId-7",
+            "Location": "location 7",
+            "Content": "content 7",
+            "When": "2024-05-28",
+            "Where": {
+                "lat": 50.807155,
+                "lng": 8.773379
+            },
+            "createdAt": "2024-11-27T21:44:20.539Z",
+            "updatedAt": "2024-12-05T22:17:54.564Z",
+            "publishedAt": "2024-12-05T22:17:54.553Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-8",
+            "documentId": "documentId-8",
+            "Location": "location 8",
+            "Content": "content 8",
+            "When": "2024-05-30",
+            "Where": {
+                "lat": 50.817641,
+                "lng": 8.611271
+            },
+            "createdAt": "2024-11-27T21:45:58.597Z",
+            "updatedAt": "2024-11-27T21:45:58.597Z",
+            "publishedAt": "2024-11-27T21:45:58.594Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-9",
+            "documentId": "documentId-9",
+            "Location": "location 9",
+            "Content": "content 9",
+            "When": "2024-06-07",
+            "Where": {
+                "lat": 50.730101,
+                "lng": 5.993566
+            },
+            "createdAt": "2024-11-27T21:47:33.671Z",
+            "updatedAt": "2024-11-27T21:47:33.671Z",
+            "publishedAt": "2024-11-27T21:47:33.668Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-10",
+            "documentId": "documentId-10",
+            "Location": "location 10",
+            "Content": "content 10",
+            "When": "2024-06-16",
+            "Where": {
+                "lat": 49.7083657,
+                "lng": 4.2155189
+            },
+            "createdAt": "2024-11-27T21:53:26.939Z",
+            "updatedAt": "2024-11-27T21:53:26.939Z",
+            "publishedAt": "2024-11-27T21:53:26.936Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-11",
+            "documentId": "documentId-11",
+            "Location": "location 11",
+            "Content": "content 11",
+            "When": "2024-06-18",
+            "Where": {
+                "lat": 49.3413065,
+                "lng": 4.0164917
+            },
+            "createdAt": "2024-11-27T21:55:18.158Z",
+            "updatedAt": "2024-11-28T21:13:42.493Z",
+            "publishedAt": "2024-11-28T21:13:42.479Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-12",
+            "documentId": "documentId-12",
+            "Location": "location 12",
+            "Content": "content 12",
+            "When": "2024-06-20",
+            "Where": {
+                "lat": 49.2175575,
+                "lng": 4.0345526
+            },
+            "createdAt": "2024-11-27T21:57:32.938Z",
+            "updatedAt": "2024-11-27T21:58:13.569Z",
+            "publishedAt": "2024-11-27T21:58:13.562Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-13",
+            "documentId": "documentId-13",
+            "Location": "location 13",
+            "Content": "content 13",
+            "When": "2024-06-24",
+            "Where": {
+                "lat": 48.228323,
+                "lng": 3.9767303
+            },
+            "createdAt": "2024-11-28T21:03:01.491Z",
+            "updatedAt": "2024-11-28T21:04:47.480Z",
+            "publishedAt": "2024-11-28T21:04:47.473Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-14",
+            "documentId": "documentId-14",
+            "Location": "location 14",
+            "Content": "content 14",
+            "When": "2024-06-26",
+            "Where": {
+                "lat": 47.8044358,
+                "lng": 3.7720314
+            },
+            "createdAt": "2024-11-28T21:06:45.782Z",
+            "updatedAt": "2024-11-28T21:14:10.694Z",
+            "publishedAt": "2024-11-28T21:14:10.686Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-15",
+            "documentId": "documentId-15",
+            "Location": "location 15",
+            "Content": "content 15",
+            "When": "2024-06-27",
+            "Where": {
+                "lat": 47.68301682693631,
+                "lng": 3.6908272155542092
+            },
+            "createdAt": "2024-11-28T21:08:43.705Z",
+            "updatedAt": "2024-11-28T21:08:43.705Z",
+            "publishedAt": "2024-11-28T21:08:43.702Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-16",
+            "documentId": "documentId-16",
+            "Location": "location 16",
+            "Content": "content 16",
+            "When": "2024-07-03",
+            "Where": {
+                "lat": 46.6253961,
+                "lng": 3.8299068
+            },
+            "createdAt": "2024-11-28T21:19:31.808Z",
+            "updatedAt": "2024-11-28T21:24:33.877Z",
+            "publishedAt": "2024-11-28T21:24:33.868Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-17",
+            "documentId": "documentId-17",
+            "Location": "location 17",
+            "Content": "content 17",
+            "When": "2024-07-06",
+            "Where": {
+                "lat": 45.9784329,
+                "lng": 3.6972045
+            },
+            "createdAt": "2024-11-28T21:26:53.923Z",
+            "updatedAt": "2024-11-28T21:26:53.923Z",
+            "publishedAt": "2024-11-28T21:26:53.918Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-18",
+            "documentId": "documentId-18",
+            "Location": "location 18",
+            "Content": "content 18",
+            "When": "2024-07-11",
+            "Where": {
+                "lat": 45.04525678936654,
+                "lng": 3.885989449217911
+            },
+            "createdAt": "2024-12-03T21:18:22.919Z",
+            "updatedAt": "2024-12-05T22:08:49.679Z",
+            "publishedAt": "2024-12-05T22:08:49.671Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-19",
+            "documentId": "documentId-19",
+            "Location": "location 19",
+            "Content": "content 19",
+            "When": "2024-07-13",
+            "Where": {
+                "lat": 44.99000733391672,
+                "lng": 3.678609502153583
+            },
+            "createdAt": "2024-12-03T21:21:30.163Z",
+            "updatedAt": "2024-12-03T21:21:30.163Z",
+            "publishedAt": "2024-12-03T21:21:30.158Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-20",
+            "documentId": "documentId-20",
+            "Location": "location 20",
+            "Content": "content 20",
+            "When": "2024-07-14",
+            "Where": {
+                "lat": 44.90974691422344,
+                "lng": 3.5044194951490324
+            },
+            "createdAt": "2024-12-03T21:40:47.103Z",
+            "updatedAt": "2024-12-05T22:05:14.542Z",
+            "publishedAt": "2024-12-05T22:05:14.534Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-21",
+            "documentId": "documentId-21",
+            "Location": "location 21",
+            "Content": "content 21",
+            "When": "2024-07-17",
+            "Where": {
+                "lat": 44.558733676813596,
+                "lng": 2.873542948069261
+            },
+            "createdAt": "2024-12-03T22:06:24.947Z",
+            "updatedAt": "2024-12-03T22:06:24.947Z",
+            "publishedAt": "2024-12-03T22:06:24.940Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-22",
+            "documentId": "documentId-22",
+            "Location": "location 22",
+            "Content": "content 22",
+            "When": "2024-07-20",
+            "Where": {
+                "lat": 44.60472923295973,
+                "lng": 2.583484508789864
+            },
+            "createdAt": "2024-12-03T22:15:05.821Z",
+            "updatedAt": "2024-12-03T22:15:05.821Z",
+            "publishedAt": "2024-12-03T22:15:05.817Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-23",
+            "documentId": "documentId-23",
+            "Location": "location 23",
+            "Content": "content 23",
+            "When": "2024-07-22",
+            "Where": {
+                "lat": 44.59926321814235,
+                "lng": 2.397529082804564
+            },
+            "createdAt": "2024-12-03T22:18:16.908Z",
+            "updatedAt": "2024-12-06T11:58:12.005Z",
+            "publishedAt": "2024-12-06T11:58:11.996Z",
+            "locale": "de-DE",
+            "localizations": []
+        },
+        {
+            "id": "id-24",
+            "documentId": "documentId-24",
+            "Location": "location 24",
+            "Content": "content 24",
+            "When": "2024-07-22",
+            "Where": {
+                "lat": 44.55887753518108,
+                "lng": 2.3113604129595093
+            },
+            "createdAt": "2024-12-03T22:27:59.101Z",
+            "updatedAt": "2024-12-03T22:27:59.101Z",
+            "publishedAt": "2024-12-03T22:27:59.096Z",
+            "locale": "de-DE",
+            "localizations": []
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "page": 1,
+            "pageSize": 25,
+            "pageCount": 3,
+            "total": 73
+        }
+    }
+}

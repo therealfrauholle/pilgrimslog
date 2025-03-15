@@ -1,30 +1,27 @@
-import { ILogEntry } from "../services/FetchService";
-import HeaderBookmark from "./HeaderBookmark";
-import BottomBar, { LinkLocation } from "./BottomBar";
-import { useNavigate } from "react-router-dom";
+import { useContext } from 'react';
+import { BookPage } from './BookPage';
+import PullOutDrawer from './PullOutDrawer';
+import { BookContext } from './Main';
 
-export default function Book({ pageContent, previous, next, currentlySelectedDay }: { pageContent: any, previous: LinkLocation | undefined, next: LinkLocation | undefined, currentlySelectedDay: ILogEntry | undefined }) {
+export default function Book() {
+    const { displayed } = useContext(BookContext)!;
 
-    const navigate = useNavigate();
+    if (displayed.is404()) {
+        return (
+            <div className="flex-grow flex flex-col items-center justify-center">
+                <h1>404</h1>
+            </div>
+        );
+    }
 
     return (
         <>
-            <div className="relative flex flex-col h-full w-full">
-                <HeaderBookmark
-                    isHome={previous !== null && currentlySelectedDay === null}
-                    onClick={() => navigate('/Content')}
-                />
-                <div className="flex-grow min-h-0">
-                    {pageContent}
-                </div>
-                <div className="flex-none">
-                    <BottomBar
-                        previous={previous}
-                        next={next}
-                        currentlySelectedDay={currentlySelectedDay}
-                    />
-                </div>
+            <div className="flex-grow min-h-0">
+                <BookPage />
+            </div>
+            <div className="flex-none">
+                <PullOutDrawer />
             </div>
         </>
-    )
+    );
 }

@@ -1,0 +1,82 @@
+.container {
+    position: relative;
+    height: 100%;
+}
+
+.rail {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 3px;
+    opacity: 1;
+    user-select: none;
+    touch-action: none;
+    transition: all 0.7s ease-in-out, left 0.7s linear, width 0.7s linear;
+}
+
+.sticky {
+    position: absolute;
+    top: 50%;
+    height: 150%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s linear;
+    z-index: 99;
+    visibility: visible;
+}
+
+
+.thumb {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 3px;
+    user-select: none;
+    touch-action: none;
+    top: 50%;
+    transition: all 0.7s ease-in-out, left 0.3s linear;
+}
+
+
+.mark {
+    border-radius: 1px;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    transition: all 0.7s ease-in-out;
+}
+
+
+.scrollleft {
+    left: 0;
+}
+
+.scrollright {
+    left: 100%;
+    transform: translateX(180deg);
+}
+
+.scroll {
+    height: 100%;
+    position: absolute;
+    transform: translateX(-50px);
+}
+
+.debug .container {
+    background: blue !important;
+    opacity: 0.2 !important;
+}
+
+.debug .sticky {
+    background: green !important;
+    opacity: 0.2 !important;
+}
+
+.debug .scroll {
+    background: red !important;
+    opacity: 0.2 !important;
+}
+
+.zoomedref {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    height: 100%;
+}

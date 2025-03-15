@@ -1,13 +1,12 @@
-import { ILogEntry } from '../services/FetchService';
+import React from 'react';
 import StrapiMarkdownRenderer from './StrapiMarkdownRenderer';
+import { ILogEntry } from '@/util/PageModel';
 
-export default function BlogEntry({ data }: { data: ILogEntry }) {
-    console.log('Rendering entry: ', data);
-
-    if (!data) {
-        return <div>No blog posts available</div>;
-    }
-
+const BlogEntry = React.memo(function BlogEntry({
+    data: day,
+}: {
+    data: ILogEntry;
+}) {
     return (
         <div
             style={{
@@ -16,17 +15,20 @@ export default function BlogEntry({ data }: { data: ILogEntry }) {
             className="flex flex-col p-6 md:p-8 h-full"
         >
             <h1
+                className="text-extra"
                 style={{
                     fontSize: '2rem',
                     fontWeight: 'bold',
                     marginBottom: '2rem',
                 }}
             >
-                {data.Location || 'Untilted'}
+                {day.Location || 'Untilted'}
             </h1>
             <div className="grow overflow-y-auto">
-                <StrapiMarkdownRenderer data={data.Content} />
+                <StrapiMarkdownRenderer data={day.Content} />
             </div>
         </div>
     );
-}
+});
+
+export default BlogEntry;
