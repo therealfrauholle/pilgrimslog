@@ -94,118 +94,155 @@
     width: calc(100% - var(--marker-size));
 }
 
-.mapcontainer {
+.drawer {
     position: relative;
+    overflow: hidden;
+    padding-top: 5px;
+    box-shadow: none;
+    border-top: none;
     transition: all 1s ease-out;
 
-    .description {
+    .opener {
         position: absolute;
-        left: 0;
-        height: var(--size-map-small);
-        padding: '5px';
-        width: var(--fraction-tooltip);
-        bottom: 0;
-        pointer-events: none;
+        transform: translate(-50%, 0%);
+        top: -5px;
+        left: 50%;
+        background: var(--color-plog-neutral);
+        border-radius: 3px;
+        padding-top: 5px;
+        width: 30px;
+        height: 30px;
         transition: all 1s ease-out;
-        opacity: 0.8;
+        opacity: 1;
 
-        .innerdescription {
-            position: absolute;
-            transform: translate(-50%, -50%);
-            left: 50%;
-            top: 50%;
-            font-size: 25px;
-            font-weight: bold;
-            white-space: nowrap;
-            transition: all 1s ease-out;
-            text-shadow: 1px 1px 4px var(--color-plog-neutral);
-        }
-    }
-
-    &.expanded:not(.home) {
-        .description {
-            height: var(--size-tooltip);
-            width: 100%;
-            bottom: -15px;
+        &.home {
+            opacity: 0;
         }
 
-        padding-bottom: var(--size-tooltip);
-    }
-
-    &.expanded.home {
-        padding-bottom: 0px;
-    }
-
-    &:not(.expanded) {
-        height: var(--size-map-small);
-    }
-
-    &.home .description {
-        opacity: 0;
+        &.open {
+            width: 40px;
+            height: 40px;
+        }
     }
 
     &.expanded {
-        height: var(--size-map-large);
+        box-shadow: 0px -10px 10px 0px var(--color-plog-accent);
+        border-top: 1px solid var(--color-plog-accent);
+    }
+
+    .mapcontainer {
+        position: relative;
+        transition: all 1s ease-out;
+
+        .description {
+            position: absolute;
+            left: 0;
+            height: var(--size-map-small);
+            padding: '5px';
+            width: var(--fraction-tooltip);
+            bottom: 0;
+            pointer-events: none;
+            transition: all 1s ease-out;
+            opacity: 0.8;
+
+            .innerdescription {
+                position: absolute;
+                transform: translate(-50%, -50%);
+                left: 50%;
+                top: 50%;
+                font-size: 25px;
+                font-weight: bold;
+                white-space: nowrap;
+                transition: all 1s ease-out;
+                text-shadow: 1px 1px 4px var(--color-plog-neutral);
+            }
+        }
+
+        &.expanded:not(.home) {
+            .description {
+                height: var(--size-tooltip);
+                width: 100%;
+                bottom: -15px;
+            }
+
+            padding-bottom: var(--size-tooltip);
+        }
+
+        &.expanded.home {
+            padding-bottom: 0px;
+        }
+
+        &:not(.expanded) {
+            height: var(--size-map-small);
+        }
+
+        &.home .description {
+            opacity: 0;
+        }
+
+        &.expanded {
+            height: var(--size-map-large);
+
+            .map {
+                margin-left: -50%;
+            }
+
+            .description .innerdescription {
+                text-shadow: none;
+            }
+        }
+
+        .mapframe {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
 
         .map {
-            margin-left: -50%;
-        }
+            width: 200%;
+            height: calc(var(--marker-size-large) + 100%);
+            margin-left: calc((var(--fraction-tooltip) - 100%) / 2);
+            transition: all 1s linear;
 
-        .description .innerdescription {
-            text-shadow: none;
-        }
-    }
+            .marker {
+                transition-property:
+                    color, opacity, width, height;
+                transition-timing-function: ease-out;
+                transition-duration: 1s;
+                color: var(--color-plog-normal);
+                opacity: 0.5;
+                height: var(--marker-size);
+                width: var(--marker-size);
 
-    .mapframe {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
+                .icon {
+                    pointer-events: auto;
+                    width: 100%;
+                    height: 100%;
 
-    .map {
-        width: 200%;
-        height: calc(var(--marker-size-large) + 100%);
-        margin-left: calc((var(--fraction-tooltip) - 100%) / 2);
-        transition: all 1s linear;
+                    path {
+                        transition: d 1s;
+                    }
+                }
 
-        .marker {
-            transition-property:
-                color, opacity, width, height;
-            transition-timing-function: ease-out;
-            transition-duration: 1s;
-            color: var(--color-plog-normal);
-            opacity: 0.5;
-            height: var(--marker-size);
-            width: var(--marker-size);
 
-            .icon {
-                pointer-events: auto;
-                width: 100%;
-                height: 100%;
-
-                path {
-                    transition: d 1s;
+                &.selected {
+                    color: var(--color-plog-highlight);
+                    opacity: 0.8;
+                    height: var(--marker-size-large) !important;
+                    width: var(--marker-size-large) !important;
                 }
             }
+        }
 
-
-            &.selected {
-                color: var(--color-plog-highlight);
-                opacity: 0.8;
-                height: var(--marker-size-large) !important;
-                width: var(--marker-size-large) !important;
+        &.home .map {
+            .marker {
+                opacity: 1;
             }
-        }
-    }
 
-    &.home .map {
-        .marker {
-            opacity: 1;
-        }
-
-        .icon {
-            transform: translateY(50%);
-            opacity: 1;
+            .icon {
+                transform: translateY(50%);
+                opacity: 1;
+            }
         }
     }
 }
