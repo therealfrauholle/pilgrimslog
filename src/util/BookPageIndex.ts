@@ -147,4 +147,19 @@ export class BookPageIndex {
                 return '[404]';
         }
     }
+
+    htmlTitle(): string {
+        switch (this.page) {
+            case IndexType.Homepage:
+                return 'Logbuch eines Pilgers';
+            case IndexType.Entry:
+                return (
+                    'Tag ' +
+                    (this.entry!.getDaysSinceStart() + 1) +
+                    ' | Logbuch eines Pilgers'
+                );
+            case IndexType.NotFound:
+                return 'Not Found';
+        }
+    }
 }
