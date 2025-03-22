@@ -63,6 +63,7 @@ class LogEntries implements ILogEntries {
                 next = entry;
             });
     }
+
     getClosestEntryByDay(day: number): ILogEntry {
         const nextDay = this.data.find(
             (entry) => entry.getDaysSinceStart() > day,

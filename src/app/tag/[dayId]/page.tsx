@@ -1,5 +1,6 @@
 import MainLayout from '@/components/Main';
 import { fetchAndParse, fetchFromStrapi } from '@/util/FetchService';
+import { Metadata } from 'next';
 
 export async function generateStaticParams() {
     const data = await fetchAndParse();
@@ -11,6 +12,21 @@ export async function generateStaticParams() {
 
 export const dynamic = 'force-static';
 export const dynamicParams = false;
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ dayId: string }>;
+}): Promise<Metadata> {
+    const { dayId } = await params;
+
+    const page = await fetchAndParse();
+    const entry = page!.getDayById(dayId)!;
+
+    return {
+        title: 'Tag ' + (entry.getDaysSinceStart() + 1),
+    };
+}
 
 export default async function Page({
     params,
