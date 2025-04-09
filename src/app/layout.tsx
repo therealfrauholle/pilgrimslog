@@ -9,6 +9,10 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
     description: 'Logbuch eines Pilgers',
+    title: {
+        template: '%s | Logbuch eines Pilgers',
+        default: 'Logbuch eines Pilgers',
+    },
 };
 
 export default function MyApp({ children }: { children: React.ReactNode }) {

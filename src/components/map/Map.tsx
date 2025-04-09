@@ -114,7 +114,7 @@ export default function ControlledMap({ expanded, expand }: MapProps) {
             <div ref={setContainer} className="mapreference"></div>
             <div
                 className={
-                    'drawer ' +
+                    'mapcontainer ' +
                     (expanded ? 'expanded ' : '') +
                     (isHome ? 'home ' : '')
                 }

@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { BookPageIndex } from '@/util/BookPageIndex';
 import Book from './Book';
 import { StrapiEntries } from '@/util/FetchService';
@@ -41,6 +41,10 @@ export default function MainLayout({
               ? BookPageIndex.entry(entries.getDayById(id)!, entries)
               : BookPageIndex.homepage(entries),
     );
+
+    useEffect(() => {
+        document.title = current.htmlTitle();
+    }, [current]);
 
     function update(page: BookPageIndex) {
         setCurrent((oldPage) => {

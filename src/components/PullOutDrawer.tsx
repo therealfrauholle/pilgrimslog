@@ -27,34 +27,17 @@ export default function PullOutDrawer() {
 
     return (
         <div
+            className={'drawer ' + (isHome ? 'open' : '')}
             style={{
-                position: 'relative',
-                overflow: 'hidden',
-                paddingTop: '5px',
-                boxShadow: isHome
-                    ? 'none'
-                    : '0px -10px 10px 0px var(--color-plog-accent)',
-                borderTop: isHome
-                    ? 'none'
-                    : '1px solid var(--color-plog-accent)',
-                transition: 'all 1s ease-out',
                 zIndex: 1100,
             }}
         >
             <div
-                className="absolute"
+                className={
+                    'opener ' + (isHome ? 'home ' : '') + (isOpen ? 'open' : '')
+                }
                 style={{
                     zIndex: 1500,
-                    transform: 'translate(-50%, 0%)',
-                    top: '-5px',
-                    left: '50%',
-                    background: 'var(--color-plog-neutral)',
-                    borderRadius: '3px',
-                    paddingTop: '5px',
-                    width: isOpen ? '40px' : '30px',
-                    height: isOpen ? '40px' : '30px',
-                    transition: 'all 1s ease-out',
-                    opacity: isHome ? 0 : 1,
                 }}
                 onClick={() => setExtended(!extended)}
             >

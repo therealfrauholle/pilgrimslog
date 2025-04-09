@@ -29,7 +29,7 @@ export async function fetchFromStrapi(): Promise<StrapiEntries> {
     const apiUrl =
         'https://api.todaycounts.de/api/log-entries?populate=*&sort=When:asc&pagination[pageSize]=10000';
 
-    const result = await fetch(apiUrl);
+    const result = await fetch(apiUrl, { next: { revalidate: 60 } });
     return await result.json();
 }
 
