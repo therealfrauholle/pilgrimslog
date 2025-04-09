@@ -7,8 +7,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "format": "npx prettier --ignore-path \".gitignore\" --write \"**/*.{js,jsx,ts,tsx,json}\"",
-        "formatcheck": "npx prettier --ignore-path \".gitignore\" -c \"**/*.{js,jsx,ts,tsx,json}\"",
+        "format": "npx prettier --ignore-path \".prettierignore\" --write \"**/*.{js,jsx,ts,tsx,json}\"",
+        "formatcheck": "npx prettier --ignore-path \".prettierignore\" -c \"**/*.{js,jsx,ts,tsx,json}\"",
         "test": "jest"
     },
     "dependencies": {
