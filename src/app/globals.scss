@@ -5,7 +5,7 @@
 :root {
     --size-map-small: 100px;
     --size-tooltip: 50px;
-    --size-map-large: 350px;
+    --size-map-large: 500px;
     --fraction-tooltip: 80%;
     --marker-size: 32px;
     --marker-size-large: 48px;
@@ -97,8 +97,9 @@
 .drawer {
     position: relative;
     overflow: hidden;
-    padding-top: 5px;
-    box-shadow: none;
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
     border-top: none;
     transition: all 1s ease-out;
 
@@ -196,6 +197,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+            border-radius: 8px;
         }
 
         .map {
