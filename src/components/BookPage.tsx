@@ -256,7 +256,7 @@ export function BookPage() {
                 handlers.ref(r);
                 containerRef.current = r;
             }}
-            className="relative w-full h-full overflow-hidden"
+            className="absolute w-full h-full overflow-hidden"
         >
             <div
                 className="nav-button"
