@@ -4,7 +4,7 @@ import { BookPageIndex } from '@/util/BookPageIndex';
 import { SwipeEventData, useSwipeable } from 'react-swipeable';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { BookContext } from './Main';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
 type Action = {
     type: 'display' | 'swipe' | 'swipeend';
@@ -273,7 +273,7 @@ export function BookPage() {
                 }}
                 role="button"
             >
-                <ChevronLeft className="h-full w-full" />
+                <ArrowBack className="h-full w-full" />
             </div>
             {toPageDiv(
                 BookPageIndex.homepage(entries),
@@ -304,7 +304,7 @@ export function BookPage() {
                 }}
                 role="button"
             >
-                <ChevronRight className="h-full w-full" />
+                <ArrowForward className="h-full w-full" />
             </div>
         </div>
     );
