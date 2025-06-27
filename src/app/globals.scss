@@ -6,6 +6,7 @@
     --size-map-small: 100px;
     --size-tooltip: 50px;
     --size-map-large: 500px;
+    --size-map-home:350px;
     --fraction-tooltip: 80%;
     --marker-size: 32px;
     --marker-size-large: 48px;
@@ -89,7 +90,7 @@
 
 .mapreference {
     position: absolute;
-    height: calc(var(--size-map-large) - var(--marker-size-large));
+    height: calc(var(--size-map-home) - var(--marker-size-large));
     visibility: hidden;
     width: calc(100% - var(--marker-size));
 }
@@ -132,6 +133,9 @@
         border-top: 1px solid var(--color-plog-accent);
     }
 
+    &.home {
+        box-shadow: none;
+    }
     .mapcontainer {
         position: relative;
         transition: all 1s ease-out;
@@ -171,6 +175,7 @@
         }
 
         &.expanded.home {
+            height: var(--size-map-home);
             padding-bottom: 0px;
         }
 
@@ -243,7 +248,9 @@
             }
 
             .icon {
-                transform: translateY(50%);
+                transform: translateY(150%) translateX(50%);
+                height: 50%;
+                width: 50%;
                 opacity: 1;
             }
         }
