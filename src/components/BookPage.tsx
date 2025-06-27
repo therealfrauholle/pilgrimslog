@@ -256,9 +256,10 @@ export function BookPage() {
                 handlers.ref(r);
                 containerRef.current = r;
             }}
-            className="absolute w-full h-full overflow-hidden"
+            className="static w-full h-full overflow-hidden"
         >
-            <div
+            <div className='absolute top-0 w-full h-full'>
+                <div
                 className="nav-button"
                 style={{
                     left: '0%',
@@ -273,22 +274,8 @@ export function BookPage() {
                 }}
                 role="button"
             >
-                <ArrowBack className="h-full w-full" />
+             <ArrowBack className="h-full w-full" />
             </div>
-            {toPageDiv(
-                BookPageIndex.homepage(entries),
-                offset,
-                selected,
-                fastChange,
-            )}
-            {entries.data.map((element) =>
-                toPageDiv(
-                    BookPageIndex.entry(element, entries),
-                    offset,
-                    selected,
-                    fastChange,
-                ),
-            )}
             <div
                 className="nav-button"
                 style={{
@@ -306,6 +293,25 @@ export function BookPage() {
             >
                 <ArrowForward className="h-full w-full" />
             </div>
+            </div>
+            <div className='relative h-full w-full'>
+                {toPageDiv(
+                BookPageIndex.homepage(entries),
+                offset,
+                selected,
+                fastChange,
+            )}
+            {entries.data.map((element) =>
+                toPageDiv(
+                    BookPageIndex.entry(element, entries),
+                    offset,
+                    selected,
+                    fastChange,
+                ),
+            )}
+            </div>
+            
+            
         </div>
     );
 }
