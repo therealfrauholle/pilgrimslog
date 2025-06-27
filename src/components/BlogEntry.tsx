@@ -14,7 +14,9 @@ const BlogEntry = React.memo(function BlogEntry({
             }}
             className="flex flex-col p-6 md:p-8 h-full"
         >
-            <h1 className="tracking-tighter text-2xl md:text-4xl font-extrabold mb-2 text-extra pb-6">
+            <h1
+                className="tracking-tighter text-2xl md:text-4xl font-extrabold mb-2 text-extra pb-6"
+            >
                 {day.Location || 'Untilted'}
             </h1>
             <div className="grow overflow-y-auto">
