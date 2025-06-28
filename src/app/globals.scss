@@ -6,7 +6,7 @@
     --size-map-small: 100px;
     --size-tooltip: 50px;
     --size-map-large: 500px;
-    --size-map-home:350px;
+    --size-map-home:300px;
     --fraction-tooltip: 80%;
     --marker-size: 32px;
     --marker-size-large: 48px;
@@ -177,7 +177,7 @@
         }
 
         &.expanded.home {
-            height: var(--size-map-home);
+            height: calc(100vh - var(--min-home-height));
             padding-bottom: 0px;
         }
 
