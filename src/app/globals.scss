@@ -6,10 +6,12 @@
     --size-map-small: 100px;
     --size-tooltip: 50px;
     --size-map-large: 500px;
-    --size-map-home:350px;
+    --size-map-home:300px;
     --fraction-tooltip: 80%;
     --marker-size: 32px;
     --marker-size-large: 48px;
+    --min-content-height: 250px;
+    --min-home-height: 450px;
 
     --color-plog-neutral: #FEF4EC;
     --color-plog-neutral-8: #fef4eca0;
@@ -175,7 +177,7 @@
         }
 
         &.expanded.home {
-            height: var(--size-map-home);
+            height: calc(100vh - var(--min-home-height));
             padding-bottom: 0px;
         }
 
@@ -189,6 +191,7 @@
 
         &.expanded {
             height: var(--size-map-large);
+            max-height: calc(100vh - var(--min-content-height));
 
             .map {
                 margin-left: -50%;
