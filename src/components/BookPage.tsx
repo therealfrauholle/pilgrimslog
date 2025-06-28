@@ -274,7 +274,7 @@ export function BookPage() {
                 }}
                 role="button"
             >
-             <ArrowBack className="h-full w-full" />
+             <ArrowBack className="h-full w-full" sx={{fill:"#303030", stroke:"#FEF4EC", strokeWidth:0.5}} />
             </div>
             <div
                 className="nav-button"
@@ -291,7 +291,7 @@ export function BookPage() {
                 }}
                 role="button"
             >
-                <ArrowForward className="h-full w-full" />
+                <ArrowForward className="h-full w-full" sx={{fill:"#303030", stroke:"#FEF4EC", strokeWidth:0.5}}/>
             </div>
             </div>
             <div className='relative h-full w-full'>
