@@ -294,24 +294,22 @@ export function BookPage() {
                 <ArrowForward className="h-full w-full" sx={{fill:"#303030", stroke:"#FEF4EC", strokeWidth:0.5}}/>
             </div>
             </div>
-            <div className='relative h-full w-full'>
+            <div className="relative h-full w-full">
                 {toPageDiv(
-                BookPageIndex.homepage(entries),
-                offset,
-                selected,
-                fastChange,
-            )}
-            {entries.data.map((element) =>
-                toPageDiv(
-                    BookPageIndex.entry(element, entries),
+                    BookPageIndex.homepage(entries),
                     offset,
                     selected,
                     fastChange,
-                ),
-            )}
+                )}
+                {entries.data.map((element) =>
+                    toPageDiv(
+                        BookPageIndex.entry(element, entries),
+                        offset,
+                        selected,
+                        fastChange,
+                    ),
+                )}
             </div>
-            
-            
         </div>
     );
 }

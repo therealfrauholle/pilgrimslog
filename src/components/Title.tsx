@@ -10,8 +10,8 @@ export default function Title() {
                 <h2 className="text-2xl md:text-4xl sm:text-xl pl-4">eines Pilgers</h2>
             </div>
             <div className="flex prose prose-blog overflow-y-auto px-4 md:px-6 pb-4 text-sm text-left tracking-wide md:text-xl leading-6 md:leading-8">
-                Wir sind alle Pilger im Leben: Einen Tag kommen wir, den
-                anderen gehen wir. Nur auf der Durchreise.
+                Wir sind alle Pilger im Leben: Einen Tag kommen wir, den anderen
+                gehen wir. Nur auf der Durchreise.
                 <br />
                 Dieses Logbuch eines Pilgers sucht festzuhalten, was nicht
                 greifbar scheint. Alles andere mag zwischen den Seiten
