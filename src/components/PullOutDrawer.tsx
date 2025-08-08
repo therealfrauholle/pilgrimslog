@@ -27,7 +27,9 @@ export default function PullOutDrawer() {
 
     return (
         <div
-            className={'drawer ' + (isOpen ? 'open' : '') + (isHome ? ' home' : '')}
+            className={
+                'drawer ' + (isOpen ? 'open' : '') + (isHome ? ' home' : '')
+            }
             style={{
                 zIndex: 1100,
             }}
