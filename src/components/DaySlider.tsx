@@ -28,19 +28,19 @@ export default function DaySlider({ activeValue }: DaySliderProps) {
     let gap = gapToFirst;
 
     const marks = entries.data.map((entry) => {
-        let estimatedPositionOfCurrentMark =
+        const estimatedPositionOfCurrentMark =
             (entry.getDaysSinceStart() / total) * OFFSET + gap;
         let positionOfCurrentMark = 0;
 
         if (positionOfPreviousMark >= 0) {
-            let distance =
+            const distance =
                 estimatedPositionOfCurrentMark - positionOfPreviousMark;
             if (distance == 0) {
                 positionOfCurrentMark =
                     estimatedPositionOfCurrentMark + jitterWhenEqual;
                 gap += jitterWhenEqual;
             } else if (distance > gapToFirst) {
-                var distanceReducer = distance - gapToFirst;
+                const distanceReducer = distance - gapToFirst;
                 positionOfCurrentMark =
                     estimatedPositionOfCurrentMark - distanceReducer;
                 gap -= distanceReducer;
