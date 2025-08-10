@@ -6,7 +6,10 @@ type NavigationButtonsProps = {
     onNavigate: (index: BookPageIndex) => void;
 };
 
-export function NavigationButtons({ currentIndex, onNavigate }: NavigationButtonsProps) {
+export function NavigationButtons({
+    currentIndex,
+    onNavigate,
+}: NavigationButtonsProps) {
     return (
         <>
             <div
@@ -53,7 +56,7 @@ export function NavigationButtons({ currentIndex, onNavigate }: NavigationButton
                         fontSize: '36px',
                         fill: '#303030',
                         stroke: '#FEF4EC',
-                        strokeWidth: 0.5, 
+                        strokeWidth: 0.5,
                     }}
                 />
             </div>
