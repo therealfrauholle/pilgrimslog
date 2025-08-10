@@ -266,8 +266,8 @@
     width: 56px;
     height: 56px;
     padding: 8px;
-    top: 50%;
-    transform: translateY(-200%);
+    top: 40vh; /* 40% of viewport height instead of 50% */
+    transform: translateY(-50%);
     background: var(--color-plog-neutral-8);
     border: 2px solid var(--color-plog-extra);
     border-radius: 35px;

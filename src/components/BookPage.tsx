@@ -4,7 +4,6 @@ import { BookPageIndex } from '@/util/BookPageIndex';
 import { SwipeEventData, useSwipeable } from 'react-swipeable';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { BookContext } from './Main';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
 type Action = {
     type: 'display' | 'swipe' | 'swipeend';
@@ -256,44 +255,8 @@ export function BookPage() {
                 handlers.ref(r);
                 containerRef.current = r;
             }}
-            className="static w-full h-full overflow-hidden"
+            className="relative w-full h-full overflow-hidden"
         >
-            <div className='absolute top-0 w-full h-full'>
-                <div
-                className="nav-button"
-                style={{
-                    left: '0%',
-                    zIndex: 2000,
-                    opacity: selected.navPrev() ? 1 : 0,
-                }}
-                onClick={() => {
-                    const previous = selected.navPrev();
-                    if (previous) {
-                        setDisplayed(previous);
-                    }
-                }}
-                role="button"
-            >
-             <ArrowBack className="h-full w-full" sx={{fill:"#303030", stroke:"#FEF4EC", strokeWidth:0.5}} />
-            </div>
-            <div
-                className="nav-button"
-                style={{
-                    right: '0%',
-                    zIndex: 2000,
-                    opacity: selected.navNext() ? 1 : 0,
-                }}
-                onClick={() => {
-                    const next = selected.navNext();
-                    if (next) {
-                        setDisplayed(next);
-                    }
-                }}
-                role="button"
-            >
-                <ArrowForward className="h-full w-full" sx={{fill:"#303030", stroke:"#FEF4EC", strokeWidth:0.5}}/>
-            </div>
-            </div>
             <div className="relative h-full w-full">
                 {toPageDiv(
                     BookPageIndex.homepage(entries),

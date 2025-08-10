@@ -2,9 +2,10 @@ import { useContext } from 'react';
 import { BookPage } from './BookPage';
 import PullOutDrawer from './PullOutDrawer';
 import { BookContext } from './Main';
+import { NavigationButtons } from './NavButtons';
 
 export default function Book() {
-    const { displayed } = useContext(BookContext)!;
+    const { setDisplayed, displayed } = useContext(BookContext)!;
 
     if (displayed.is404()) {
         return (
@@ -18,6 +19,12 @@ export default function Book() {
         <>
             <div className="flex-grow min-h-0">
                 <BookPage />
+            </div>
+            <div className="flex-none">
+                <NavigationButtons 
+                    currentIndex={displayed} 
+                    onNavigate={setDisplayed} 
+                /> 
             </div>
             <div className="flex-none">
                 <PullOutDrawer />
