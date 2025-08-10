@@ -21,10 +21,10 @@ export default function Book() {
                 <BookPage />
             </div>
             <div className="flex-none">
-                <NavigationButtons 
-                    currentIndex={displayed} 
-                    onNavigate={setDisplayed} 
-                /> 
+                <NavigationButtons
+                    currentIndex={displayed}
+                    onNavigate={setDisplayed}
+                />
             </div>
             <div className="flex-none">
                 <PullOutDrawer />
