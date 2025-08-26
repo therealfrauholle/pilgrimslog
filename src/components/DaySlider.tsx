@@ -19,7 +19,7 @@ export default function DaySlider({ activeValue }: DaySliderProps) {
 
     const total = entries.data[entries.data.length - 1].getDaysSinceStart() + 1;
     const jitterWhenEqual = 0.0025;
-    const minDayDistance = 0.005; 
+    const minDayDistance = 0.005;
     const OFFSET = 0.92;
     const gapToFirst = 1 - OFFSET;
     const endPadding = 0.0025;
@@ -46,21 +46,21 @@ export default function DaySlider({ activeValue }: DaySliderProps) {
                 gap -= distanceReducer;
             } else if (distance < minDayDistance && distance > 0) {
                 positionOfCurrentMark = positionOfPreviousMark + minDayDistance;
-                gap += (minDayDistance - distance);
+                gap += minDayDistance - distance;
             } else {
                 positionOfCurrentMark = estimatedPositionOfCurrentMark;
             }
         } else {
             positionOfCurrentMark = estimatedPositionOfCurrentMark;
         }
-        
+
         positionOfPreviousMark = positionOfCurrentMark;
         return positionOfCurrentMark;
     });
 
     const normalizedMarks: number[] = [];
     const lastMarkValue = marks[marks.length - 1];
-    const maxNormalizedValue = 1.0 - endPadding; 
+    const maxNormalizedValue = 1.0 - endPadding;
 
     marks.forEach((mark) => {
         normalizedMarks.push((mark / lastMarkValue) * maxNormalizedValue);
@@ -69,23 +69,24 @@ export default function DaySlider({ activeValue }: DaySliderProps) {
     function indexToSliderOffset(index: BookPageIndex): number {
         let entry: ILogEntry | null;
         if ((entry = index.getEntry())) {
-            const entryIndex = entries.data.findIndex(e => e === entry);
+            const entryIndex = entries.data.findIndex((e) => e === entry);
             if (entryIndex >= 0 && entryIndex < normalizedMarks.length) {
                 return normalizedMarks[entryIndex];
             }
         }
-        return 0; 
+        return 0;
     }
 
     function sliderOffsetToIndex(offset: number): BookPageIndex {
-        const adjustedGapThreshold = (gapToFirst / lastMarkValue) * maxNormalizedValue / 2;
-        
+        const adjustedGapThreshold =
+            ((gapToFirst / lastMarkValue) * maxNormalizedValue) / 2;
+
         if (offset < adjustedGapThreshold) {
             return BookPageIndex.homepage(entries);
         }
         let closestIndex = 0;
         let minDistance = Math.abs(normalizedMarks[0] - offset);
-        
+
         for (let i = 1; i < normalizedMarks.length; i++) {
             const distance = Math.abs(normalizedMarks[i] - offset);
             if (distance < minDistance) {
@@ -93,7 +94,7 @@ export default function DaySlider({ activeValue }: DaySliderProps) {
                 closestIndex = i;
             }
         }
-        
+
         return BookPageIndex.entry(entries.data[closestIndex], entries);
     }
 
