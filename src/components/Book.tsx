@@ -22,7 +22,8 @@ export default function Book() {
             </div>
             <div className="flex-none">
                 <NavigationButtons
-                    currentIndex={displayed}
+                    previous={displayed.navPrev()}
+                    next={displayed.navNext()}
                     onNavigate={setDisplayed}
                 />
             </div>
