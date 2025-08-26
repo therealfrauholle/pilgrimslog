@@ -2,13 +2,15 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { BookPageIndex } from '@/util/BookPageIndex';
 
 type NavigationButtonsProps = {
-    currentIndex: BookPageIndex;
+    previous: BookPageIndex | null;
+    next: BookPageIndex | null;
     onNavigate: (index: BookPageIndex) => void;
 };
 
 export function NavigationButtons({
-    currentIndex,
     onNavigate,
+    previous,
+    next,
 }: NavigationButtonsProps) {
     return (
         <>
@@ -17,10 +19,9 @@ export function NavigationButtons({
                 style={{
                     left: '0%',
                     zIndex: 2000,
-                    opacity: currentIndex.navPrev() ? 1 : 0,
+                    opacity: previous ? 1 : 0,
                 }}
                 onClick={() => {
-                    const previous = currentIndex.navPrev();
                     if (previous) {
                         onNavigate(previous);
                     }
@@ -41,10 +42,9 @@ export function NavigationButtons({
                 style={{
                     right: '0%',
                     zIndex: 2000,
-                    opacity: currentIndex.navNext() ? 1 : 0,
+                    opacity: next ? 1 : 0,
                 }}
                 onClick={() => {
-                    const next = currentIndex.navNext();
                     if (next) {
                         onNavigate(next);
                     }
