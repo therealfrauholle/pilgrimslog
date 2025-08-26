@@ -58,7 +58,7 @@ export default function DaySlider({ activeValue }: DaySliderProps) {
         return positionOfCurrentMark;
     });
 
-    let normalizedMarks: number[] = [];
+    const normalizedMarks: number[] = [];
     const lastMarkValue = marks[marks.length - 1];
     const maxNormalizedValue = 1.0 - endPadding; 
 
