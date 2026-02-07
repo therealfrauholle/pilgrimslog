@@ -4,6 +4,7 @@ import { BookPageIndex } from '@/util/BookPageIndex';
 import Book from './Book';
 import { StrapiEntries } from '@/util/FetchService';
 import { ILogEntries, parse } from '@/util/PageModel';
+import { useRouter } from 'next/navigation';
 
 export type BookData = {
     entries: ILogEntries;
@@ -32,6 +33,7 @@ export default function MainLayout({
     id?: string;
     notFound?: boolean;
 }) {
+    const router = useRouter();
     const entries = parse(data.entries);
 
     const [current, setCurrent] = useState<BookPageIndex>(
@@ -51,7 +53,7 @@ export default function MainLayout({
             if (oldPage.equals(page)) {
                 return oldPage;
             }
-            window.history.pushState(null, '', page.asUrl());
+            router.push(page.asUrl());
             return page;
         });
     }
