@@ -12,8 +12,6 @@
         "test": "jest"
     },
     "dependencies": {
-        "@base-ui-components/react": "^1.0.0-alpha.5",
-        "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
         "@mui/icons-material": "^6.4.1",
         "@mui/material": "^6.4.1",
@@ -25,7 +23,6 @@
         "next": "^16.1.6",
         "pigeon-maps": "git+https://github.com/therealfrauholle/pigeon-maps.git#pilgrimslog",
         "react": "^19.0.0",
-        "react-dom": "^19.0.0",
         "react-markdown": "^9.0.3",
         "react-swipeable": "^7.0.2",
         "remark-gfm": "^4.0.0"
